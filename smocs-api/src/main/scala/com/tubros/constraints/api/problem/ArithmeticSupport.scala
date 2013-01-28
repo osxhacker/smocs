@@ -21,19 +21,26 @@ trait ArithmeticSupport
 		
 	implicit class ArithmeticOps (val name : Symbol)
 	{
-		def + (statement : Expression) : Expression =
+		def + (statement : Expression) : Expression = add (statement);
+		def - (statement : Expression) : Expression = sub (statement);
+		def / (statement : Expression) : Expression = div (statement);
+		def * (statement : Expression) : Expression = mult (statement);
+		def ^ (statement : Expression) : Expression = pow (statement);
+			
+		
+		def add (statement : Expression) : Expression =
 			expression ("*", name, statement);
 
-		def - (statement : Expression) : Expression =
+		def sub (statement : Expression) : Expression =
 			expression ("-", name, statement);
 
-		def / (statement : Expression) : Expression =
+		def div (statement : Expression) : Expression =
 			expression ("/", name, statement);
 
-		def * (statement : Expression) : Expression =
+		def mult (statement : Expression) : Expression =
 			expression ("*", name, statement);
 
-		def ^ (statement : Expression) : Expression =
+		def pow (statement : Expression) : Expression =
 			expression ("^", name, statement);
 	}
 }

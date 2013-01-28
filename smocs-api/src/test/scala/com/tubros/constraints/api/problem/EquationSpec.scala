@@ -4,6 +4,8 @@
 package com.tubros.constraints.api
 package problem
 
+import scalaz._
+
 import org.junit.runner.RunWith
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
@@ -42,14 +44,46 @@ class EquationSpec
 		val greaterThanZero = new MathEquation {
 			def apply = 'x > 0;
 			};
+			
+		greaterThanZero.arity should be === (1);
+		greaterThanZero ().flatten.toList should be === (
+			Tree.node[Expression] (
+				Operator (">"),
+				Stream (VariableUse ('x), Constant (0))
+				).flatten.toList
+			);
 	}
 	
 	it should "support compound statements" in
 	{
-		val notZero = new MathEquation {
-			def apply = 'x < 0 || 'x > 0;
+		val complex = new MathEquation {
+			def apply = ('x < 0 || 'x > 0) && ('x !== 99);
 			};
 			
-		notZero.arity should be === (1);
+		complex.arity should be === (1);
+		complex ().flatten.toList should be === (
+			Tree.node[Expression] (
+				Operator ("&&"),
+				Stream (
+					Tree.node[Expression] (
+						Operator ("||"),
+						Stream (
+							Tree.node[Expression] (
+								Operator ("<"),
+								Stream (VariableUse ('x), Constant (0))
+								),
+							Tree.node[Expression] (
+								Operator (">"),
+								Stream (VariableUse ('x), Constant (0))
+								)
+							)
+						),
+						Tree.node[Expression] (
+							Operator ("!=="),
+							Stream (VariableUse ('x), Constant (99))
+							)
+					)
+				).flatten.toList
+			);
 	}
 }

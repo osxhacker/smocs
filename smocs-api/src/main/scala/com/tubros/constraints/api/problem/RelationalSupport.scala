@@ -25,10 +25,10 @@ trait RelationalSupport
 	implicit class RelationalOps (val name : Symbol)
 	{
 		def === (statement : Expression) : Expression =
-			expression ("==", name, statement);
+			expression ("===", name, statement);
 		
 		def !== (statement : Expression) : Expression =
-			expression ("!=", name, statement);
+			expression ("!==", name, statement);
 		
 		def < (statement : Expression) : Expression =
 			expression ("<", name, statement);
