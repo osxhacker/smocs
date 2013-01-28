@@ -16,7 +16,7 @@ import scalaz._
  * '''Equation''' can be defined in a natural way, such as:
  * 
  * {{{
- * val min = new Equation {
+ * val xBeforeY = new Equation {
  * 		def apply = 'x < 'y
  * 		};
  * }}}
@@ -34,7 +34,7 @@ trait Equation
 	/// Instance Properties
 	/**
 	 * The tree property uses the concrete type's `apply` definition to cache
-	 * the [[scalaz.Tree]] defiition.
+	 * the [[scalaz.Tree]] definition.
 	 */
 	lazy val tree : Tree[Expression] = apply;
 	

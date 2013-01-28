@@ -89,10 +89,10 @@ class EquationSpec
 	
 	it should "allow definitions consisting only of symbolic variables" in
 	{
-		val min = new MathEquation {
+		val xBeforeY = new MathEquation {
 			def apply = 'x < 'y;
 			}
 		
-		min.arity should be === (2);
+		xBeforeY.arity should be === (2);
 	}
 }
