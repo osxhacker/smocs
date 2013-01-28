@@ -15,4 +15,5 @@ import org.scalatest._
  */
 trait UseCaseSpec
 	extends FeatureSpec
+		with GivenWhenThen
 		with ShouldMatchers

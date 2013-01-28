@@ -7,16 +7,11 @@ import scalaz.NonEmptyList
 
 
 /**
- * The '''Problem''' type defines the representation and functionality
- * intrinsically available in a '''Problem''' definition.  There are three
- * fundamental concepts involved in a CSP:
- * 
- * $ - variables: the objects a CSP is seeking to find values from their domain
- * $ - domains: valid values each variable can have (can differ per variable)
- * $ - constraints: restrictions on variables and domains
- *
- * Since each variable can have a different domain of values, the
- * '''Variable''' type captures the allowable `domain` ''for that instance''.
+ * The '''Problem''' type defines the representation of a CSP problem
+ * definition.  It is independent of any specific
+ * [[com.tubros.constraints.api.solver]], as
+ * [[com.tubros.constraints.api.solver.Solver]]s define ''how'' a '''Problem'''
+ * is solved.
  *
  * @author svickers
  *

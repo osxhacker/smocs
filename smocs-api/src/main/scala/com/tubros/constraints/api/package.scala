@@ -14,6 +14,21 @@ import scalaz._
  * defining and, ultimately, ''solving''
  * [[http://en.wikipedia.org/wiki/Constraint_satisfaction_problem CSP]]'s.
  *
+ * There are three fundamental concepts involved in a CSP:
+ * 
+ * $ - variables: the objects a CSP is seeking to find values from their domain
+ * $ - domains: valid values each variable can have (can differ per variable)
+ * $ - constraints: restrictions on variables and domains
+ *
+ * Since each variable can have a different domain of values, the
+ * '''Variable''' type captures the allowable `domain` ''for that instance''.
+ * 
+ * To facilitate modularity, the API is roughly divided into two
+ * sub-`package`s.  First, the [[com.tubros.constraints.api.problem]] `package`
+ * defines the ability to ''formulate'' a problem definition.  Second, the
+ * [[com.tubros.constraints.api.solver]] `package` defines the types involved
+ * in ''solving'' an arbitrary [[com.tubros.constraints.api.problem.Problem]].
+ * 
  * @author svickers
  *
  */

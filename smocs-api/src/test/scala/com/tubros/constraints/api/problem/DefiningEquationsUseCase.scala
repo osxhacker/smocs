@@ -26,22 +26,29 @@ class DefiningEquationsUseCase
 	{
 		scenario ("Defining a constant Equation")
 		{
+			Given ("An Equation specifying a constant value");
+			
 			val e = new Equation {
 				def apply = 'a := 5;
 				}
+			
+			Then ("The definition should be what was given");
 			
 			e.arity should be === (1);
 			e.variables should be === (Set ('a));
 		}
 		
-		/*
 		scenario ("Using a more complex Equation")
 		{
-			import Equation._
+			Given ("A quadratic Equation");
 			
-			 val quadratic = 'y := 'x * 'x;
+			 val quadratic = new Equation with ArithmeticSupport {
+				 def apply = 'y := 'x ^ 2;
+				 }
+			 
+			Then ("The definition should be what was given");
+			
+			 quadratic.arity should be === (2);
 		}
-		* 
-		*/
 	}
 }

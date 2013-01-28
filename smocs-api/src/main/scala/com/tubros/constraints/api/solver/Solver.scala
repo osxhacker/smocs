@@ -2,13 +2,11 @@
  * Created on: Jan 25, 2013
  */
 package com.tubros.constraints.api
+package solver
 
 import scala.language.higherKinds
 
-import scalaz.{
-	Monad,
-	Monoid
-	}
+import scalaz.Monad
 
 
 /**

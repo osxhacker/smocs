@@ -11,8 +11,31 @@ The goal of this project is to define a
 Overview
 --------
 
-TBD
+The project is organized into the following subsystems:
 
+* API
+* Core
+
+### API ###
+
+Here, the types defined are largely concerned with defining the *contracts*
+expected to be provided in a deployed environment.  Why separate them from
+where they are fulfilled?  This is done to help facilitate OSGi-based use
+as well as to provide a clear separation of concerns.
+
+There are "concrete" classes found in the API bundle, though.  These are
+*implementation agnostic* and, even though being classes and not traits,
+represent concepts expected not to vary across implementations.  Of course,
+some may be found to contain implementation concerns/leanings/encodings.  If
+that happens, then they should be refactored.
+
+### Core ###
+
+The core subsystem is where the smocs implementation resides.  These
+collaborations are most certainly implementation specific and should be
+expected to change across major releases, with the option to have binary
+incompatibility broken an a minor release (though this should happen less
+frequently).
 
 Further Reading
 ---------------
