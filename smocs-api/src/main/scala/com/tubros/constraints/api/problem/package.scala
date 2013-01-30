@@ -30,12 +30,4 @@ package object problem
 		def :=[T] (statement : Expression) : Tree[Expression] =
 			Assignment (name, statement);
 	}
-
-
-	/// Implicit Conversions
-	implicit def valToConstant[T <: AnyVal] (v : T) : Constant[T] =
-		Constant (v);
-	
-	implicit def symbolToVariableUse (name : Symbol) : VariableUse =
-		VariableUse (name);
 }

@@ -6,7 +6,10 @@ package solver
 
 import scala.language.higherKinds
 
-import scalaz.Monad
+import scalaz.{
+	Monad,
+	Monoid
+	}
 
 
 /**
@@ -19,7 +22,7 @@ import scalaz.Monad
  * @author svickers
  *
  */
-abstract class Solver[+SolverT[+A] <: Solver[SolverT, A] : Monad, +A]
+abstract class Solver[+SolverT[A] <: Solver[SolverT, A] : Monad, A]
 {
 	/// Class Types
 	trait Constraint
@@ -34,5 +37,5 @@ abstract class Solver[+SolverT[+A] <: Solver[SolverT, A] : Monad, +A]
 	def add[T <: this.Constraint] (constraint : T) : this.type;
 	
 	
-//	def run[C[_]] (implicit mo : Monoid[C[A]]) : C[C[A]];
+	def run[C[_]] (implicit mo : Monoid[C[A]]) : C[C[A]];
 }

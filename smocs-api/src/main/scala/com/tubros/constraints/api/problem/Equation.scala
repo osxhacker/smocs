@@ -4,7 +4,10 @@
 package com.tubros.constraints.api
 package problem
 
-import scala.language.postfixOps
+import scala.language.{
+	implicitConversions,
+	postfixOps
+	}
 
 import scalaz._
 
@@ -12,13 +15,13 @@ import scalaz._
 /**
  * The '''Equation''' type provides the ability to define an AST-based
  * [[com.tubros.constraints.api.problem.Expression]] related to defining a
- * [[com.tubros.constraints.api.problem.Problem]].  Using this type, an
+ * [[com.tubros.constraints.api.problem.Problem]].	Using this type, an
  * '''Equation''' can be defined in a natural way, such as:
  * 
  * {{{
  * val xBeforeY = new Equation {
- * 		def apply = 'x < 'y
- * 		};
+ *		def apply = 'x < 'y
+ *		};
  * }}}
  *
  * @author svickers
@@ -58,5 +61,13 @@ trait Equation
 					List.empty;
 				}
 			} toSet;
+			
+			
+	/// Implicit Conversions
+	implicit def valToConstant[T <: AnyVal] (v : T) : Constant[T] =
+		Constant (v);
+	
+	implicit def symbolToVariableUse (name : Symbol) : VariableUse =
+		VariableUse (name);
 }
 
