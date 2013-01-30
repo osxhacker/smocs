@@ -67,14 +67,14 @@ class DiscreteDomainSpec
 	
 	it should "conform to the Category laws" in
 	{
-		val strings = DiscreteDomain.empty[Int] ++ List (1, 2);
+		val ints = DiscreteDomain.empty[Int] ++ List (1, 2);
 		val more = DiscreteDomain.empty[Int] ++ List (3, 4, 5);
 		val stillMore = DiscreteDomain.empty[Int] ++ List (6);
-		val monoid = implicitly[scalaz.Monoid[DiscreteDomain[Int]]];
-		val laws = monoid.monoidLaw;
+		val category = implicitly[scalaz.Monoid[DiscreteDomain[Int]]].category;
+		val laws = category.categoryLaw;
 		
-		laws.leftIdentity (strings) must be === (true);
-		laws.rightIdentity (strings) must be === (true);
-		laws.associative (strings, more, stillMore) must be === (true);
+		laws.leftIdentity (ints) must be === (true);
+		laws.rightIdentity (ints) must be === (true);
+		laws.associative (ints, more, stillMore) must be === (true);
 	}
 }
