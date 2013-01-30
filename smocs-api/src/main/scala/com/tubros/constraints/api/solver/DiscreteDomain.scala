@@ -36,8 +36,7 @@ trait DiscreteDomain[T]
 }
 
 
-object DiscreteDomain
-	extends ImmutableSetFactory[DiscreteDomain]
+trait DiscreteDomainInstances
 {
 	/// Class Types
 	sealed trait EmptyDomain[T]
@@ -58,9 +57,7 @@ object DiscreteDomain
 	}
 	
 	
-	override def empty[A] = new EmptyDomain[A] {};
-	
-	
+	/// Implicit Conversions
 	implicit def equal[T] : Equal[DiscreteDomain[T]] = new Equal[DiscreteDomain[T]] {
 		override def equal (lhs : DiscreteDomain[T], rhs : DiscreteDomain[T])
 			: Boolean =
@@ -83,4 +80,12 @@ object DiscreteDomain
 	 * Every '''DiscreteDomain'' gives rise to a new [[scalaz.Category]].
 	 */
 	implicit def category[T] = Monoid[DiscreteDomain[T]].category;
+}
+
+
+object DiscreteDomain
+	extends ImmutableSetFactory[DiscreteDomain]
+		with DiscreteDomainInstances
+{
+	override def empty[A] = new EmptyDomain[A] {};
 }

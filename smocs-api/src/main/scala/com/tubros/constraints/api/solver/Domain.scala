@@ -3,6 +3,11 @@
  */
 package com.tubros.constraints.api.solver
 
+import scalaz.{
+	Cord,
+	Show
+	}
+
 
 /**
  * The '''Domain''' type represents the complete legal values an arbitrary
@@ -40,3 +45,48 @@ trait Domain[T]
 	 */
 	def contains (item : T) : Boolean;
 }
+
+
+trait DomainInstances
+{
+	/// Class Types
+	private class ShowDomain[T : Show]
+		extends Show[Domain[T]]
+	{
+		override def show (d : Domain[T]) : Cord =
+		{
+			sampling (d) match {
+				case (more, n) if (n < d.size) =>
+					Cord ("Domain(", more, "...)");
+					
+				case (_, 0) =>
+					Cord ("Domain(<empty>)");
+					
+				case (tenOrLess, _) =>
+					Cord ("Domain(", tenOrLess, ")");
+				}
+			}
+		
+		
+		private def sampling (d : Domain[T])
+			: (Cord, Int) =
+		{
+			val entries = d.iterator.take (10).toSeq;
+			
+			(
+				Cord.mkCord (",", entries.map (Show[T].show) : _ *),
+				entries.size
+			);
+		}
+	}
+	
+	
+	/// Implicit Conversions
+	implicit def domainShow[T] (implicit S : Show[T]) : Show[Domain[T]] =
+		new ShowDomain[T];
+}
+
+
+object Domain
+	extends DomainInstances
+	
