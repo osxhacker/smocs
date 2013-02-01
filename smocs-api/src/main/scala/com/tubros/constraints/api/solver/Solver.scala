@@ -39,17 +39,13 @@ abstract class Solver[A, S[+_] : Monad, +SolverT <: Solver[A, S, SolverT]]
 	def apply[C[_]] (context : S[Stream[C[A]]]) : Stream[C[A]];
 	
 	
-	def newVar[A] (name : VariableName, domain : DomainType[A])
+	def newVar (name : VariableName, domain : DomainType[A])
 		: S[Variable[A, DomainType]];
 	
 	
-	def newVars[A, C[_]] (domain : DomainType[A])
+	def newVars[C[_]] (domain : DomainType[A])
 		(names : C[VariableName])
-		(implicit
-			F : Foldable[C],
-			M : Monoid[C[Variable[A, DomainType]]],
-			A : Applicative[C]
-			)
+		(implicit F : Foldable[C])
 		: S[List[Variable[A, DomainType]]];
 
 

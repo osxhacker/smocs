@@ -46,10 +46,30 @@ final case class FiniteDiscreteDomain[T] (private val self : Set[T])
 
 object FiniteDiscreteDomain
 {
+	/// Class Imports
+	import scalaz._
+	
+	
 	/**
 	 * This apply method is provided to support functional creation style
 	 * when the collaborator desires a variadic form.
 	 */
-	def apply[T] (values : T *) : FiniteDiscreteDomain[T] =
-		new FiniteDiscreteDomain[T] (values.to[Set]);
+	def apply[T] (head : T, tail : T *) : FiniteDiscreteDomain[T] =
+		new FiniteDiscreteDomain[T] ((head :: tail.to[List]).to[Set]);
+	
+	
+	/**
+	 * This apply method is provided to support functional creation style
+	 * when the collaborator has a '''collection'''.
+	 */
+	def apply[T] (collection : TraversableOnce[T]) : FiniteDiscreteDomain[T] =
+		new FiniteDiscreteDomain[T] (collection.to[Set]);
+	
+	
+	/**
+	 * This apply method is provided to support functional creation style
+	 * when the collaborator has a [[scalaz.EphemeralStream]].
+	 */
+	def apply[T] (stream : EphemeralStream[T]) : FiniteDiscreteDomain[T] =
+		new FiniteDiscreteDomain[T] (stream.to[Set]);
 }
