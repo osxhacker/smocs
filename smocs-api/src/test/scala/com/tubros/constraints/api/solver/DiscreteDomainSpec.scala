@@ -21,6 +21,11 @@ import org.scalatest.junit.JUnitRunner
 class DiscreteDomainSpec
 	extends ProjectSpec
 {
+	/// Class Imports
+	import scalaz.std.AllInstances._
+	import scalaz.syntax.show._
+	
+	
 	"A DiscreteDomain" should "have SetLike characteristics" in
 	{
 		val empty = DiscreteDomain.empty[Int];
@@ -34,7 +39,8 @@ class DiscreteDomainSpec
 	{
 		val ten : Domain[Int] = DiscreteDomain.empty[Int] ++ (1 to 10);
 		
-		ten should not be ('infinite);
+		ten.hasDefiniteSize should be === (true);
+		ten should have size (10);
 		ten.bounds should be === (Some ((1, 10)));
 	}
 	
@@ -42,14 +48,22 @@ class DiscreteDomainSpec
 	{
 		val ten = DiscreteDomain.empty[Int] ++ (1 to 10);
 		val firstThree : DiscreteDomain[Int] = ten.take (3);
-		val last : DiscreteDomain[Int] = ten.init;
+		val allButLast : DiscreteDomain[Int] = ten.init;
 		val even : DiscreteDomain[Int] = ten filter (n => (n % 2) == 0);
 		val odd : DiscreteDomain[Int] = ten &~ even;
 		
+		ten must have size (10);
 		firstThree must have size (3);
-		last must have size (9);
+		allButLast must have size (9);
 		even must have size (5);
 		odd must have size (5);
+	}
+	
+	it should "support the Show monad" in
+	{
+		val empty : DiscreteDomain[Double] = DiscreteDomain.empty[Double];
+		
+		empty.shows should not be ('empty);
 	}
 	
 	it should "conform to the Monoid laws" in
@@ -76,5 +90,11 @@ class DiscreteDomainSpec
 		laws.leftIdentity (ints) must be === (true);
 		laws.rightIdentity (ints) must be === (true);
 		laws.associative (ints, more, stillMore) must be === (true);
+	}
+	
+	it should "support Functor use" in
+	{
+		val ints = DiscreteDomain.empty[Int] ++ Seq (4, 5, 6);
+		//val functor = scalaz.Functor[DiscreteDomain]
 	}
 }

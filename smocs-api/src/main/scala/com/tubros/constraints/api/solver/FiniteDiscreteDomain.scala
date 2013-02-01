@@ -22,7 +22,7 @@ final case class FiniteDiscreteDomain[T] (private val self : Set[T])
 	
 	
 	/// Instance Properties
-	override val isInfinite : Boolean = false;
+	override val hasDefiniteSize : Boolean = true;
 	override lazy val iterator : Iterator[T] = self.iterator;
 	override lazy val size : Int = self.size;
 	
@@ -41,4 +41,15 @@ final case class FiniteDiscreteDomain[T] (private val self : Set[T])
 	
 	override def bounds (implicit ev : Ordering[T]) : Option[(T, T)] =
 		(!isEmpty).option ((self.min, self.max));
+}
+
+
+object FiniteDiscreteDomain
+{
+	/**
+	 * This apply method is provided to support functional creation style
+	 * when the collaborator desires a variadic form.
+	 */
+	def apply[T] (values : T *) : FiniteDiscreteDomain[T] =
+		new FiniteDiscreteDomain[T] (values.to[Set]);
 }

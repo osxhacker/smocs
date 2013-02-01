@@ -3,7 +3,10 @@
  */
 package com.tubros.constraints.api.solver
 
-import scala.collection.SetLike
+import scala.collection.{
+	GenTraversableOnce,
+	SetLike
+	}
 import scala.collection.generic._
 
 import scalaz.{
@@ -31,7 +34,7 @@ trait DiscreteDomain[T]
 	/// Instance Properties
 	final override val isDiscrete : Boolean = true;
 	override def companion : GenericCompanion[DiscreteDomain] = DiscreteDomain;
-	override def empty = DiscreteDomain.empty[T];
+	override def empty : DiscreteDomain[T] = DiscreteDomain.empty[T];
 	override def seq : DiscreteDomain[T] = this;
 }
 
@@ -43,13 +46,12 @@ trait DiscreteDomainInstances
 		extends DiscreteDomain[T]
 	{
 		/// Instance Properties
-		override val isInfinite : Boolean = false;
 		override val isEmpty : Boolean = true;
 		override val iterator : Iterator[T] = Iterator.empty;
 		override val size : Int = 0;
 		
 		override def + (elem : T) : DiscreteDomain[T] =
-			new FiniteDiscreteDomain[T] (elem);
+			FiniteDiscreteDomain (elem);
 		override def - (elem : T) : DiscreteDomain[T] = this;
 		override def bounds (implicit ev : Ordering[T]) : Option[(T, T)] = None;
 		override def contains (elem : T) : Boolean = false;
@@ -68,12 +70,13 @@ trait DiscreteDomainInstances
 	/**
 	 * '''DiscreteDomain''' types are models of [[scalaz.Monoid]].
 	 */
-	implicit def monoid[T] : Monoid[DiscreteDomain[T]] = new Monoid[DiscreteDomain[T]] {
-		override def zero = DiscreteDomain.empty[T];
-		override def append (a : DiscreteDomain[T], b : => DiscreteDomain[T])
-			: DiscreteDomain[T] =
-			a ++ b;
-		}
+	implicit def monoid[T] : Monoid[DiscreteDomain[T]] =
+		new Monoid[DiscreteDomain[T]] {
+			override def zero = DiscreteDomain.empty[T];
+			override def append (a : DiscreteDomain[T], b : => DiscreteDomain[T])
+				: DiscreteDomain[T] =
+				a ++ b;
+			}
 	
 	
 	/**
@@ -87,5 +90,5 @@ object DiscreteDomain
 	extends ImmutableSetFactory[DiscreteDomain]
 		with DiscreteDomainInstances
 {
-	override def empty[A] = new EmptyDomain[A] {};
+	override def empty[A] : DiscreteDomain[A] = new EmptyDomain[A] {};
 }

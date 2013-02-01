@@ -3,6 +3,8 @@
  */
 package com.tubros.constraints.api.solver
 
+import scala.language.higherKinds
+
 import scalaz.{
 	Cord,
 	Show
@@ -25,9 +27,12 @@ import scalaz.{
 trait Domain[T]
 	extends collection.Iterable[T]
 {
+	/// Class Types
+	type MemberType = T
+	
+	
 	/// Instance Properties
 	def isDiscrete : Boolean;
-	def isInfinite : Boolean;
 	
 	def empty : Domain[T];
 	
@@ -50,10 +55,10 @@ trait Domain[T]
 trait DomainInstances
 {
 	/// Class Types
-	private class ShowDomain[T : Show]
-		extends Show[Domain[T]]
+	private class ShowDomain[T : Show, DomainT[T] <: Domain[T]]
+		extends Show[DomainT[T]]
 	{
-		override def show (d : Domain[T]) : Cord =
+		override def show (d : DomainT[T]) : Cord =
 		{
 			sampling (d) match {
 				case (more, n) if (n < d.size) =>
@@ -68,10 +73,10 @@ trait DomainInstances
 			}
 		
 		
-		private def sampling (d : Domain[T])
+		private def sampling (d : DomainT[T])
 			: (Cord, Int) =
 		{
-			val entries = d.iterator.take (10).toSeq;
+			val entries = d.iterator.take (10).toSeq
 			
 			(
 				Cord.mkCord (",", entries.map (Show[T].show) : _ *),
@@ -82,8 +87,9 @@ trait DomainInstances
 	
 	
 	/// Implicit Conversions
-	implicit def domainShow[T] (implicit S : Show[T]) : Show[Domain[T]] =
-		new ShowDomain[T];
+	implicit def domainShow[T : Show, DomainT[T] <: Domain[T]]
+		: Show[DomainT[T]] =
+		new ShowDomain[T, DomainT];
 }
 
 

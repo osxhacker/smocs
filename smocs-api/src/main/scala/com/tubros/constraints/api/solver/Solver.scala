@@ -6,10 +6,7 @@ package solver
 
 import scala.language.higherKinds
 
-import scalaz.{
-	Monad,
-	Monoid
-	}
+import scalaz._
 
 
 /**
@@ -22,9 +19,11 @@ import scalaz.{
  * @author svickers
  *
  */
-abstract class Solver[+SolverT[A] <: Solver[SolverT, A] : Monad, A]
+abstract class Solver[A, S[+_] : Monad, +SolverT <: Solver[A, S, SolverT]]
 {
 	/// Class Types
+	type DomainType[T] <: Domain[T]
+	
 	trait Constraint
 	
 	trait Term
@@ -34,8 +33,25 @@ abstract class Solver[+SolverT[A] <: Solver[SolverT, A] : Monad, A]
 	}
 	
 	
-	def add[T <: this.Constraint] (constraint : T) : this.type;
+	def add[T <: this.Constraint] (constraint : T) : S[_];
 	
 	
-	def run[C[_]] (implicit mo : Monoid[C[A]]) : C[C[A]];
+	def apply[C[_]] (context : S[Stream[C[A]]]) : Stream[C[A]];
+	
+	
+	def newVar[A] (name : VariableName, domain : DomainType[A])
+		: S[Variable[A, DomainType]];
+	
+	
+	def newVars[A, C[_]] (domain : DomainType[A])
+		(names : C[VariableName])
+		(implicit
+			F : Foldable[C],
+			M : Monoid[C[Variable[A, DomainType]]],
+			A : Applicative[C]
+			)
+		: S[List[Variable[A, DomainType]]];
+
+
+	def run[C[_]] (implicit mo : Monoid[C[A]]) : S[Stream[C[A]]];
 }
