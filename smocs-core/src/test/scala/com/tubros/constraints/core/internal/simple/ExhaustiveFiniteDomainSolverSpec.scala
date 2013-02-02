@@ -38,7 +38,7 @@ class ExhaustiveFiniteDomainSolverSpec
 	{
 		val solver = new ExhaustiveFiniteDomainSolver[Int];
 		val domain = FiniteDiscreteDomain (1 to 5);
-		val answer : Stream[List[Int]] = solver {
+		val answer : Stream[List[Answer[Int]]] = solver {
 			s =>
 				
 			for {
@@ -48,8 +48,9 @@ class ExhaustiveFiniteDomainSolverSpec
 				} yield stream;
 			}
 			
-		answer.contains (List (1, 1)) should be === (true);
-		answer.contains (List (2, 5)) should be === (true);
-		answer.contains (List (5, 5)) should be === (true);
+		answer.contains (List (Answer ('x -> 1), Answer ('y -> 1))) should be === (true);
+		answer.contains (List (Answer ('x -> 2), Answer ('y -> 5))) should be === (true);
+		answer.contains (List (Answer ('x -> 5), Answer ('y -> 5))) should be === (true);
+		answer should have size (25);
 	}
 }

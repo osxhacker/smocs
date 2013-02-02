@@ -46,7 +46,7 @@ object Smocs
 	/// Instance Properties
 	lazy val buildSettings = Seq (
 		organization := "com.tubros",
-		version := "0.1-SNAPSHOT",
+		version := "0.2-SNAPSHOT",
 		scalaVersion := "2.10.0"
 		);
 

@@ -52,9 +52,10 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	
 	def apply[C[_]] (
-		context : ExhaustiveFiniteDomainSolver[A] => SolverState[Stream[C[A]]]
+		context : ExhaustiveFiniteDomainSolver[A] =>
+			SolverState[Stream[C[Answer[A]]]]
 		)
-		: Stream[C[A]] =
+		: Stream[C[Answer[A]]] =
 	{
 		context (this).eval (VariableStore[A] (Set.empty));
 	}
@@ -93,8 +94,8 @@ class ExhaustiveFiniteDomainSolver[A]
 	 * if ''all'' have at least one value remaining in their
 	 * [[com.tubros.constraints.api.solver.DiscreteDomain]].
 	 */
-	def run[C[_]] (implicit mo : Monoid[C[A]], a : Applicative[C])
-		: SolverState[Stream[C[A]]] =
+	def run[C[_]] (implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
+		: SolverState[Stream[C[Answer[A]]]] =
 		State.gets {
 			vs =>
 				
@@ -103,10 +104,10 @@ class ExhaustiveFiniteDomainSolver[A]
 			val answers = lists.map {
 				answer =>
 					
-				answer.map (_._2).foldLeft (mo.zero) {
+				answer.foldLeft (mo.zero) {
 					case (accum, cur) =>
 						
-					mo.append (accum, cur.point[C]);
+					mo.append (accum, Answer (cur).point[C]);
 					}
 				}
 			

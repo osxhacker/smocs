@@ -4,8 +4,8 @@ smocs
 Scala Monadic Constraint Solver
 
 The goal of this project is to define a
-[Constraint Satisfiaction Problem](http://en.wikipedia.org/wiki/Constraint_satisfaction_problem) (*CSP*) solver framework which employs
-[Monadic](http://en.wikipedia.org/wiki/Monad_(functional_programming)) programming techniques.
+[Constraint Satisfiaction Problem](http://en.wikipedia.org/wiki/Constraint_satisfaction_problem), *CSP*, solver framework which employs
+[Monadic](http://en.wikipedia.org/wiki/Monad_(functional_programming) "Monad") programming techniques.
 
 
 Overview
@@ -28,6 +28,25 @@ There are "concrete" classes found in the API bundle, though.  These are
 represent concepts expected not to vary across implementations.  Of course,
 some may be found to contain implementation concerns/leanings/encodings.  If
 that happens, then they should be refactored.
+
+Two of the main design goals are to enable a rich embedded
+[DSL] (http://en.wikipedia.org/wiki/Domain-specific_language) when defining
+problems and to facilitate an open-ended set of *solvers* to be available.
+An example of the EDSL looks like :
+
+	val problem = Problem (
+		new Equation {
+			def apply = 'x < 10 && 'x > 0
+			},
+		new Equation {
+			def apply = 'y == 'x ^ 2
+			},
+		);
+
+Solving these constraints would yield values corresponding with :
+
+	('x -> 1, 'y -> 1), ('x -> 2, 'y -> 4), ('x -> 3, 'y -> 9)
+
 
 ### Core ###
 

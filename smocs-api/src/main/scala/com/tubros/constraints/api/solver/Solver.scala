@@ -47,7 +47,8 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	 * Concrete implementations can perform whatever actions ''they'' deem fit
 	 * before and after the '''Solver''' is defined.
 	 */
-	def apply[C[_]] (context : SolverT => M[Stream[C[A]]]) : Stream[C[A]];
+	def apply[C[_]] (context : SolverT => M[Stream[C[Answer[A]]]])
+		: Stream[C[Answer[A]]];
 	
 	
 	/**
@@ -73,6 +74,6 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 		: M[List[Variable[A, DomainType]]];
 
 
-	def run[C[_]] (implicit mo : Monoid[C[A]], a : Applicative[C])
-		: M[Stream[C[A]]];
+	def run[C[_]] (implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
+		: M[Stream[C[Answer[A]]]];
 }
