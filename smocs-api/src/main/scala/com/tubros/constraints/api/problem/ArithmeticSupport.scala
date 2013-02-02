@@ -24,6 +24,7 @@ trait ArithmeticSupport
 		def + (statement : Expression) : Expression = add (statement);
 		def - (statement : Expression) : Expression = sub (statement);
 		def / (statement : Expression) : Expression = div (statement);
+		def % (statement : Expression) : Expression = mod (statement);
 		def * (statement : Expression) : Expression = mult (statement);
 		def ^ (statement : Expression) : Expression = pow (statement);
 			
@@ -37,6 +38,9 @@ trait ArithmeticSupport
 		def div (statement : Expression) : Expression =
 			expression ("/", name, statement);
 
+		def mod (statement : Expression) : Expression =
+			expression ("%", name, statement);
+		
 		def mult (statement : Expression) : Expression =
 			expression ("*", name, statement);
 
