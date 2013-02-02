@@ -50,5 +50,5 @@ class DomainSpec
 		if (entries == 0)
 			DiscreteDomain.empty[Int];
 		else
-			DiscreteDomain.empty[Int] ++ (1 to entries);
+			FiniteDiscreteDomain (1 to entries);
 }

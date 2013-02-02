@@ -24,7 +24,7 @@ import scala.language.higherKinds
  * @author svickers
  *
  */
-trait Variable[A, DomainT[_] <: Domain[_]]
+trait Variable[A, DomainT[A] <: Domain[A]]
 {
 	/// Instance Properties
 	/**
@@ -38,6 +38,15 @@ trait Variable[A, DomainT[_] <: Domain[_]]
 	 * represent.
 	 */
 	def domain : DomainT[A];
+	
+	/**
+	 * The enumerate property provides a [[scala.collection.Iterator]] which
+	 * contains the '''name''' and each '''domain''' value paired as a
+	 * [[scala.Tuple2]].
+	 */
+	lazy val enumerate : Iterable[(VariableName, A)] = domain.map {
+		(name, _)
+		};
 	
 	
 	/**
@@ -71,14 +80,14 @@ object Variable
 	 */
 	implicit class WithName[
 		A,
-		DomainT[_] <: Domain[_],
+		DomainT[A] <: Domain[A],
 		V <: Variable[A, DomainT]
 		] (val variable : V)
 		{
 			def withName = new {
 				def map[B] (f : (VariableName, DomainT[A]) => DomainT[B])
 					: Variable[B, DomainT] =
-					variable.map (_ => f (variable.name, variable.domain));
+					variable.map (f (variable.name, _));
 				}
 		}
 }

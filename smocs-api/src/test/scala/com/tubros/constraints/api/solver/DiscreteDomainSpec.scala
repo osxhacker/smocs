@@ -40,7 +40,6 @@ class DiscreteDomainSpec
 		val ten : Domain[Int] = DiscreteDomain.empty[Int] ++ (1 to 10);
 		
 		ten.hasDefiniteSize should be === (true);
-		ten should have size (10);
 		ten.bounds should be === (Some ((1, 10)));
 	}
 	

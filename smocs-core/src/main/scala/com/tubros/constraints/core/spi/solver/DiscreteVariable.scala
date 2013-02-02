@@ -46,12 +46,11 @@ final case class DiscreteVariable[A] (
 	override def map[B] (f : DiscreteDomain[A] => DiscreteDomain[B])
 		: Variable[B, DiscreteDomain] =
 		new DiscreteVariable[B] (name = this.name, domain = f (domain));
-
 }
 
 
 object DiscreteVariable
 {
 	def apply[A] (name : VariableName) : DiscreteVariable[A] =
-		new DiscreteVariable (name, DiscreteDomain.empty);
+		new DiscreteVariable (name, DiscreteDomain.empty[A]);
 }

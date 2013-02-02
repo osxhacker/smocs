@@ -32,9 +32,17 @@ trait Domain[T]
 	
 	
 	/// Instance Properties
-	def isDiscrete : Boolean;
-	
+	/**
+	 * The empty property must produce a '''Domain''' which has no contents,
+	 * for whatever definition of that means to the concrete type.
+	 */
 	def empty : Domain[T];
+	
+	/**
+	 * The isDiscrete property indicates whether or not this '''Domain'''
+	 * contains values which are not contiguous.
+	 */
+	def isDiscrete : Boolean;
 	
 	
 	/**
@@ -60,11 +68,11 @@ trait DomainInstances
 	{
 		override def show (d : DomainT[T]) : Cord =
 		{
-			sampling (d) match {
-				case (more, n) if (n < d.size) =>
-					Cord ("Domain(", more, "...)");
+			sampling (d, 10) match {
+				case (firstTen, more) if (more) =>
+					Cord ("Domain(", firstTen, "...)");
 					
-				case (_, 0) =>
+				case (empty, false) if (empty.length == 0) =>
 					Cord ("Domain(<empty>)");
 					
 				case (tenOrLess, _) =>
@@ -73,14 +81,14 @@ trait DomainInstances
 			}
 		
 		
-		private def sampling (d : DomainT[T])
-			: (Cord, Int) =
+		private def sampling (d : DomainT[T], howMany : Int)
+			: (Cord, Boolean) =
 		{
-			val entries = d.iterator.take (10).toSeq
-			
+			val entries = d.iterator.take (howMany).toSeq;
+
 			(
 				Cord.mkCord (",", entries.map (Show[T].show) : _ *),
-				entries.size
+				!d.iterator.drop (howMany).isEmpty
 			);
 		}
 	}
