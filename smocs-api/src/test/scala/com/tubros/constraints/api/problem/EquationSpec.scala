@@ -23,6 +23,10 @@ import org.scalatest.junit.JUnitRunner
 class EquationSpec
 	extends ProjectSpec
 {
+	/// Class Imports
+	import ast._
+	
+	
 	/// Class Types
 	trait RelationalEquation
 		extends Equation
@@ -48,7 +52,7 @@ class EquationSpec
 			
 		greaterThanZero.arity should be === (1);
 		greaterThanZero () should be === (
-			greaterThanZero.GreaterThan (
+			GreaterThan (
 				VariableUse ('x),
 				Constant (0)
 				)
@@ -63,18 +67,18 @@ class EquationSpec
 			
 		complex.arity should be === (1);
 		complex () should be === (
-			complex.LogicalAnd (
-				complex.LogicalOr (
-					complex.LessThan (
+			LogicalAnd (
+				LogicalOr (
+					LessThan (
 						VariableUse ('x),
 						Constant (0)
 						),
-					complex.GreaterThan (
+					GreaterThan (
 						VariableUse ('x),
 						Constant (0)
 						)
 					),
-				complex.NotEqualTo (
+				NotEqualTo (
 					VariableUse ('x),
 					Constant (99)
 					)

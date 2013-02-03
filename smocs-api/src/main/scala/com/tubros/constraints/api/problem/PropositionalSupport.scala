@@ -18,22 +18,11 @@ trait PropositionalSupport
 	this : Equation =>
 	
 	
+	/// Class Imports
+	import ast._
+	
+	
 	/// Class Types
-	case class LogicalAnd (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-	
-	case class LogicalOr (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-
-	
 	implicit class PropositionalOps[T <% Expression] (val lhs : T)
 	{
 		def /\ (rhs : Expression) : Expression = and (lhs, rhs);
@@ -48,4 +37,24 @@ trait PropositionalSupport
 	
 	def or (lhs : Expression, rhs : Expression) : Expression =
 		LogicalOr (lhs, rhs);
+}
+
+
+package ast
+{
+	
+case class LogicalAnd (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+
+case class LogicalOr (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+
 }

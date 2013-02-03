@@ -21,50 +21,11 @@ trait RelationalSupport
 	this : Equation =>
 	
 	
+	/// Class Imports
+	import ast._
+	
+	
 	/// Class Types
-	case class EqualTo (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-			
-	case class NotEqualTo (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-			
-	case class LessThan (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-			
-	case class GreaterThan (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-			
-	case class LessThanOrEqualTo (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-			
-	case class GreaterThanOrEqualTo (
-		override val lhs : Expression,
-		override val rhs : Expression
-		)
-		extends Expression
-			with BinaryOperator
-			
-		
 	implicit class RelationalOps[T <% Expression] (val lhs : T)
 	{
 		def === (rhs : Expression) : Expression = equalTo (lhs, rhs);
@@ -96,4 +57,52 @@ trait RelationalSupport
 	
 	def greaterThanOrEqualTo (lhs : Expression, rhs : Expression) : Expression =
 		GreaterThanOrEqualTo (lhs, rhs);
+}
+
+
+package ast
+{
+	
+case class EqualTo (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+		
+case class NotEqualTo (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+		
+case class LessThan (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+		
+case class GreaterThan (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+		
+case class LessThanOrEqualTo (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+		
+case class GreaterThanOrEqualTo (
+	override val lhs : Expression,
+	override val rhs : Expression
+	)
+	extends Expression
+		with BinaryOperator
+
 }
