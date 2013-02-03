@@ -24,8 +24,9 @@ class EquationSpec
 	extends ProjectSpec
 {
 	/// Class Types
-	trait MathEquation
+	trait RelationalEquation
 		extends Equation
+			with PropositionalSupport
 			with RelationalSupport
 
 
@@ -41,55 +42,49 @@ class EquationSpec
 	
 	it should "not require an assigment operator" in
 	{
-		val greaterThanZero = new MathEquation {
+		val greaterThanZero = new RelationalEquation {
 			def apply = 'x > 0;
 			};
 			
 		greaterThanZero.arity should be === (1);
-		greaterThanZero ().flatten.toList should be === (
-			Tree.node[Expression] (
-				Operator (">"),
-				Stream (VariableUse ('x), Constant (0))
-				).flatten.toList
+		greaterThanZero () should be === (
+			greaterThanZero.GreaterThan (
+				VariableUse ('x),
+				Constant (0)
+				)
 			);
 	}
 	
 	it should "support compound statements" in
 	{
-		val complex = new MathEquation {
+		val complex = new RelationalEquation {
 			def apply = ('x < 0 || 'x > 0) && ('x !== 99);
 			};
 			
 		complex.arity should be === (1);
-		complex ().flatten.toList should be === (
-			Tree.node[Expression] (
-				Operator ("&&"),
-				Stream (
-					Tree.node[Expression] (
-						Operator ("||"),
-						Stream (
-							Tree.node[Expression] (
-								Operator ("<"),
-								Stream (VariableUse ('x), Constant (0))
-								),
-							Tree.node[Expression] (
-								Operator (">"),
-								Stream (VariableUse ('x), Constant (0))
-								)
-							)
+		complex () should be === (
+			complex.LogicalAnd (
+				complex.LogicalOr (
+					complex.LessThan (
+						VariableUse ('x),
+						Constant (0)
 						),
-						Tree.node[Expression] (
-							Operator ("!=="),
-							Stream (VariableUse ('x), Constant (99))
-							)
+					complex.GreaterThan (
+						VariableUse ('x),
+						Constant (0)
+						)
+					),
+				complex.NotEqualTo (
+					VariableUse ('x),
+					Constant (99)
 					)
-				).flatten.toList
+				)
 			);
 	}
 	
 	it should "allow definitions consisting only of symbolic variables" in
 	{
-		val xBeforeY = new MathEquation {
+		val xBeforeY = new RelationalEquation {
 			def apply = 'x < 'y;
 			}
 		

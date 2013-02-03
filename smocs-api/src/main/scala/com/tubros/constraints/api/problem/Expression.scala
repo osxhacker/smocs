@@ -7,7 +7,6 @@ package problem
 import scala.language.implicitConversions
 
 import scalaz._
-import scalaz.syntax.tree._
 
 
 /**
@@ -17,28 +16,12 @@ import scalaz.syntax.tree._
  * @author svickers
  *
  */
-sealed trait Expression
-{
-	/// Instance Properties
-	lazy val toTree : Tree[Expression] = this.leaf;
-	
-	
-	def /\ (other : Expression) : Expression = and (other);
-	def && (other : Expression) : Expression = and (other);
-	def \/ (other : Expression) : Expression = or (other);
-	def || (other : Expression) : Expression = or (other);
-	
-	def and (other : Expression) : Expression = LogicalAnd (this, other);
-	def or (other : Expression) : Expression = LogicalOr (this, other);
-}
+trait Expression
 
 
 object Expression
 {
 	/// Implicit Conversions
-	implicit def expressionToTree (expr : Expression) : Tree[Expression] =
-		expr.toTree;
-	
 	implicit def expressionToShow : Show[Expression] =
 		new Show[Expression] {
 			override def shows (expr : Expression) : String =
@@ -47,65 +30,36 @@ object Expression
 }
 
 
-case class Operator[T] (opcode : T)
+trait UnaryOperator
+{
+	/// Self Type Constraints
+	this : Expression =>
+		
+		
+	/// Instance Properties
+	val operand : Expression;
+}
+
+trait BinaryOperator
+{
+	/// Self Type Constraints
+	this : Expression =>
+		
+		
+	/// Instance Properties
+	val lhs : Expression;
+	val rhs : Expression;
+}
+
+case class Assignment (
+	override val lhs : VariableUse,
+	override val rhs : Expression
+	)
 	extends Expression
-{
-}
-
-
-object Operator
-{
-	private[problem] def tree[T] (opcode : T, args : Expression *)
-		: Tree[Expression] =
-		Tree.node[Expression] (
-			Operator (opcode),
-			args.map (_.toTree).toStream
-			);
-}
-
-
-case class Assignment (name : VariableName, statement : Expression)
-	extends Expression
-{
-	override lazy val toTree = Operator.tree (
-		":=",
-		VariableUse (name),
-		statement
-		);
-}
-	
+		with BinaryOperator
 
 case class VariableUse (name : VariableName)
 	extends Expression
 
-
 case class Constant[T] (value : T)
 	extends Expression
-
-
-case class UnaryOperator[T] (opcode : T, statement : Expression)
-	extends Expression
-{
-	override lazy val toTree = Operator.tree (opcode, statement);
-}
-
-
-case class BinaryOperator[T] (opcode : T, lhs : Expression, rhs : Expression)
-	extends Expression
-{
-	override lazy val toTree = Operator.tree (opcode, lhs, rhs);
-}
-
-
-case class LogicalAnd (lhs : Expression, rhs : Expression)
-	extends Expression
-{
-	override lazy val toTree = Operator.tree ("&&", lhs, rhs);
-}
-
-
-case class LogicalOr (lhs : Expression, rhs : Expression)
-	extends Expression
-{
-	override lazy val toTree = Operator.tree ("||", lhs, rhs);
-}

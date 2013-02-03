@@ -28,7 +28,7 @@ import scalaz._
  *
  */
 trait Equation
-	extends (() => Tree[Expression])
+	extends (() => Expression)
 {
 	/// Class Imports
 	import std.list._
@@ -36,10 +36,10 @@ trait Equation
 	
 	/// Instance Properties
 	/**
-	 * The tree property uses the concrete type's `apply` definition to cache
-	 * the [[scalaz.Tree]] definition.
+	 * The expression property uses the concrete type's `apply` definition to
+	 * cache the [[com.tubros.constraints.api.problem.Expression]] definition.
 	 */
-	lazy val tree : Tree[Expression] = apply;
+	lazy val expression : Expression = apply;
 	
 	/**
 	 * The arity property lets callers know how many ''distinct'' `variables`
@@ -52,22 +52,30 @@ trait Equation
 	 * [[com.tubros.constraints.VariableName]]s used in this '''Equation'''.
 	 */
 	lazy val variables : Set[VariableName] =
-		tree.foldMap {
-			_ match {
-				case VariableUse (name) =>
-					List (name);
-					
-				case _ =>
-					List.empty;
-				}
-			} toSet;
+		findVariables (expression).to[Set];
 			
 			
-	/// Implicit Conversions
-	implicit def valToConstant[T <: AnyVal] (v : T) : Constant[T] =
-		Constant (v);
+	private def findVariables (expr : Expression) : List[VariableName] =
+		expr match {
+			case VariableUse (name) =>
+				name :: Nil;
+				
+			case unary : UnaryOperator =>
+				findVariables (unary);
+				
+			case binary : BinaryOperator =>
+				findVariables (binary.lhs) ::: findVariables (binary.rhs);
+				
+			case _ =>
+				List.empty;
+			}
 	
-	implicit def symbolToVariableUse (name : Symbol) : VariableUse =
+	
+	/// Implicit Conversions
+	implicit def valToConstant[T <: AnyVal] (v : T) : Expression =
+		Constant[T] (v);
+	
+	implicit def symbolToVariableUse (name : Symbol) : Expression =
 		VariableUse (name);
 }
 

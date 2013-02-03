@@ -13,38 +13,81 @@ package problem
  *
  */
 trait ArithmeticSupport
-	extends DefinitionFunctions
 {
 	/// Self Type Constraints
 	this : Equation =>
-		
-		
-	implicit class ArithmeticOps (val name : Symbol)
+
+
+	/// Class Types
+	case class DividedBy (
+		override val lhs : Expression,
+		override val rhs : Expression
+		)
+		extends Expression
+			with BinaryOperator
+	
+	case class Plus (
+		override val lhs : Expression,
+		override val rhs : Expression
+		)
+		extends Expression
+			with BinaryOperator
+	
+	case class Power (
+		override val lhs : Expression,
+		override val rhs : Expression
+		)
+		extends Expression
+			with BinaryOperator
+	
+	case class Minus (
+		override val lhs : Expression,
+		override val rhs : Expression
+		)
+		extends Expression
+			with BinaryOperator
+	
+	case class Modulo (
+		override val lhs : Expression,
+		override val rhs : Expression
+		)
+		extends Expression
+			with BinaryOperator
+	
+	case class Times (
+		override val lhs : Expression,
+		override val rhs : Expression
+		)
+		extends Expression
+			with BinaryOperator
+	
+	
+	implicit class ArithmeticOps[T <% Expression] (val lhs : T)
 	{
-		def + (statement : Expression) : Expression = add (statement);
-		def - (statement : Expression) : Expression = sub (statement);
-		def / (statement : Expression) : Expression = div (statement);
-		def % (statement : Expression) : Expression = mod (statement);
-		def * (statement : Expression) : Expression = mult (statement);
-		def ^ (statement : Expression) : Expression = pow (statement);
+		def + (rhs : Expression) : Expression = add (lhs, rhs);
+		def - (rhs : Expression) : Expression = sub (lhs, rhs);
+		def / (rhs : Expression) : Expression = div (lhs, rhs);
+		def % (rhs : Expression) : Expression = mod (lhs, rhs);
+		def * (rhs : Expression) : Expression = mult (lhs, rhs);
+		def ^ (rhs : Expression) : Expression = pow (lhs, rhs);
+	}
 			
 		
-		def add (statement : Expression) : Expression =
-			expression ("*", name, statement);
+		def add (lhs : Expression, rhs : Expression) : Expression =
+			Plus (lhs, rhs);
 
-		def sub (statement : Expression) : Expression =
-			expression ("-", name, statement);
+		def sub (lhs : Expression, rhs : Expression) : Expression =
+			Minus (lhs, rhs);
 
-		def div (statement : Expression) : Expression =
-			expression ("/", name, statement);
+		def div (lhs : Expression, rhs : Expression) : Expression =
+			DividedBy (lhs, rhs);
 
-		def mod (statement : Expression) : Expression =
-			expression ("%", name, statement);
+		def mod (lhs : Expression, rhs : Expression) : Expression =
+			Modulo (lhs, rhs);
 		
-		def mult (statement : Expression) : Expression =
-			expression ("*", name, statement);
+		def mult (lhs : Expression, rhs : Expression) : Expression =
+			Times (lhs, rhs);
 
-		def pow (statement : Expression) : Expression =
-			expression ("^", name, statement);
-	}
+		def pow (lhs : Expression, rhs : Expression) : Expression =
+			Power (lhs, rhs);
 }

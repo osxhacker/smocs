@@ -42,13 +42,16 @@ class DefiningEquationsUseCase
 		{
 			Given ("A quadratic Equation");
 			
-			 val quadratic = new Equation with ArithmeticSupport {
-				 def apply = 'y := 'x ^ 2;
-				 }
+			val quadratic = new Equation
+				with ArithmeticSupport
+				with RelationalSupport {
+					def apply = 'y @== 'x ^ 2;
+					}
 			 
 			Then ("The definition should be what was given");
 			
-			 quadratic.arity should be === (2);
+			quadratic.arity should be === (2);
+			quadratic.variables should be === (Set ('x, 'y));
 		}
 	}
 }
