@@ -71,7 +71,7 @@ class ExhaustiveFiniteDomainSolver[A]
 		)
 		: Stream[C[Answer[A]]] =
 	{
-		context (this).eval (VariableStore[A] (Set.empty));
+		context (this).eval (VariableStore[A] (Map.empty));
 	}
 	
 	
@@ -119,7 +119,7 @@ class ExhaustiveFiniteDomainSolver[A]
 			vs =>
 				
 			// TODO: This is horribly inefficient!
-			val lists = vs.variables.to[List].map (_.enumerate.toList).sequence;
+			val lists = vs.variables.values.to[List].map (_.enumerate.toList).sequence;
 			val answers = lists.map {
 				answer =>
 					
@@ -138,12 +138,14 @@ class ExhaustiveFiniteDomainSolver[A]
 object ExhaustiveFiniteDomainSolver
 {
 	/// Class Types
-	case class VariableStore[A] (variables : Set[Variable[A, DiscreteDomain]])
+	case class VariableStore[A] (
+		variables : Map[VariableName, Variable[A, DiscreteDomain]]
+		)
 	{
 		def + (entry : DiscreteVariable[A]) =
-			copy (variables = variables + entry);
+			copy (variables = variables + (entry.name -> entry));
 		
 		def ++ (entries : Seq[DiscreteVariable[A]]) =
-			copy (variables = variables ++ entries);
+			copy (variables = variables ++ (entries map (e => (e.name -> e))));
 	}
 }
