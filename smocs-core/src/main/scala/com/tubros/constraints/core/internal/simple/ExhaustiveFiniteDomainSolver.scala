@@ -10,6 +10,7 @@ import scalaz._
 import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
 
+import problem.Equation
 import solver._
 import ExhaustiveFiniteDomainSolver._
 
@@ -35,23 +36,36 @@ class ExhaustiveFiniteDomainSolver[A]
 	import scalaz.std.list._
 	import scalaz.syntax.applicative._
 	import scalaz.syntax.traverse._
+	import State._
 	
 	
 	/// Class Types
 	type DomainType[T] = DiscreteDomain[T]
 	
-	type SolverState[T] = ({ type L[+X] = State[VariableStore[A], X]})#L[T]
+	type SolverState[+T] = ({ type L[+X] = State[VariableStore[A], X]})#L[T]
 	
 	
-	def add[T <: this.Constraint] (constraint : T) : SolverState[_] =
-		State {
+	override def add[T <: this.Constraint] (constraint : T)
+		: SolverState[Unit] =
+		modify {
 			case vs =>
 				
-			(vs, 0);
+			// TODO: Implement constraint creation
+			vs;
 			}
 	
 	
-	def apply[C[_]] (
+	override def add[F[_]] (equation : F[Equation])
+		(implicit A : Applicative[F])
+		: SolverState[Unit] =
+		modify {
+			case vs =>
+				
+			vs;
+			}
+	
+	
+	override def apply[C[_]] (
 		context : ExhaustiveFiniteDomainSolver[A] =>
 			SolverState[Stream[C[Answer[A]]]]
 		)
@@ -61,7 +75,7 @@ class ExhaustiveFiniteDomainSolver[A]
 	}
 	
 	
-	def newVar (name : VariableName, domain : DomainType[A])
+	override def newVar (name : VariableName, domain : DomainType[A])
 		: SolverState[Variable[A, DomainType]] =
 		State {
 			case vs =>
@@ -72,7 +86,7 @@ class ExhaustiveFiniteDomainSolver[A]
 			}
 	
 	
-	def newVars[C[_]] (domain : DomainType[A])
+	override def newVars[C[_]] (domain : DomainType[A])
 		(names : C[VariableName])
 		(implicit F : Foldable[C])
 		: SolverState[List[Variable[A, DomainType]]] =
@@ -80,7 +94,9 @@ class ExhaustiveFiniteDomainSolver[A]
 			case vs =>
 				
 			val created = F.foldMap (names) {
-				name => List (DiscreteVariable (name, domain));
+				name =>
+					
+				List (DiscreteVariable (name, domain));
 				}
 			
 			(vs ++ created, created);
@@ -94,9 +110,12 @@ class ExhaustiveFiniteDomainSolver[A]
 	 * if ''all'' have at least one value remaining in their
 	 * [[com.tubros.constraints.api.solver.DiscreteDomain]].
 	 */
-	def run[C[_]] (implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
+	override def run[C[_]] (
+		implicit mo : Monoid[C[Answer[A]]],
+		a : Applicative[C]
+		)
 		: SolverState[Stream[C[Answer[A]]]] =
-		State.gets {
+		gets {
 			vs =>
 				
 			// TODO: This is horribly inefficient!

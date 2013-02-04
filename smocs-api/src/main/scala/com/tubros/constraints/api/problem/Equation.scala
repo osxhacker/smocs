@@ -9,8 +9,6 @@ import scala.language.{
 	postfixOps
 	}
 
-import scalaz._
-
 
 /**
  * The '''Equation''' type provides the ability to define an AST-based
@@ -30,10 +28,6 @@ import scalaz._
 trait Equation
 	extends (() => Expression)
 {
-	/// Class Imports
-	import std.list._
-	
-	
 	/// Instance Properties
 	/**
 	 * The expression property uses the concrete type's `apply` definition to

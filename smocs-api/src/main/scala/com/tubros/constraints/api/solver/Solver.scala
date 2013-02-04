@@ -8,6 +8,8 @@ import scala.language.higherKinds
 
 import scalaz._
 
+import problem.Equation
+
 
 /**
  * The '''Solver''' type defines a generic interface for running a CPS solution
@@ -26,14 +28,13 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	
 	trait Constraint
 	
-	trait Term
-	{
-		/// Instance Properties
-		def name : VariableName;
-	}
+	
+	def add[T <: this.Constraint] (constraint : T) : M[Unit];
 	
 	
-	def add[T <: this.Constraint] (constraint : T) : M[_];
+	def add[F[_]] (equation : F[Equation])
+		(implicit A : Applicative[F])
+		: M[Unit];
 	
 	
 	/**
