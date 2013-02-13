@@ -3,6 +3,8 @@
  */
 package com.tubros.constraints.core.spi.solver
 
+import scalaz._
+
 import com.tubros.constraints.api.VariableName
 import com.tubros.constraints.api.solver.{
 	DiscreteDomain,
@@ -27,6 +29,10 @@ final case class DiscreteVariable[A] (
 	)
 	extends Variable[A, DiscreteDomain]
 {
+	override def filter (predicate : A => Boolean) : DiscreteVariable[A] =
+		new DiscreteVariable (name, domain.filter (predicate));
+	
+	
 	override def flatMap[B] (
 		f : (VariableName, DiscreteDomain[A]) => Variable[B, DiscreteDomain]
 		)
@@ -43,9 +49,8 @@ final case class DiscreteVariable[A] (
 	}
 	
 	
-	override def map[B] (f : DiscreteDomain[A] => DiscreteDomain[B])
-		: Variable[B, DiscreteDomain] =
-		new DiscreteVariable[B] (name = this.name, domain = f (domain));
+	override def map[B] (f : A => B) : DiscreteVariable[B] =
+		new DiscreteVariable[B] (name = this.name, domain = domain.map (f));
 }
 
 
@@ -53,4 +58,14 @@ object DiscreteVariable
 {
 	def apply[A] (name : VariableName) : DiscreteVariable[A] =
 		new DiscreteVariable (name, DiscreteDomain.empty[A]);
+	
+	
+	/// Implicit Conversions
+	implicit def DiscreteVariableFunctor : Functor[DiscreteVariable] =
+		new Functor[DiscreteVariable] {
+			override def map[A, B] (fa : DiscreteVariable[A])
+				(f : A => B)
+				: DiscreteVariable[B] =
+				fa.map (f);
+			}
 }

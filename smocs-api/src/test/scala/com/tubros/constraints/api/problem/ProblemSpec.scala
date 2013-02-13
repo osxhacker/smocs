@@ -26,7 +26,7 @@ class ProblemSpec
 	"A Problem" should "require at least one Equation" in
 	{
 		val problem = Problem (
-			new Equation {
+			new Equation[Int] {
 				def apply = 'x := 99;
 				}
 			);
@@ -34,3 +34,4 @@ class ProblemSpec
 		problem.equations.size must be === (1);
 	}
 }
+

@@ -16,8 +16,8 @@ import scalaz.NonEmptyList
  * @author svickers
  *
  */
-case class Problem (
-	val equations : NonEmptyList[Equation]
+case class Problem[T] (
+	val equations : NonEmptyList[Equation[T]]
 	)
 
 
@@ -27,6 +27,6 @@ object Problem
 	 * The apply method allows a functional creation style for situations where
 	 * the caller prefers a variadic invocation style.
 	 */
-	def apply (head : Equation, tail : Equation *) : Problem =
+	def apply[T] (head : Equation[T], tail : Equation[T] *) : Problem[T] =
 		new Problem (NonEmptyList (head, tail : _ *));
 }

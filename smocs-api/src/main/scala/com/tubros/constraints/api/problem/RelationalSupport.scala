@@ -15,10 +15,10 @@ import scalaz.Tree
  * @author svickers
  *
  */
-trait RelationalSupport
+trait RelationalSupport[T]
 {
 	/// Self Type Constraints
-	this : Equation =>
+	this : Equation[T] =>
 	
 	
 	/// Class Imports
@@ -26,36 +26,36 @@ trait RelationalSupport
 	
 	
 	/// Class Types
-	implicit class RelationalOps[T <% Expression] (val lhs : T)
+	implicit class RelationalOps[U <% Expression[T]] (val lhs : U)
 	{
-		def === (rhs : Expression) : Expression = equalTo (lhs, rhs);
-		def @== (rhs : Expression) : Expression = equalTo (lhs, rhs);
-		def !== (rhs : Expression) : Expression = notEqualTo (lhs, rhs);
-		def <> (rhs : Expression) : Expression = notEqualTo (lhs, rhs);
-		def < (rhs : Expression) : Expression = lessThan (lhs, rhs);
-		def > (rhs : Expression) : Expression = greaterThan (lhs, rhs);
-		def <= (rhs : Expression) : Expression = lessThanOrEqualTo (lhs, rhs);
-		def >= (rhs : Expression) : Expression =
+		def === (rhs : Expression[T]) : Expression[T] = equalTo (lhs, rhs);
+		def @== (rhs : Expression[T]) : Expression[T] = equalTo (lhs, rhs);
+		def !== (rhs : Expression[T]) : Expression[T] = notEqualTo (lhs, rhs);
+		def <> (rhs : Expression[T]) : Expression[T] = notEqualTo (lhs, rhs);
+		def < (rhs : Expression[T]) : Expression[T] = lessThan (lhs, rhs);
+		def > (rhs : Expression[T]) : Expression[T] = greaterThan (lhs, rhs);
+		def <= (rhs : Expression[T]) : Expression[T] = lessThanOrEqualTo (lhs, rhs);
+		def >= (rhs : Expression[T]) : Expression[T] =
 			greaterThanOrEqualTo (lhs, rhs);
 	}
 	
 	
-	def equalTo (lhs : Expression, rhs : Expression) : Expression =
+	def equalTo (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		EqualTo (lhs, rhs);
 	
-	def notEqualTo (lhs : Expression, rhs : Expression) : Expression =
+	def notEqualTo (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		NotEqualTo (lhs, rhs);
 	
-	def lessThan (lhs : Expression, rhs : Expression) : Expression =
+	def lessThan (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		LessThan (lhs, rhs);
 	
-	def greaterThan (lhs : Expression, rhs : Expression) : Expression =
+	def greaterThan (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		GreaterThan (lhs, rhs);
 	
-	def lessThanOrEqualTo (lhs : Expression, rhs : Expression) : Expression =
+	def lessThanOrEqualTo (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		LessThanOrEqualTo (lhs, rhs);
 	
-	def greaterThanOrEqualTo (lhs : Expression, rhs : Expression) : Expression =
+	def greaterThanOrEqualTo (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		GreaterThanOrEqualTo (lhs, rhs);
 }
 
@@ -63,46 +63,46 @@ trait RelationalSupport
 package ast
 {
 	
-case class EqualTo (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class EqualTo[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 		
-case class NotEqualTo (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class NotEqualTo[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 		
-case class LessThan (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class LessThan[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 		
-case class GreaterThan (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class GreaterThan[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 		
-case class LessThanOrEqualTo (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class LessThanOrEqualTo[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 		
-case class GreaterThanOrEqualTo (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class GreaterThanOrEqualTo[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 
 }

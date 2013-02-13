@@ -13,10 +13,7 @@ import problem.Equation
 
 /**
  * The '''Solver''' type defines a generic interface for running a CPS solution
- * algorithm.  '''Constraint'''s are defined as a nested type so that
- * instances can ''only'' be associated with particular '''Solver'''s, thus
- * eliminating a category of errors wherein '''Constraint'''s from one
- * '''Solver''' are given to another.
+ * algorithm. 
  *
  * @author svickers
  *
@@ -26,15 +23,14 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	/// Class Types
 	type DomainType[T] <: Domain[T]
 	
-	trait Constraint
 	
-	
-	def add[T <: this.Constraint] (constraint : T) : M[Unit];
-	
-	
-	def add[F[_]] (equation : F[Equation])
-		(implicit A : Applicative[F])
-		: M[Unit];
+	/**
+	 * The add method internalizes an '''equation''' for use when producing
+	 * the solution.  Any number of
+	 * [[com.tubros.constraints.api.problem.Equation]]s can be provided through
+	 * this method.
+	 */
+	def add (equation : Equation[A]) : M[Unit];
 	
 	
 	/**

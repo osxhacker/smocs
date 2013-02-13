@@ -25,15 +25,15 @@ import scala.language.{
  * @author svickers
  *
  */
-trait Equation
-	extends (() => Expression)
+trait Equation[T]
+	extends (() => Expression[T])
 {
 	/// Instance Properties
 	/**
 	 * The expression property uses the concrete type's `apply` definition to
 	 * cache the [[com.tubros.constraints.api.problem.Expression]] definition.
 	 */
-	lazy val expression : Expression = apply;
+	lazy val expression : Expression[T] = apply;
 	
 	/**
 	 * The arity property lets callers know how many ''distinct'' `variables`
@@ -49,16 +49,16 @@ trait Equation
 		findVariables (expression).to[Set];
 			
 			
-	private def findVariables (expr : Expression) : List[VariableName] =
+	private def findVariables (expr : Expression[T]) : List[VariableName] =
 		expr match {
 			case VariableUse (name) =>
 				name :: Nil;
 				
-			case unary : UnaryOperator =>
-				findVariables (unary);
+			case UnaryOperator (operand) =>
+				findVariables (operand);
 				
-			case binary : BinaryOperator =>
-				findVariables (binary.lhs) ::: findVariables (binary.rhs);
+			case BinaryOperator (lhs, rhs) =>
+				findVariables (lhs) ::: findVariables (rhs);
 				
 			case _ =>
 				List.empty;
@@ -66,10 +66,10 @@ trait Equation
 	
 	
 	/// Implicit Conversions
-	implicit def valToConstant[T <: AnyVal] (v : T) : Expression =
+	implicit def valToConstant[T <: AnyVal] (v : T) : Expression[T] =
 		Constant[T] (v);
 	
-	implicit def symbolToVariableUse (name : Symbol) : Expression =
+	implicit def symbolToVariableUse (name : Symbol) : Expression[Nothing] =
 		VariableUse (name);
 }
 

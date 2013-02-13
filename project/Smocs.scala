@@ -46,7 +46,7 @@ object Smocs
 	/// Instance Properties
 	lazy val buildSettings = Seq (
 		organization := "com.tubros",
-		version := "0.2-SNAPSHOT",
+		version := "0.3-SNAPSHOT",
 		scalaVersion := "2.10.0"
 		);
 
@@ -54,7 +54,7 @@ object Smocs
 	lazy val defaultSettings = Defaults.defaultSettings ++ Seq (
 		scalacOptions in Compile ++= Seq (
 			"-encoding", "UTF-8",
-			"-target:jvm-1.6",
+			"-target:jvm-1.7",
 			"-deprecation",
 			"-feature",
 			"-unchecked"

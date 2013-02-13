@@ -12,6 +12,7 @@ import com.tubros.constraints.core.spi.solver._
 
 import problem.Equation
 import solver._
+import solver.error._
 import ExhaustiveFiniteDomainSolver._
 
 
@@ -26,6 +27,7 @@ import ExhaustiveFiniteDomainSolver._
  *
  */
 class ExhaustiveFiniteDomainSolver[A]
+	(implicit val cc : CanConstrain[Equation, A])
 	extends Solver[
 		A,
 		({ type L[+X] = State[VariableStore[A], X]})#L,
@@ -33,8 +35,11 @@ class ExhaustiveFiniteDomainSolver[A]
 		]
 {
 	/// Class Imports
+	import constraints._
 	import scalaz.std.list._
+	import scalaz.std.stream._
 	import scalaz.syntax.applicative._
+	import scalaz.syntax.id._
 	import scalaz.syntax.traverse._
 	import State._
 	
@@ -45,23 +50,9 @@ class ExhaustiveFiniteDomainSolver[A]
 	type SolverState[+T] = ({ type L[+X] = State[VariableStore[A], X]})#L[T]
 	
 	
-	override def add[T <: this.Constraint] (constraint : T)
-		: SolverState[Unit] =
+	override def add (equation : Equation[A]) : SolverState[Unit] =
 		modify {
-			case vs =>
-				
-			// TODO: Implement constraint creation
-			vs;
-			}
-	
-	
-	override def add[F[_]] (equation : F[Equation])
-		(implicit A : Applicative[F])
-		: SolverState[Unit] =
-		modify {
-			case vs =>
-				
-			vs;
+			_ + equation.constrains;
 			}
 	
 	
@@ -71,14 +62,14 @@ class ExhaustiveFiniteDomainSolver[A]
 		)
 		: Stream[C[Answer[A]]] =
 	{
-		context (this).eval (VariableStore[A] (Map.empty));
+		context (this).eval (VariableStore.empty[A]);
 	}
 	
 	
 	override def newVar (name : VariableName, domain : DomainType[A])
 		: SolverState[Variable[A, DomainType]] =
 		State {
-			case vs =>
+			vs =>
 				
 			val variable = DiscreteVariable (name, domain);
 			
@@ -91,7 +82,7 @@ class ExhaustiveFiniteDomainSolver[A]
 		(implicit F : Foldable[C])
 		: SolverState[List[Variable[A, DomainType]]] =
 		State {
-			case vs =>
+			vs =>
 				
 			val created = F.foldMap (names) {
 				name =>
@@ -115,12 +106,38 @@ class ExhaustiveFiniteDomainSolver[A]
 		a : Applicative[C]
 		)
 		: SolverState[Stream[C[Answer[A]]]] =
+		for {
+			constrained <- applyConstraints
+			answers <- label (constrained)
+			} yield answers;
+			
+	
+	private def applyConstraints ()
+		: SolverState[Stream[Map[VariableName, A]]] =
 		gets {
 			vs =>
 				
-			// TODO: This is horribly inefficient!
-			val lists = vs.variables.values.to[List].map (_.enumerate.toList).sequence;
-			val answers = lists.map {
+			val streams = vs.variables.view.to[Stream].map (_.enumerate.to[Stream]);
+			val c = vs.constraints.foldLeft (Constraint.kleisliUnit[A]) {
+				case (accum, c) =>
+					
+				accum >==> c;
+				}
+			
+			// TODO: this needs to return SolverError \/ Stream
+			streams.sequence.map (_.toMap).filter {
+				candidate =>
+					
+				c.run (candidate).isRight;
+				}
+			}
+	
+	
+	private def label[C[_]] (variables : Stream[Map[VariableName, A]])
+		(implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
+		: SolverState[Stream[C[Answer[A]]]] =
+		state {
+			val answers = variables.map {
 				answer =>
 					
 				answer.foldLeft (mo.zero) {
@@ -130,22 +147,40 @@ class ExhaustiveFiniteDomainSolver[A]
 					}
 				}
 			
-			answers.toStream;
+			answers;
 			}
 }
 
 
 object ExhaustiveFiniteDomainSolver
 {
+	/// Class Imports
+	import scalaz.std.AllInstances._
+	import scalaz.std.AllFunctions._
+	import scalaz.syntax.monoid._
+	
+	
 	/// Class Types
 	case class VariableStore[A] (
-		variables : Map[VariableName, Variable[A, DiscreteDomain]]
+		variables : Set[Variable[A, DiscreteDomain]],
+		constraints : Set[Constraint[A]]
 		)
 	{
+		def + (constraint : Constraint[A]) =
+			copy (constraints = constraints + constraint);
+			
 		def + (entry : DiscreteVariable[A]) =
-			copy (variables = variables + (entry.name -> entry));
+			copy (variables = variables + entry);
 		
 		def ++ (entries : Seq[DiscreteVariable[A]]) =
-			copy (variables = variables ++ (entries map (e => (e.name -> e))));
+			copy (variables = variables ++ entries);
+	}
+	
+	object VariableStore
+	{
+		def empty[A] = new VariableStore[A] (
+			variables = Set.empty,
+			constraints = Set.empty
+			);
 	}
 }

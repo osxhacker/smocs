@@ -16,50 +16,75 @@ import scalaz._
  * @author svickers
  *
  */
-trait Expression
+trait Expression[+T]
 
 
 object Expression
 {
 	/// Implicit Conversions
-	implicit def expressionToShow : Show[Expression] =
-		new Show[Expression] {
-			override def shows (expr : Expression) : String =
+	implicit def expressionToShow[T] : Show[Expression[T]] =
+		new Show[Expression[T]] {
+			override def shows (expr : Expression[T]) : String =
 				expr.toString;
 	}
 }
 
 
-trait UnaryOperator
+trait UnaryOperator[+T]
 {
 	/// Self Type Constraints
-	this : Expression =>
+	this : Expression[T] =>
 		
 		
 	/// Instance Properties
-	val operand : Expression;
+	val operand : Expression[T];
 }
 
-trait BinaryOperator
+
+object UnaryOperator
+{
+	def unapply[T] (e : Expression[T]) : Option[Expression[T]] =
+		e match {
+			case uo : UnaryOperator[T] => Some (uo.operand);
+			case _ => None;
+			}
+}
+
+
+trait BinaryOperator[+T]
 {
 	/// Self Type Constraints
-	this : Expression =>
+	this : Expression[T] =>
 		
 		
 	/// Instance Properties
-	val lhs : Expression;
-	val rhs : Expression;
+	val lhs : Expression[T];
+	val rhs : Expression[T];
 }
 
-case class Assignment (
+
+object BinaryOperator
+{
+	def unapply[T] (e : Expression[T])
+		: Option[(Expression[T], Expression[T])] =
+		e match {
+			case bo : BinaryOperator[T] => Some (bo.lhs, bo.rhs);
+			case _ => None;
+			}
+}
+
+
+case class Assignment[T] (
 	override val lhs : VariableUse,
-	override val rhs : Expression
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
+
 
 case class VariableUse (name : VariableName)
-	extends Expression
+	extends Expression[Nothing]
+
 
 case class Constant[T] (value : T)
-	extends Expression
+	extends Expression[T]

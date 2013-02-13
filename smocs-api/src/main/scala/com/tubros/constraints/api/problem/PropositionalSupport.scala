@@ -12,10 +12,10 @@ package com.tubros.constraints.api.problem
  * @author svickers
  *
  */
-trait PropositionalSupport
+trait PropositionalSupport[T]
 {
 	/// Self Type Constraints
-	this : Equation =>
+	this : Equation[T] =>
 	
 	
 	/// Class Imports
@@ -23,19 +23,19 @@ trait PropositionalSupport
 	
 	
 	/// Class Types
-	implicit class PropositionalOps[T <% Expression] (val lhs : T)
+	implicit class PropositionalOps[U <% Expression[T]] (val lhs : U)
 	{
-		def /\ (rhs : Expression) : Expression = and (lhs, rhs);
-		def && (rhs : Expression) : Expression = and (lhs, rhs);
-		def \/ (rhs : Expression) : Expression = or (lhs, rhs);
-		def || (rhs : Expression) : Expression = or (lhs, rhs);
+		def /\ (rhs : Expression[T]) : Expression[T] = and (lhs, rhs);
+		def && (rhs : Expression[T]) : Expression[T] = and (lhs, rhs);
+		def \/ (rhs : Expression[T]) : Expression[T] = or (lhs, rhs);
+		def || (rhs : Expression[T]) : Expression[T] = or (lhs, rhs);
 	}
 	
 	
-	def and (lhs : Expression, rhs : Expression) : Expression =
+	def and (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		LogicalAnd (lhs, rhs);
 	
-	def or (lhs : Expression, rhs : Expression) : Expression =
+	def or (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		LogicalOr (lhs, rhs);
 }
 
@@ -43,18 +43,18 @@ trait PropositionalSupport
 package ast
 {
 	
-case class LogicalAnd (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class LogicalAnd[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 
-case class LogicalOr (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class LogicalOr[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 
 }

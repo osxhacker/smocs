@@ -8,7 +8,6 @@ import scala.collection.{
 	SetLike
 	}
 import scala.collection.generic._
-
 import scalaz.{
 	Ordering => ScalazOrdering,
 	_
@@ -90,5 +89,10 @@ object DiscreteDomain
 	extends ImmutableSetFactory[DiscreteDomain]
 		with DiscreteDomainInstances
 {
+	override implicit def setCanBuildFrom[A]
+		: CanBuildFrom[Coll,A, DiscreteDomain[A]] =
+		super.setCanBuildFrom[A];
+	
+	
 	override def empty[A] : DiscreteDomain[A] = new EmptyDomain[A] {};
 }

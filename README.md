@@ -35,15 +35,15 @@ problems and to facilitate an open-ended set of *solvers* to be available.
 A small example of the EDSL looks like :
 
 	val problem = Problem (
-		new Equation {
+		new Equation[Int] {
 			def apply = 'x < 10 && 'x > 0
 			},
-		new Equation {
-			def apply = 'y === 'x ^ 2
+		new Equation[Int] {
+			def apply = 'y === 'x ** 2
 			},
 		// This could have been in the Equation above, but is shown
 		// separately for illustrative purposes.
-		new Equation {
+		new Equation[Int] {
 			def apply = 'y < 10
 			},
 		);
@@ -78,4 +78,8 @@ have a starting point.
 4. Dr. Jacob Feldman, *JSR-331*,
 	accessed January 24, 2013,
 	http://jcp.org/aboutJava/communityprocess/final/jsr331/index.html
+5. Tiark Rompf, Martin Odersky,
+	*Lightweight Modular Staging: A Pragmatic Approach to Runtime Code Generation and Compiled DSLs*,
+	accessed Feb 7, 2013,
+	http://infoscience.epfl.ch/record/150347/files/gpce63-rompf.pdf
 

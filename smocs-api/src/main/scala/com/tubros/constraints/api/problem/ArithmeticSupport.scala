@@ -7,15 +7,15 @@ package problem
 
 /**
  * The '''ArithmeticSupport''' type provides operators for the EDSL related to
- * mathematical operations, such as `mult` (`*`) and `pow` (`^`).
+ * mathematical operations, such as `mult` (`*`) and `pow` (`**`).
  *
  * @author svickers
  *
  */
-trait ArithmeticSupport
+trait ArithmeticSupport[T]
 {
 	/// Self Type Constraints
-	this : Equation =>
+	this : Equation[T] =>
 
 
 	/// Class Imports
@@ -23,80 +23,88 @@ trait ArithmeticSupport
 	
 	
 	/// Class Types
-	implicit class ArithmeticOps[T <% Expression] (val lhs : T)
+	implicit class ArithmeticOps[U <% Expression[T]] (val lhs : U)
 	{
-		def + (rhs : Expression) : Expression = add (lhs, rhs);
-		def - (rhs : Expression) : Expression = sub (lhs, rhs);
-		def / (rhs : Expression) : Expression = div (lhs, rhs);
-		def % (rhs : Expression) : Expression = mod (lhs, rhs);
-		def * (rhs : Expression) : Expression = mult (lhs, rhs);
-		def ^ (rhs : Expression) : Expression = pow (lhs, rhs);
+		def + (rhs : Expression[T]) : Expression[T] = add (lhs, rhs);
+		def - (rhs : Expression[T]) : Expression[T] = sub (lhs, rhs);
+		def / (rhs : Expression[T]) : Expression[T] = div (lhs, rhs);
+		def % (rhs : Expression[T]) : Expression[T] = mod (lhs, rhs);
+		def * (rhs : Expression[T]) : Expression[T] = mult (lhs, rhs);
+		def ** (rhs : Expression[T]) : Expression[T] = pow (lhs, rhs);
+		def unary_- : Expression[T] = negate (lhs);
 	}
 			
 		
-	def add (lhs : Expression, rhs : Expression) : Expression =
+	def add (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		Plus (lhs, rhs);
 
-	def sub (lhs : Expression, rhs : Expression) : Expression =
+	def sub (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		Minus (lhs, rhs);
 
-	def div (lhs : Expression, rhs : Expression) : Expression =
-		DividedBy (lhs, rhs);
+	def div (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
+		Quotient (lhs, rhs);
 
-	def mod (lhs : Expression, rhs : Expression) : Expression =
+	def mod (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		Modulo (lhs, rhs);
 	
-	def mult (lhs : Expression, rhs : Expression) : Expression =
+	def mult (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		Times (lhs, rhs);
 
-	def pow (lhs : Expression, rhs : Expression) : Expression =
+	def negate (exp : Expression[T]) : Expression[T] =
+		Negate (exp);
+	
+	def pow (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		Power (lhs, rhs);
 }
 
 
 package ast
 {
-	
-case class DividedBy (
-	override val lhs : Expression,
-	override val rhs : Expression
-	)
-	extends Expression
-		with BinaryOperator
 
-case class Plus (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class Minus[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 
-case class Power (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class Modulo[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 
-case class Minus (
-	override val lhs : Expression,
-	override val rhs : Expression
-	)
-	extends Expression
-		with BinaryOperator
+case class Negate[T] (override val operand : Expression[T])
+	extends Expression[T]
+		with UnaryOperator[T]
 
-case class Modulo (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class Plus[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
 
-case class Times (
-	override val lhs : Expression,
-	override val rhs : Expression
+case class Power[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
 	)
-	extends Expression
-		with BinaryOperator
+	extends Expression[T]
+		with BinaryOperator[T]
+
+case class Quotient[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
+	)
+	extends Expression[T]
+		with BinaryOperator[T]
+
+case class Times[T] (
+	override val lhs : Expression[T],
+	override val rhs : Expression[T]
+	)
+	extends Expression[T]
+		with BinaryOperator[T]
 		
 }

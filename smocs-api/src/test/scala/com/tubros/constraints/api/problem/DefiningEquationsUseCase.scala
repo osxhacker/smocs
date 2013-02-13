@@ -28,7 +28,7 @@ class DefiningEquationsUseCase
 		{
 			Given ("An Equation specifying a constant value");
 			
-			val e = new Equation {
+			val e = new Equation[Int] {
 				def apply = 'a := 5;
 				}
 			
@@ -42,10 +42,10 @@ class DefiningEquationsUseCase
 		{
 			Given ("A quadratic Equation");
 			
-			val quadratic = new Equation
-				with ArithmeticSupport
-				with RelationalSupport {
-					def apply = 'y @== 'x ^ 2;
+			val quadratic = new Equation[Int]
+				with ArithmeticSupport[Int]
+				with RelationalSupport[Int] {
+					def apply = 'y @== 'x ** 2;
 					}
 			 
 			Then ("The definition should be what was given");

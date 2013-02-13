@@ -27,6 +27,7 @@ class ExhaustiveFiniteDomainSolverSpec
 {
 	/// Class Imports
 	import scalaz.std.AllInstances._
+	import algebraic._
 	
 	
 	"A ExhaustiveFiniteDomainSolver" should "be able to be constructed" in

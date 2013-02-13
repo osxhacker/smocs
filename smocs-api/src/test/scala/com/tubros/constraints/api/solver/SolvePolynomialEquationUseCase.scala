@@ -8,6 +8,7 @@ import Predef.{
 	any2stringadd => _,					// disable (x : Any) + "foo" conversions
 	_
 	}
+import scala.language.higherKinds
 
 import scalaz._
 
@@ -29,7 +30,7 @@ import problem._
  *
  */
 trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
-	extends UseCaseSpec
+	extends SolverUseCaseSpec[M, SolverT]
 {
 	/// Class Imports
 	import Scalaz._
@@ -37,25 +38,14 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 	
 	/// Class Types
 	trait PolynomialEquation
-		extends Equation
-			with ArithmeticSupport
-			with RelationalSupport
+		extends Equation[Int]
+			with ArithmeticSupport[Int]
+			with RelationalSupport[Int]
 			
 			
-	trait SolverUse
-	{
-		def withSolver[C[_]] (block : SolverT => M[Stream[C[Answer[Int]]]])
-			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-			: Stream[C[Answer[Int]]];
-		
-		def domain (solver : SolverT, range : Range) : solver.DomainType[Int];
-		
-	}
-	
-	
 	/// Test Collaborators
-	implicit val solvable : SolverUse;
-	implicit val unsolvable : SolverUse;
+	implicit val solvable : SolverUsage;
+	implicit val unsolvable : SolverUsage;
 	implicit val monad : Monad[M];
 	
 	
@@ -71,7 +61,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			Given ("a solvable polynomial Equation");
 			
 			val polynomial = new PolynomialEquation {
-				def apply = 'x ^ 2 + 'x * 4 - 4 @== 'y ^ 3;
+				def apply = 'x ** 2 + 'x * 4 - 4 @== 'y ** 3;
 				}
 			
 			When ("solving the equation");
@@ -80,9 +70,9 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 				solver =>
 					
 				for {
-					x <- solver.newVar ('x, domain (solver, 1 to 10))
+					x <- solver.newVar ('x, domain (solver, 2 to 10))
 					y <- solver.newVar ('y, domain (solver, 0 to 5))
-					_ <- solver.add (polynomial.some)
+					_ <- solver.add (polynomial)
 					stream <- solver.run[Set]
 					} yield stream;
 				}
@@ -103,7 +93,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			Given ("a valid, but unsolvable within the domain, Equation");
 		
 			val polynomial = new PolynomialEquation {
-				def apply = ('x ^ 5) - ('x * 3) + 1 @== 0;
+				def apply = ('x ** 5) - ('x * 3) + 1 @== 0;
 				}
 		
 			When ("attempting to solve the Equation");
@@ -113,7 +103,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 					
 				for {
 					x <- solver.newVar ('x, domain (solver, -10 to 10));
-					_ <- solver.add (polynomial.some)
+					_ <- solver.add (polynomial)
 					stream <- solver.run[List]
 					} yield stream;
 				}

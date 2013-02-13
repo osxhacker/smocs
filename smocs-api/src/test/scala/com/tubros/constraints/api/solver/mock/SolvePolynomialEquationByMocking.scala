@@ -3,6 +3,8 @@
  */
 package com.tubros.constraints.api.solver.mock
 
+import scala.language.higherKinds
+
 import scalaz._
 
 import org.scalamock.scalatest.MockFactory
@@ -37,17 +39,16 @@ trait SolvePolynomialEquationByMocking
 	
 	override val monad = Monad[Option];
 	
-	override val solvable = new SolverUse {
+	override val solvable = new SolverUsage {
 		def withSolver[C[_]] (
 			block : MockSolver => Option[Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
 			: Stream[C[Answer[Int]]] =
 		{
-			val answer = mo.append (
-				a.point (Answer ('x -> 2)),
-				a.point (Answer ('y -> 2))
-				);
+			val answer = mo.zero |+|
+				Answer ('x -> 2).point[C] |+|
+				Answer ('y -> 2).point[C];
 			
 			Stream (answer);
 		}
@@ -56,7 +57,7 @@ trait SolvePolynomialEquationByMocking
 			FiniteDiscreteDomain (range);
 		}
 	
-	override val unsolvable = new SolverUse {
+	override val unsolvable = new SolverUsage {
 		def withSolver[C[_]] (
 			block : MockSolver => Option[Stream[C[Answer[Int]]]]
 			)

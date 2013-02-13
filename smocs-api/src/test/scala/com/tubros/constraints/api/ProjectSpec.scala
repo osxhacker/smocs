@@ -28,3 +28,4 @@ trait ProjectSpec
 		with Checkers
 		with MustMatchers
 		with ShouldMatchers
+

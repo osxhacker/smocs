@@ -34,15 +34,15 @@ class DiscreteVariableSpec
 	
 	it should "be able to 'map' its domain" in
 	{
-		val expected = FiniteDiscreteDomain ((1 to 5).to[Set]);
-		val five = DiscreteVariable[Int] ('x) map (_ => expected);
+		val expected = FiniteDiscreteDomain (1 to 5);
+		val five = DiscreteVariable[Int] ('x, expected) map (_.toString);
 		
-		five.domain should be === (expected);
+		five.domain should be === (expected.map (_.toString));
 	}
 	
 	it should "be able to 'flatMap' its contents" in
 	{
-		val initial = FiniteDiscreteDomain ((1 to 5).to[Set]);
+		val initial = FiniteDiscreteDomain (1 to 5);
 		val five = DiscreteVariable[Int] ('x, initial);
 		val ten = five flatMap {
 			(n, d) =>
@@ -52,5 +52,25 @@ class DiscreteVariableSpec
 		
 		ten.name must be === (five.name);
 		ten.domain should have size (10);
+	}
+	
+	it should "be able to filter its domain" in
+	{
+		val domain = FiniteDiscreteDomain ("A", "b", "Cee", "dee");
+		val original = DiscreteVariable ('orig, domain);
+		
+		original.filter (_ == "b") should be === (
+			DiscreteVariable (original.name, FiniteDiscreteDomain ("b"))
+			);
+	}
+	
+	it should "be usable as a Functor" in
+	{
+		import scalaz._
+		import Scalaz._
+		
+		val original = DiscreteVariable ('x, FiniteDiscreteDomain (1 to 5));
+		
+		original.fpair.domain.headOption should be ('defined);
 	}
 }

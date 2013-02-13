@@ -4,7 +4,12 @@
 package com.tubros.constraints.api
 package solver
 
-import scala.language.higherKinds
+import scala.language.{
+	higherKinds,
+	implicitConversions
+	}
+
+import scalaz._
 
 
 /**
@@ -50,6 +55,13 @@ trait Variable[A, DomainT[A] <: Domain[A]]
 	
 	
 	/**
+	 * The filter method allows all '''domain''' values to which the
+	 * given '''predicate''' yields `true` into the resulting '''Variable'''.
+	 */
+	def filter (predicate : A => Boolean) : Variable[A, DomainT];
+	
+	
+	/**
 	 * The flatMap method builds a new '''Variable''' by applying a function
 	 * to the [[com.tubros.constraints.api.VariableName]] and
 	 * [[com.tubros.constraints.api.solver.Domain]] pair.
@@ -64,7 +76,7 @@ trait Variable[A, DomainT[A] <: Domain[A]]
 	 * The map method applies a ''domain-leaning'' function to this
 	 * '''Variable'' in order to produce a new '''Variable''' instance.
 	 */
-	def map[B] (f : DomainT[A] => DomainT[B]) : Variable[B, DomainT];
+	def map[B] (f : A => B) : Variable[B, DomainT];
 }
 
 
@@ -85,7 +97,7 @@ object Variable
 		] (val variable : V)
 		{
 			def withName = new {
-				def map[B] (f : (VariableName, DomainT[A]) => DomainT[B])
+				def map[B] (f : (VariableName, A) => B)
 					: Variable[B, DomainT] =
 					variable.map (f (variable.name, _));
 				}

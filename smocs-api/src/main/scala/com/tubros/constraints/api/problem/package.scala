@@ -23,11 +23,11 @@ package object problem
 	implicit class EquationDefinition (val name : Symbol)
 		extends AnyVal
 	{
-		def :=[T <: AnyVal] (constant : T) : Expression =
-			Assignment (VariableUse (name), Constant (constant));
+		def :=[T <: AnyVal] (constant : T) : Expression[T] =
+			Assignment[T] (VariableUse (name), Constant (constant));
 		
 		
-		def :=[T] (statement : Expression) : Expression =
-			Assignment (VariableUse (name), statement);
+		def :=[T] (statement : Expression[T]) : Expression[T] =
+			Assignment[T] (VariableUse (name), statement);
 	}
 }

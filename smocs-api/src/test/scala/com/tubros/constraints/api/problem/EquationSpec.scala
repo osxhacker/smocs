@@ -29,14 +29,14 @@ class EquationSpec
 	
 	/// Class Types
 	trait RelationalEquation
-		extends Equation
-			with PropositionalSupport
-			with RelationalSupport
+		extends Equation[Int]
+			with PropositionalSupport[Int]
+			with RelationalSupport[Int]
 
 
 	"An Equation" should "support a constant assignment" in
 	{
-		val const = new Equation {
+		val const = new Equation[Int] {
 			def apply = 'a := 5;
 			};
 		
