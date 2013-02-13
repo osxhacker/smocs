@@ -34,6 +34,14 @@ package object simple
 			new IntegralAlgebraicEquationConstraint[T];
 	}
 	
+	object relational
+	{
+		implicit def constrainOrderedEquations[T : Ordering]
+			: CanConstrain[Equation, T] =
+			new RelationalEquationConstraint[T];
+	}
+	
+	
 	/// Instance Properties
 	val constraints = ToCanConstrainOps;
 	

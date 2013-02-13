@@ -4,8 +4,6 @@
 package com.tubros.constraints.api
 package problem
 
-import scalaz.Tree
-
 
 /**
  * The '''RelationalSupport''' type provides the

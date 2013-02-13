@@ -12,9 +12,7 @@ import scala.language.higherKinds
 
 import scalaz._
 
-import org.junit.runner.RunWith
 import org.scalatest._
-import org.scalatest.junit.JUnitRunner
 
 import problem._
 
@@ -30,7 +28,7 @@ import problem._
  *
  */
 trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
-	extends SolverUseCaseSpec[M, SolverT]
+	extends SolverUseCaseSpec[Int, M, SolverT]
 {
 	/// Class Imports
 	import Scalaz._

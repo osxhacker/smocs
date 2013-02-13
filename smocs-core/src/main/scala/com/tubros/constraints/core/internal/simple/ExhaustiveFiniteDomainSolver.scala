@@ -10,7 +10,10 @@ import scalaz._
 import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
 
-import problem.Equation
+import problem.{
+	Equation,
+	Problem
+	}
 import solver._
 import solver.error._
 import ExhaustiveFiniteDomainSolver._
@@ -52,8 +55,16 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	override def add (equation : Equation[A]) : SolverState[Unit] =
 		modify {
-			_ + equation.constrains;
+			_.addConstraint (equation.constrains);
 			}
+	
+	
+	override def add (problem : Problem[A]) : SolverState[Unit] =
+	{
+		modify {
+			_.addConstraints (problem.equations.map (_.constrains).toList);
+			}
+	}
 	
 	
 	override def apply[C[_]] (
@@ -73,7 +84,7 @@ class ExhaustiveFiniteDomainSolver[A]
 				
 			val variable = DiscreteVariable (name, domain);
 			
-			(vs + variable, variable);
+			(vs.addVariable (variable), variable);
 			}
 	
 	
@@ -90,7 +101,7 @@ class ExhaustiveFiniteDomainSolver[A]
 				List (DiscreteVariable (name, domain));
 				}
 			
-			(vs ++ created, created);
+			(vs.addVariables (created), created);
 			}
 		
 		
@@ -166,13 +177,16 @@ object ExhaustiveFiniteDomainSolver
 		constraints : Set[Constraint[A]]
 		)
 	{
-		def + (constraint : Constraint[A]) =
-			copy (constraints = constraints + constraint);
+		def addConstraint (entry : Constraint[A]) =
+			copy (constraints = constraints + entry);
 			
-		def + (entry : DiscreteVariable[A]) =
+		def addConstraints (entries : Seq[Constraint[A]]) =
+			copy (constraints = constraints ++ entries);
+			
+		def addVariable (entry : DiscreteVariable[A]) =
 			copy (variables = variables + entry);
 		
-		def ++ (entries : Seq[DiscreteVariable[A]]) =
+		def addVariables (entries : Seq[DiscreteVariable[A]]) =
 			copy (variables = variables ++ entries);
 	}
 	

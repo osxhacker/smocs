@@ -69,6 +69,14 @@ trait RelationalConstraint[A]
 		env =>
 			
 		_ match {
+			case LogicalAnd (l, r) => evalRelational (env) (l, r) {
+				_ && _
+				}
+			
+			case LogicalOr (l, r) => evalRelational (env) (l, r) {
+				_ || _
+				}
+			
 			case EqualTo (l, r) => eval (env) (l, r) flatMap (equiv);
 			case NotEqualTo (l, r) => eval (env) (l, r) flatMap (nequiv);
 			case GreaterThan (l, r) => eval (env) (l, r) flatMap (gt);
@@ -76,5 +84,16 @@ trait RelationalConstraint[A]
 			case LessThan (l, r) => eval (env) (l, r) flatMap (lt);
 			case LessThanOrEqualTo (l, r) => eval (env) (l, r) flatMap (lte);
 		}
+	}
+		
+		
+	private def evalRelational (env : Env[A])
+		(lhs : Expression[A], rhs : Expression[A])
+		(condition : (Boolean, Boolean) => Boolean)
+		: Result[A] =
+	{
+		(interpreter (env) (lhs), interpreter (env) (rhs)) match {
+			case (-\/ (l), -\/ (r)) => condition (l, r).left;
+			}
 	}
 }

@@ -29,7 +29,7 @@ trait SolvePolynomialEquationByMocking
 	/// Self Type Constraints
 	this : Suite
 		with MockFactory
-		with SolvePolynomialEquationUseCase[Option, MockSolver]
+		with SolvePolynomialEquationUseCase[Option, MockSolver[Int]]
 		=>
 			
 			
@@ -41,7 +41,7 @@ trait SolvePolynomialEquationByMocking
 	
 	override val solvable = new SolverUsage {
 		def withSolver[C[_]] (
-			block : MockSolver => Option[Stream[C[Answer[Int]]]]
+			block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
 			: Stream[C[Answer[Int]]] =
@@ -53,13 +53,14 @@ trait SolvePolynomialEquationByMocking
 			Stream (answer);
 		}
 		
-		def domain (solver : MockSolver, range : Range) : solver.DomainType[Int] = 
+		def domain (solver : MockSolver[Int], range : Seq[Int])
+			: solver.DomainType[Int] = 
 			FiniteDiscreteDomain (range);
 		}
 	
 	override val unsolvable = new SolverUsage {
 		def withSolver[C[_]] (
-			block : MockSolver => Option[Stream[C[Answer[Int]]]]
+			block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
 			: Stream[C[Answer[Int]]] =
@@ -67,14 +68,15 @@ trait SolvePolynomialEquationByMocking
 			Stream ();
 		}
 		
-		def domain (solver : MockSolver, range : Range) : solver.DomainType[Int] = 
+		def domain (solver : MockSolver[Int], range : Seq[Int])
+			: solver.DomainType[Int] = 
 			FiniteDiscreteDomain (range);
 		}
 }
 
 
-sealed trait MockSolver
-	extends Solver[Int, Option, MockSolver]
+sealed trait MockSolver[A]
+	extends Solver[A, Option, MockSolver[A]]
 {
 	type DomainType[T] = DiscreteDomain[T]
 }

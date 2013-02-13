@@ -9,6 +9,11 @@ import scala.language.{
 	postfixOps
 	}
 
+import ast.{
+	Constant,
+	VariableUse
+	}
+
 
 /**
  * The '''Equation''' type provides the ability to define an AST-based
@@ -49,6 +54,13 @@ trait Equation[T]
 		findVariables (expression).to[Set];
 			
 			
+	/**
+	 * The lit EDSL method allows '''Equation'''s to escape a literal value
+	 * which may conflict with formulae definition.
+	 */
+	def lit[T] (value : T) = Constant[T] (value);
+	
+	
 	private def findVariables (expr : Expression[T]) : List[VariableName] =
 		expr match {
 			case VariableUse (name) =>

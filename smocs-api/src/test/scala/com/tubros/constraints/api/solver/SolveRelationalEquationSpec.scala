@@ -1,5 +1,5 @@
 /**
- * Created on: Feb 4, 2013
+ * Created on: Feb 13, 2013
  */
 package com.tubros.constraints.api
 package solver
@@ -11,10 +11,10 @@ import org.scalatest.junit.JUnitRunner
 
 
 /**
- * The '''SolvePolynomialEquationSpec''' type uses the
- * [[com.tubros.constraints.api.solver.mock.SolvePolynomialEquationByMocking]]
+ * The '''SolveRelationalEquationSpec''' type * uses the
+ * [[com.tubros.constraints.api.solver.mock.SolveRelationalEquationByMocking]]
  * ''mock''-based implementation of the
- * [[com.tubros.constraints.api.solver.SolvePolynomialEquationUseCase]]
+ * [[com.tubros.constraints.api.solver.SolveRelationalEquationUseCase]]
  * dependencies to ensure the API operates consistently ''without'' having to
  * use/depend on `core` implementations.
  *
@@ -22,8 +22,8 @@ import org.scalatest.junit.JUnitRunner
  *
  */
 @RunWith (classOf[JUnitRunner])
-class SolvePolynomialEquationSpec
+class SolveRelationalEquationSpec
 	extends UseCaseSpec
 		with MockFactory
-		with SolvePolynomialEquationUseCase[Option, mock.MockSolver[Int]]
-		with mock.SolvePolynomialEquationByMocking
+		with SolveRelationalEquationUseCase[Option, mock.MockSolver[Symbol]]
+		with mock.SolveRelationalEquationByMocking

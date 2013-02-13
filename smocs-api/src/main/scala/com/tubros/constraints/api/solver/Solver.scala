@@ -8,7 +8,10 @@ import scala.language.higherKinds
 
 import scalaz._
 
-import problem.Equation
+import problem.{
+	Equation,
+	Problem
+	}
 
 
 /**
@@ -31,6 +34,13 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	 * this method.
 	 */
 	def add (equation : Equation[A]) : M[Unit];
+	
+	
+	/**
+	 * This add method allows collaborators to provide a '''problem'' to use
+	 * when solving the CSP.
+	 */
+	def add (problem : Problem[A]) : M[Unit];
 	
 	
 	/**

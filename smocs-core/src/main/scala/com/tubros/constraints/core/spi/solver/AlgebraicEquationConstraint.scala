@@ -24,7 +24,8 @@ import com.tubros.constraints.api.solver.error._
  *
  */
 class FractionalAlgebraicEquationConstraint[A : Numeric : Fractional]
-	extends CanConstrain[Equation, A] {
+	extends CanConstrain[Equation, A]
+{
 	/// Class Imports
 	import AlgebraicEquationConstraint._
 	
@@ -55,18 +56,8 @@ object AlgebraicEquationConstraint
 	sealed abstract class AbstractAlgebraicConstraint[A] (
 		val equation : Equation[A]
 		)
-		extends Constraint[A]
-			with Interpreted[A]
+		extends AbstractInterpretedConstraint[A]
 	{
-		/// Instance Properties
-		override val variables = equation.variables;
-		
-		
-		override def apply (input : Map[VariableName, A])
-			: SolverError \/ Map[VariableName, A] =
-			variablesUsed (input) flatMap (evaluate);
-		
-		
 		override protected def interpreter
 			: Env[A] => PartialFunction[Expression[A], Result[A]] =
 			env => numericOps (env);
@@ -74,27 +65,6 @@ object AlgebraicEquationConstraint
 			
 		protected def numericOps (env : Env[A])
 			: PartialFunction[Expression[A], Result[A]];
-		
-		
-		private def variablesUsed (all : Map[VariableName, A])
-			: SolverError \/ Map[VariableName, A] =
-		{
-			val missing = variables &~ all.keySet;
-			
-			missing.isEmpty.fold (
-				\/- (all),
-				-\/ (MissingVariables (missing))
-				);
-		}
-		
-		
-		private def evaluate (vars : Map[VariableName, A])
-			: SolverError \/ Map[VariableName, A] =
-			interpreter (vars) (equation.expression) match {
-				case -\/ (true) => vars.right;
-				case \/- (_) => vars.right;
-				case _ => -\/ (UnsolvableError);
-				}
 	}
 	
 	

@@ -7,6 +7,12 @@ import scala.language.implicitConversions
 
 import scalaz._
 
+import com.tubros.constraints.api.problem.ast.{
+	Assignment,
+	Constant,
+	VariableUse
+	}
+
 
 /**
  * The '''problem''' `package` provides the smocs API with types supporting the

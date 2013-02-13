@@ -1,5 +1,5 @@
 /**
- * Created on: Feb 4, 2013
+ * Created on: Feb 13, 2013
  */
 package com.tubros.constraints.core.internal.simple
 
@@ -15,7 +15,7 @@ import com.tubros.constraints.api.solver._
 
 
 /**
- * The '''ExhaustiveSolvePolynomialEquationSpec''' type defines a concrete
+ * The '''ExhaustiveSolveRelationalEquationSpec''' type defines a concrete
  * Use Case implementation of the
  * [[com.tubros.constraints.api.solver.SolvePolynomialEquationUseCase]] by
  * using
@@ -26,40 +26,40 @@ import com.tubros.constraints.api.solver._
  *
  */
 @RunWith (classOf[JUnitRunner])
-class ExhaustiveSolvePolynomialEquationSpec
-	extends SolvePolynomialEquationUseCase[
-		ExhaustiveFiniteDomainSolver[Int]#SolverState,
-		ExhaustiveFiniteDomainSolver[Int]
+class ExhaustiveSolveRelationalEquationSpec
+	extends SolveRelationalEquationUseCase[
+		ExhaustiveFiniteDomainSolver[Symbol]#SolverState,
+		ExhaustiveFiniteDomainSolver[Symbol]
 		]
 {
 	/// Class Imports
-	import algebraic._
+	import relational._
 	
 	
 	/// Class Types
 	type MonadType[T] = SolverType#SolverState[T]
-	type SolverType = ExhaustiveFiniteDomainSolver[Int]
+	type SolverType = ExhaustiveFiniteDomainSolver[Symbol]
 	
 	
 	/// Test Collaborators
-	private val solver = new ExhaustiveFiniteDomainSolver[Int];
-	
-	override val monad = Monad[ExhaustiveFiniteDomainSolver[Int]#SolverState];
+	override val monad = Monad[ExhaustiveFiniteDomainSolver[Symbol]#SolverState];
+	private val solver = new ExhaustiveFiniteDomainSolver[Symbol];
 	
 	override val solvable = new SolverUsage {
 		override def withSolver[C[_]] (
-			block : SolverType => MonadType[Stream[C[Answer[Int]]]]
+			block : SolverType => MonadType[Stream[C[Answer[Symbol]]]]
 			)
-			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-			: Stream[C[Answer[Int]]] =
+			(implicit a : Applicative[C], mo : Monoid[C[Answer[Symbol]]])
+			: Stream[C[Answer[Symbol]]] =
 		{
 			return (solver (block));
 		}
 		
-		override def domain (solver : SolverType, range : Seq[Int])
-			: solver.DomainType[Int] =
+		override def domain (solver : SolverType, range : Seq[Symbol])
+			: solver.DomainType[Symbol] =
 			FiniteDiscreteDomain (range);
 		}
 	
 	override val unsolvable = solvable;
+
 }

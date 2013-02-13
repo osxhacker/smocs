@@ -17,17 +17,16 @@ import com.tubros.constraints.api.UseCaseSpec
  * @author svickers
  *
  */
-trait SolverUseCaseSpec[M[+_], SolverT <: Solver[Int, M, SolverT]]
+trait SolverUseCaseSpec[A, M[+_], SolverT <: Solver[A, M, SolverT]]
 	extends UseCaseSpec
 {
 	/// Class Types
 	trait SolverUsage
 	{
-		def withSolver[C[_]] (block : SolverT => M[Stream[C[Answer[Int]]]])
-			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-			: Stream[C[Answer[Int]]];
+		def withSolver[C[_]] (block : SolverT => M[Stream[C[Answer[A]]]])
+			(implicit a : Applicative[C], mo : Monoid[C[Answer[A]]])
+			: Stream[C[Answer[A]]];
 		
-		def domain (solver : SolverT, range : Range) : solver.DomainType[Int];
-		
+		def domain (solver : SolverT, range : Seq[A]) : solver.DomainType[A];
 	}
 }

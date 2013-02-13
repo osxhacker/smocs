@@ -82,4 +82,21 @@ class AlgebraicEquationConstraintSpec
 		answer must not be === (null);
 		answer should be ('left);
 	}
+	
+	it should "ignore variables not needed in the equation" in
+	{
+		val cc = new IntegralAlgebraicEquationConstraint[Int];
+		val equation = new ArithEquation[Int] {
+			def apply = 'x * 2 < 5
+			}
+		val input = Map[VariableName, Int] (
+			VariableName ('a) -> 0,
+			VariableName ('x) -> 42
+			);
+		
+		val answer = cc.constrains (equation) (input);
+		
+		answer must not be === (null);
+		answer should be ('left);
+	}
 }

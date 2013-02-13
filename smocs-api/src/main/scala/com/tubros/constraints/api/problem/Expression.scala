@@ -74,6 +74,9 @@ object BinaryOperator
 }
 
 
+package ast
+{
+	
 case class Assignment[T] (
 	override val lhs : VariableUse,
 	override val rhs : Expression[T]
@@ -88,3 +91,5 @@ case class VariableUse (name : VariableName)
 
 case class Constant[T] (value : T)
 	extends Expression[T]
+
+}
