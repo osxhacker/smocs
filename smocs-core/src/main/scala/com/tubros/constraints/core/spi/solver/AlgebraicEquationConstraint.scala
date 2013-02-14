@@ -3,7 +3,10 @@
  */
 package com.tubros.constraints.core.spi.solver
 
-import scalaz._
+import scalaz.{
+	Ordering => _,
+	_
+	}
 
 import com.tubros.constraints.api._
 import com.tubros.constraints.api.problem.{
@@ -57,10 +60,12 @@ object AlgebraicEquationConstraint
 		val equation : Equation[A]
 		)
 		extends AbstractInterpretedConstraint[A]
+			with AlgebraicConstraint[A]
+			with RelationalConstraint[A]
 	{
 		override protected def interpreter
 			: Env[A] => PartialFunction[Expression[A], Result[A]] =
-			env => numericOps (env);
+			env => (super.interpreter (env) orElse numericOps (env));
 			
 			
 		protected def numericOps (env : Env[A])
@@ -73,21 +78,16 @@ object AlgebraicEquationConstraint
 		)
 		(implicit
 			override val numeric : Numeric[A],
-			override val ordering : scala.Ordering[A],
+			override val ordering : Ordering[A],
 			fn : Fractional[A]
 		)
 		extends AbstractAlgebraicConstraint[A] (equation)
-			with AlgebraicConstraint[A]
-			with RelationalConstraint[A]
 	{
 		override protected def numericOps (env : Env[A])
 			: PartialFunction[Expression[A], Result[A]] =
 			_ match {
 				case Quotient (n, d) =>
-					for {
-						num <- interpreter (env) (n)
-						denom <- interpreter (env) (d)
-						} yield fn.div (num, denom);
+					eval (env) (n, d) map ((fn.div _).tupled);
 				}
 	}
 	
@@ -96,21 +96,16 @@ object AlgebraicEquationConstraint
 		)
 		(implicit
 			override val numeric : Numeric[A],
-			override val ordering : scala.Ordering[A],
+			override val ordering : Ordering[A],
 			in : Integral[A]
 		)
 		extends AbstractAlgebraicConstraint[A] (equation)
-			with AlgebraicConstraint[A]
-			with RelationalConstraint[A]
 	{
 		override protected def numericOps (env : Env[A])
 			: PartialFunction[Expression[A], Result[A]] =
 			_ match {
 				case Quotient (n, d) =>
-					for {
-						num <- interpreter (env) (n)
-						denom <- interpreter (env) (d)
-						} yield in.quot (num, denom);
+					eval (env) (n, d) map ((in.quot _).tupled);
 				}
 	}
 }

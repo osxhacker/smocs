@@ -40,29 +40,11 @@ class RelationalEquationConstraint[A : Ordering]
 
 object RelationalEquationConstraint
 {
-	/// Class Imports
-	import Scalaz._
-	
-	
 	/// Class Types
-	sealed abstract class AbstractRelationalConstraint[A] (
-		val equation : Equation[A]
-		)
-		extends AbstractInterpretedConstraint[A]
-	{
-		override protected def interpreter
-			: Env[A] => PartialFunction[Expression[A], Result[A]] =
-			env => _ match {
-				case VariableUse (x) => env (x).point[Result];
-				case Constant (c) => c.point[Result];
-				}
-	}
-	
-	
 	class DefaultRelationalConstraint[A] (
 		override val equation : Equation[A]
 		)
 		(implicit override val ordering : Ordering[A])
-		extends AbstractRelationalConstraint[A] (equation)
+		extends AbstractInterpretedConstraint[A]
 			with RelationalConstraint[A]
 }

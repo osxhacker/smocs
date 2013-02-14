@@ -30,6 +30,7 @@ trait AbstractInterpretedConstraint[A]
 {
 	/// Class Imports
 	import scalaz.syntax.id._
+	import scalaz.syntax.monad._
 	import scalaz.syntax.std.boolean._
 	
 	
@@ -43,6 +44,14 @@ trait AbstractInterpretedConstraint[A]
 		variablesUsed (input) flatMap (evaluate);
 		
 
+	override protected def interpreter
+		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		env => _ match {
+			case VariableUse (x) => env (x).point[Result];
+			case Constant (c) => c.point[Result];
+			}
+		
+		
 	private def variablesUsed (all : Map[VariableName, A])
 		: SolverError \/ Map[VariableName, A] =
 	{

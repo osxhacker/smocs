@@ -82,9 +82,6 @@ trait AlgebraicConstraint[A]
 		env =>
 			
 		_ match {
-			case VariableUse (x) => env (x).point[Result];
-			case Constant (c) => c.point[Result];
-			
 			case Minus (l, r) => eval (env) (l, r) flatMap (minus);
 			case Negate (e) => interpreter (env) (e) flatMap (negate);
 			case Plus (l, r) => eval (env) (l, r) flatMap (plus);

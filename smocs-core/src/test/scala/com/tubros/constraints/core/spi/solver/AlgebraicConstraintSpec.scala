@@ -23,7 +23,12 @@ import solver.error._
 
 
 /**
- * The '''AlgebraicConstraintSpec''' type
+ * The '''AlgebraicConstraintSpec''' type is a unit test which verifies
+ * the [[com.tubros.constraints.core.spi.solver.AlgebraicConstraint]] `trait`
+ * in a very specific, controlled, manner.  As such, the scaffolding present
+ * here is typically not needed when the
+ * [[com.tubros.constraints.core.spi.solver.AlgebraicConstraint]] is employed
+ * in production code.
  *
  * @author svickers
  *
@@ -37,47 +42,11 @@ class AlgebraicConstraintSpec
 		extends Equation[Int]
 			with ArithmeticSupport[Int]
 	
-	abstract class TestConstraints[T : Numeric] (val equation : Equation[T])
-		extends Constraint[T]
-			with Interpreted[T]
-	{
-		override val variables = equation.variables;
-		
-		
-		override def apply (in : Env[T]) : SolverError \/ Env[T] =
-			interpreter (in) (equation.expression) match {
-				case \/- (_) => \/- (in);
-				case -\/ (_) => -\/ (new SolverError { val message = "failed" });
-				}
-		
-		
-		override protected def interpreter
-			: Env[T] => PartialFunction[Expression[T], Result[T]] =
-			env => numericOps (env);
-			
-			
-		def computed (in : Env[T]) : Option[T] =
-			interpreter (in) (equation.expression).toOption;
-		
-		
-		protected def numericOps (env : Env[T])
-			: PartialFunction[Expression[T], Result[T]];
-	}
-	
 	class IntConstraints (override val equation : Equation[Int])
-		(implicit override val numeric : Numeric[Int])
-		extends TestConstraints[Int] (equation)
-			with AlgebraicConstraint[Int]
+		extends AlgebraicEquationConstraint.IntegralConstraint[Int] (equation)
 	{
-		protected def numericOps (env : Env[Int])
-			: PartialFunction[Expression[Int], Result[Int]] =
-			_ match {
-				case Quotient (n, d) =>
-					for {
-						num <- interpreter (env) (n)
-						denom <- interpreter (env) (d)
-						} yield num / denom;
-				}
+		def computed (in : Env[Int]) : Option[Int] =
+			interpreter (in) (equation.expression).toOption;
 	}
 	
 	
@@ -111,5 +80,22 @@ class AlgebraicConstraintSpec
 		
 		c (vars) should be === (\/- (vars));
 		c.computed (vars) should be === (Some (-1));
+	}
+	
+	it should "ignore variables not needed by the equation" in
+	{
+		val c = new IntConstraints (
+			new PolyEquation {
+				def apply = 'a ** 4;
+				}
+			);
+		val vars = Map[VariableName, Int] (
+			VariableName ('a) -> 2,
+			VariableName ('b) -> 20
+			);
+		
+		
+		c (vars) should be === (\/- (vars));
+		c.computed (vars) should be === (Some (16));
 	}
 }
