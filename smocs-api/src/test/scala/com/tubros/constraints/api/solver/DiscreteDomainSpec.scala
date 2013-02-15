@@ -65,6 +65,27 @@ class DiscreteDomainSpec
 		empty.shows should not be ('empty);
 	}
 	
+	it should "conform to the Monad laws" in
+	{
+		val doubles = DiscreteDomain.empty[Double] ++ Seq (1.0, 2.0, 3.0);
+		val monad = implicitly[scalaz.Monad[DiscreteDomain]];
+		val laws = monad.monadLaw;
+		
+		laws.identity (doubles) must be === (true);
+		laws.leftIdentity (99.0, singleton[Double]) must be === (true);
+		laws.rightIdentity (doubles) must be === (true);
+	}
+	
+	it should "conform to the MonadPlus laws" in
+	{
+		val doubles = DiscreteDomain.empty[Double] ++ Seq (1.0, 2.0, 3.0);
+		val monadPlus = implicitly[scalaz.MonadPlus[DiscreteDomain]];
+		val laws = monadPlus.monadPlusLaw;
+		
+		laws.emptyMap ((n : Double) => n) must be === (true);
+		laws.leftZero (singleton[Double]) must be === (true);
+	}
+	
 	it should "conform to the Monoid laws" in
 	{
 		val strings = DiscreteDomain.empty[String] ++ List ("a", "b", "c", "d");
@@ -94,6 +115,14 @@ class DiscreteDomainSpec
 	it should "support Functor use" in
 	{
 		val ints = DiscreteDomain.empty[Int] ++ Seq (4, 5, 6);
-		//val functor = scalaz.Functor[DiscreteDomain]
+		val functor = implicitly[scalaz.Functor[DiscreteDomain]];
+		
+		functor (ints) (n => n + 1) must be === (
+			DiscreteDomain.empty[Int] ++ Seq (5, 6, 7)
+			);
 	}
+	
+	
+	private def singleton[A] (a : A) : DiscreteDomain[A] =
+		DiscreteDomain.empty[A] ++ Seq (a);
 }

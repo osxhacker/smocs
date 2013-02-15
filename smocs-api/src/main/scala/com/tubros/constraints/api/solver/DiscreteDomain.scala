@@ -82,6 +82,44 @@ trait DiscreteDomainInstances
 	 * Every '''DiscreteDomain'' gives rise to a new [[scalaz.Category]].
 	 */
 	implicit def category[T] = Monoid[DiscreteDomain[T]].category;
+	
+	
+	/**
+	 * Since '''DiscreteDomain''' is a model of [[scala.collection.Set]], it
+	 * can support all of the Scalaz constructs applicable to a
+	 * [[scala.collection.Set]].
+	 */
+	implicit object ScalazDiscreteDomain
+		extends Each[DiscreteDomain]
+			with IsEmpty[DiscreteDomain]
+			with Length[DiscreteDomain]
+			with MonadPlus[DiscreteDomain]
+	{
+		override def bind[A, B] (fa : DiscreteDomain[A])
+			(f : A => DiscreteDomain[B])
+			: DiscreteDomain[B] = fa flatMap f;
+		
+		override def each[A] (fa : DiscreteDomain[A])
+			(f : A => Unit)
+			: Unit = fa foreach f;
+		
+		override def empty[A] : DiscreteDomain[A] = DiscreteDomain.empty[A];
+		
+		override def isEmpty[A] (fa : DiscreteDomain[A]) : Boolean =
+			fa.isEmpty;
+		
+		override def length[A] (fa : DiscreteDomain[A]) : Int = fa.size;
+		
+		override def map[A,B] (fa : DiscreteDomain[A])
+			(f : A => B)
+			: DiscreteDomain[B] = fa map f;
+		
+		override def plus[A] (a : DiscreteDomain[A], b : => DiscreteDomain[A])
+			: DiscreteDomain[A] = a ++ b;
+		
+		override def point[A] (a : => A) : DiscreteDomain[A] =
+			DiscreteDomain[A] (a);
+	}
 }
 
 
