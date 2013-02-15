@@ -60,11 +60,7 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	
 	override def add (problem : Problem[A]) : SolverState[Unit] =
-	{
-		modify {
-			_.addConstraints (problem.equations.map (_.constrains).toList);
-			}
-	}
+		problem.equations.traverseS (add) map (_ => ());
 	
 	
 	override def apply[C[_]] (
@@ -72,9 +68,7 @@ class ExhaustiveFiniteDomainSolver[A]
 			SolverState[Stream[C[Answer[A]]]]
 		)
 		: Stream[C[Answer[A]]] =
-	{
 		context (this).eval (VariableStore.empty[A]);
-	}
 	
 	
 	override def newVar (name : VariableName, domain : DomainType[A])
@@ -149,12 +143,10 @@ class ExhaustiveFiniteDomainSolver[A]
 		: SolverState[Stream[C[Answer[A]]]] =
 		state {
 			val answers = variables.map {
-				answer =>
-					
-				answer.foldLeft (mo.zero) {
-					case (accum, cur) =>
+				_.to[List].foldMap {
+					cur =>
 						
-					mo.append (accum, Answer (cur).point[C]);
+					Answer (cur).point[C];
 					}
 				}
 			
