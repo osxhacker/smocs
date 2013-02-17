@@ -53,4 +53,6 @@ package object api
 	/// Implicit Conversions
 	implicit def symbolToVariableName (name : Symbol) : VariableName =
 		VariableName (name);
+	
+	implicit def variableNameEqual : Equal[VariableName] = Equal.equalA;
 }
