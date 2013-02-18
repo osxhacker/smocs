@@ -113,7 +113,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 				}
 			val range = (0 |=> 10) map (_.toDouble) toSeq;
 				
-			When ("solving the Equation having an alldiff requirement");
+			When ("solving with alldiff and increasing requirements");
 			
 			val answers = withSolver {
 				solver =>
@@ -136,7 +136,13 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 			answers.forall {
 				answer =>
 					
-				allDiff (answer.map (_.copoint)) &&
+				allDiff (answer.map (_.copoint));
+				} should be === (true);
+			
+			And ("each answer should have ascending positional values");
+			answers.forall {
+				answer =>
+					
 				increasing (answer.map (_.copoint));
 				} should be === (true);
 		}
@@ -152,7 +158,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 				}
 			val range = (1 |=> 10) map (_.toDouble) toSeq;
 				
-			When ("solving the Equation having an alldiff requirement");
+			When ("solving the Equation having an allsame requirement");
 			
 			val answers = withSolver {
 				solver =>

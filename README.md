@@ -48,7 +48,7 @@ A small example of the EDSL looks like :
 			},
 		);
 
-Solving these constraints would yield values corresponding with :
+Solving these constraints would yield values corresponding to :
 
 	('x -> 1, 'y -> 1), ('x -> 2, 'y -> 4), ('x -> 3, 'y -> 9)
 
@@ -61,24 +61,45 @@ expected to change across major releases, with the option to have binary
 incompatibility broken in a minor release (though this should happen less
 frequently).
 
+#### Simple ####
+
+Within *Core* exists a *CSP* implementation which is designed to be the
+simplest possible (yet conformant) *CSP* implementation.  It is intended
+as more of a research/learning solver than one for production use.
+
+Since many people, including the author at the outset of this effort, will
+not be intimately familiar with the nuances regarding optimal *CSP*
+implementation, the types in `com.tubros.constraint.core.internal.simple`
+are intentionally made to be approachable without regard to performance.
+Keeping performance concerns disjoint from a correct, albeit potentially slow,
+implementation hopefully makes this fascinating subject approachable to
+developers seeking to apply *CSP*'s in their daily work.
+
+#### Graph ####
+
+TBD
+
+
 Further Reading
 ---------------
 
-This section lists various resources considered relevant to CSP.  It is by
+This section lists various resources considered relevant to *CSP*.  It is by
 no means exhaustive and is provided so that the interested reader can
 have a starting point.
 
-1. Stuart Russell, Peter Norvig, "Chapter 6",
+1. Stuart Russell, Peter Norvig, "Chapter 6: Constraint Satisfaction Problems",
 	in *Artificial Intelligence A Modern Approach*, (Prentice Hall, 2010).
-2. Tom Schrijvers, Peter Stuckey, Philip Wadler,
+2. Francesca Rossi, Peter van Beek, Toby Walsh
+	*Handbook of Constraint Programming*, (Elsevier Science, 2006).
+3. Tom Schrijvers, Peter Stuckey, Philip Wadler,
 	*Monaid Constraint Programming*, accessed January 24, 2013,
 	https://lirias.kuleuven.be/bitstream/123456789/234095/1/paper.pdf
-3. eed3si9n, *learning Scalaz*, accessed January 24, 2013,
+4. eed3si9n, *learning Scalaz*, accessed January 24, 2013,
 	http://eed3si9n.com/category/tags/scala/scalaz
-4. Dr. Jacob Feldman, *JSR-331*,
+5. Dr. Jacob Feldman, *JSR-331*,
 	accessed January 24, 2013,
 	http://jcp.org/aboutJava/communityprocess/final/jsr331/index.html
-5. Tiark Rompf, Martin Odersky,
+6. Tiark Rompf, Martin Odersky,
 	*Lightweight Modular Staging: A Pragmatic Approach to Runtime Code Generation and Compiled DSLs*,
 	accessed Feb 7, 2013,
 	http://infoscience.epfl.ch/record/150347/files/gpce63-rompf.pdf
