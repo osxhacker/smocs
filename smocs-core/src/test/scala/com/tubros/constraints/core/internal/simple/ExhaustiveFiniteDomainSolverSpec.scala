@@ -54,4 +54,29 @@ class ExhaustiveFiniteDomainSolverSpec
 		answer.contains (List (Answer ('x -> 5), Answer ('y -> 5))) should be === (true);
 		answer should have size (25);
 	}
+	
+	it should "produce answers with stable positions" in
+	{
+		val solver = new ExhaustiveFiniteDomainSolver[Int];
+		val domain = FiniteDiscreteDomain (1 to 5);
+		val answer : Stream[Stream[Answer[Int]]] = solver {
+			s =>
+				
+			for {
+				vars <- s.newVars[List] (domain) (List ('a, 'b, 'c, 'd))
+				stream <- s.run[Stream]
+				} yield stream;
+			}
+		
+		answer must not be ('empty);
+		
+		answer.foreach {
+			a =>
+				
+			a (0).name should be === ('a);
+			a (1).name should be === ('b);
+			a (2).name should be === ('c);
+			a (3).name should be === ('d);
+			}
+	}
 }

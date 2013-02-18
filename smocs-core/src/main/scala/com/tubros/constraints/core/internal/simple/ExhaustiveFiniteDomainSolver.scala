@@ -3,6 +3,8 @@
  */
 package com.tubros.constraints.core.internal.simple
 
+import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable.LinkedHashMap
 import scala.language.higherKinds
 
 import scalaz._
@@ -49,7 +51,7 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	/// Class Types
 	type DomainType[T] = DiscreteDomain[T]
-	
+	type Map[K, +V] = scala.collection.Map[K, V]
 	type SolverState[+T] = ({ type L[+X] = State[VariableStore[A], X]})#L[T]
 	
 	
@@ -69,6 +71,14 @@ class ExhaustiveFiniteDomainSolver[A]
 		)
 		: Stream[C[Answer[A]]] =
 		context (this).eval (VariableStore.empty[A]);
+	
+	
+	override def impose[C[_]] (constraint : C[A] => Boolean)
+		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
+		: SolverState[Unit] =
+		modify {
+			_.addAnswerFilter (new AnswerConstraint (constraint));
+			}
 	
 	
 	override def newVar (name : VariableName, domain : DomainType[A])
@@ -112,29 +122,43 @@ class ExhaustiveFiniteDomainSolver[A]
 		)
 		: SolverState[Stream[C[Answer[A]]]] =
 		for {
-			constrained <- applyConstraints
+			vars <- variables ()
+			filters <- filterAnswers ()
+			constrained <- applyConstraints (vars, filters)
 			answers <- label (constrained)
 			} yield answers;
-			
 	
-	private def applyConstraints ()
+	
+	private def applyConstraints (
+		vars : Seq[Variable[A, DomainType]],
+		filters : Seq[Constraint[A]]
+		)
 		: SolverState[Stream[Map[VariableName, A]]] =
 		gets {
 			vs =>
 				
-			val streams = vs.variables.view.to[Stream].map (_.enumerate.to[Stream]);
-			val c = vs.constraints.foldLeft (Constraint.kleisliUnit[A]) {
+			val streams = vars.view.to[Stream].map (_.enumerate.to[Stream]);
+			val c = filters.foldLeft (Constraint.kleisliUnit[A]) {
 				case (accum, c) =>
 					
 				accum >==> c;
 				}
 			
 			// TODO: this needs to return SolverError \/ Stream
-			streams.sequence.map (_.toMap).filter {
+			streams.sequence.map (LinkedHashMap.apply).filter {
 				candidate =>
 					
-				c.run (candidate).isRight;
+				c.run (candidate.toMap).isRight;
 				}
+			}
+			
+	
+	private def filterAnswers ()
+		: SolverState[Seq[Constraint[A]]] =
+		gets {
+			vs =>
+				
+			vs.answerFilters.toVector ++ vs.constraints;
 			}
 	
 	
@@ -152,6 +176,13 @@ class ExhaustiveFiniteDomainSolver[A]
 			
 			answers;
 			}
+			
+	
+	private def variables ()
+		: SolverState[Seq[Variable[A, DomainType]]] =
+		gets {
+			_.variables;
+			}
 }
 
 
@@ -165,18 +196,19 @@ object ExhaustiveFiniteDomainSolver
 	
 	/// Class Types
 	case class VariableStore[A] (
-		variables : Set[Variable[A, DiscreteDomain]],
-		constraints : Set[Constraint[A]]
+		variables : Vector[Variable[A, DiscreteDomain]],
+		constraints : Set[Constraint[A]],
+		answerFilters : Set[Constraint[A]]
 		)
 	{
+		def addAnswerFilter (entry : Constraint[A]) =
+			copy (answerFilters = answerFilters + entry);
+		
 		def addConstraint (entry : Constraint[A]) =
 			copy (constraints = constraints + entry);
 			
-		def addConstraints (entries : Seq[Constraint[A]]) =
-			copy (constraints = constraints ++ entries);
-			
 		def addVariable (entry : DiscreteVariable[A]) =
-			copy (variables = variables + entry);
+			copy (variables = variables :+ entry);
 		
 		def addVariables (entries : Seq[DiscreteVariable[A]]) =
 			copy (variables = variables ++ entries);
@@ -185,8 +217,9 @@ object ExhaustiveFiniteDomainSolver
 	object VariableStore
 	{
 		def empty[A] = new VariableStore[A] (
-			variables = Set.empty,
-			constraints = Set.empty
+			variables = Vector.empty,
+			constraints = Set.empty,
+			answerFilters = Set.empty
 			);
 	}
 }

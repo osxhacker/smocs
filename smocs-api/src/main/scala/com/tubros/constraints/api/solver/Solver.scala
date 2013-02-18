@@ -4,6 +4,7 @@
 package com.tubros.constraints.api
 package solver
 
+import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 import scalaz._
@@ -59,6 +60,15 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	
 	
 	/**
+	 * The impose method allows '''Solver''' clients to enforce a global
+	 * transformation, applicable
+	 */
+	def impose[C[_]] (constraint : C[A] => Boolean)
+		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
+		: M[Unit];
+	
+	
+	/**
 	 * The newVar method creates a new
 	 * [[com.tubros.constraints.api.solver.Variable]] having the unique
 	 * '''name''' given and a specific '''domain''' of values it can take.
@@ -81,6 +91,10 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 		: M[List[Variable[A, DomainType]]];
 
 
+	/**
+	 * The run method evaluates the '''Solver''' and produces a
+	 * [[scala.collection.immutable.Stream]] of satisfactory results.
+	 */
 	def run[C[_]] (implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
 		: M[Stream[C[Answer[A]]]];
 }

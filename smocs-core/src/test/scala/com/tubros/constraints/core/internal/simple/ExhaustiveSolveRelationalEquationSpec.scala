@@ -31,35 +31,13 @@ class ExhaustiveSolveRelationalEquationSpec
 		ExhaustiveFiniteDomainSolver[Symbol]#SolverState,
 		ExhaustiveFiniteDomainSolver[Symbol]
 		]
+		with ExhaustiveSolverUsage[Symbol]
 {
 	/// Class Imports
 	import relational._
 	
 	
-	/// Class Types
-	type MonadType[T] = SolverType#SolverState[T]
-	type SolverType = ExhaustiveFiniteDomainSolver[Symbol]
-	
-	
 	/// Test Collaborators
-	override val monad = Monad[ExhaustiveFiniteDomainSolver[Symbol]#SolverState];
-	private val solver = new ExhaustiveFiniteDomainSolver[Symbol];
-	
-	override val solvable = new SolverUsage {
-		override def withSolver[C[_]] (
-			block : SolverType => MonadType[Stream[C[Answer[Symbol]]]]
-			)
-			(implicit a : Applicative[C], mo : Monoid[C[Answer[Symbol]]])
-			: Stream[C[Answer[Symbol]]] =
-		{
-			return (solver (block));
-		}
-		
-		override def domain (solver : SolverType, range : Seq[Symbol])
-			: solver.DomainType[Symbol] =
-			FiniteDiscreteDomain (range);
-		}
-	
+	override val solvable = new DefaultExhaustiveSolverUsage;
 	override val unsolvable = solvable;
-
 }
