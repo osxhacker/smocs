@@ -47,9 +47,10 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 	
 	
 	/// Test Collaborators
-	implicit val allDiffConstrained : SolverUsage;
-	implicit val allSameConstrained : SolverUsage;
 	implicit val monad : Monad[M];
+	val allDiffConstrained : SolverUsage;
+	val allSameConstrained : SolverUsage;
+	
 	val allDiff : Seq[Double] => Boolean = candidate =>
 		candidate.distinct.size == candidate.size;
 	val allSame : Set[Double] => Boolean = candidate =>
