@@ -96,7 +96,7 @@ trait SolvePositionalEquationUseCase[
 		{
 			import solvable._
 			
-			Given ("the Equation 'a @== 'b - 1");
+            Given ("the Equation 'a @== 'b - 1 && 'a > first");
 			
 			val equation = new PositionalEquation {
 				def apply = ('a @== 'b - 1) && ('a > first);
@@ -137,7 +137,7 @@ trait SolvePositionalEquationUseCase[
 				aToB.contains (answer (2).value);
 				} should be === (false);
 				
-			And ("each answer should not have 'a <> 'v1");
+			And ("each answer should not have 'a == 'v1");
 			answers.toList.map {
 				answer =>
 					
