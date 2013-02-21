@@ -47,7 +47,7 @@ trait Equation[T]
 	lazy val arity : Int = variables.size;
 	
 	/**
-	 * The variables property contains the [[scala.Set]] of
+	 * The variables property contains the [[scala.collection.Set]] of
 	 * [[com.tubros.constraints.VariableName]]s used in this '''Equation'''.
 	 */
 	lazy val variables : Set[VariableName] =

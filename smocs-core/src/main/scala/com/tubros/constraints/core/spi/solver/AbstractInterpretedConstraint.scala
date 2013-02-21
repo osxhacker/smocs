@@ -29,9 +29,11 @@ trait AbstractInterpretedConstraint[A]
 		with Interpreted[A]
 {
 	/// Class Imports
+	import scalaz.std.AllInstances._
 	import scalaz.syntax.id._
 	import scalaz.syntax.monad._
 	import scalaz.syntax.std.boolean._
+	import scalaz.syntax.std.option._
 	
 	
 	/// Instance Properties
@@ -47,8 +49,8 @@ trait AbstractInterpretedConstraint[A]
 	override protected def interpreter
 		: Env[A] => PartialFunction[Expression[A], Result[A]] =
 		env => _ match {
-			case VariableUse (x) => env (x).point[Result];
-			case Constant (c) => c.point[Result];
+			case VariableUse (x) => Result.right (env (x).some);
+			case Constant (c) => Result.right (c.some);
 			}
 		
 		
@@ -66,9 +68,9 @@ trait AbstractInterpretedConstraint[A]
 	
 	private def evaluate (vars : Map[VariableName, A])
 		: SolverError \/ Map[VariableName, A] =
-		interpreter (vars) (equation.expression) match {
-			case -\/ (true) => vars.right;
-			case \/- (_) => vars.right;
+		interpreter (vars) (equation.expression).run match {
+			case Some (-\/ (true)) => vars.right;
+			case Some (\/- (_)) => vars.right;
 			case _ => -\/ (UnsolvableError);
 			}
 }

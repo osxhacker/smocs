@@ -4,6 +4,8 @@
 package com.tubros.constraints.api
 package problem
 
+import scala.language.implicitConversions
+
 
 /**
  * The '''ArithmeticSupport''' type provides operators for the EDSL related to

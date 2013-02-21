@@ -87,7 +87,13 @@ object AlgebraicEquationConstraint
 			: PartialFunction[Expression[A], Result[A]] =
 			_ match {
 				case Quotient (n, d) =>
-					eval (env) (n, d) map ((fn.div _).tupled);
+					eval (env) (n, d).flatMap {
+						case (num, denom) =>
+							
+						Result {
+							(denom != 0).option (fn.div (num, denom).right);
+							}
+					}
 				}
 	}
 	
@@ -105,7 +111,13 @@ object AlgebraicEquationConstraint
 			: PartialFunction[Expression[A], Result[A]] =
 			_ match {
 				case Quotient (n, d) =>
-					eval (env) (n, d) map ((in.quot _).tupled);
+					eval (env) (n, d).flatMap {
+						case (num, denom) =>
+							
+						Result {
+							(denom != 0).option (in.quot (num, denom).right);
+							}
+					}
 				}
 	}
 }

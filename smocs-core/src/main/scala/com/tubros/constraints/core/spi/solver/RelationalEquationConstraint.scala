@@ -3,19 +3,7 @@
  */
 package com.tubros.constraints.core.spi.solver
 
-import scalaz.{
-	Ordering => _,
-	_
-	}
-
-import com.tubros.constraints.api._
-import com.tubros.constraints.api.problem.{
-	Equation,
-	Expression
-	}
-import com.tubros.constraints.api.problem.ast._
-import com.tubros.constraints.api.solver._
-import com.tubros.constraints.api.solver.error._
+import com.tubros.constraints.api.problem.Equation
 
 
 /**

@@ -44,30 +44,33 @@ trait AlgebraicConstraint[A]
 		
 	
 	private val minus = binary {
-		(x, y) => numeric.minus (x, y).right;
+		(x : A, y : A) => numeric.minus (x, y).right;
 		}
 	
 	private val negate = unary {
-		x => numeric.negate (x).right;
+		(x : A) => numeric.negate (x).right;
 		}
 	
 	private val plus = binary {
-		(x, y) => numeric.plus (x, y).right;
+		(x : A, y : A) => numeric.plus (x, y).right;
 		}
 	
-	// TODO: work in error handling
-	private val pow = binary {
-		(x, y) => (numeric.signum (y) <= 0).either (false) or {
-			(1 until numeric.toInt (y)).foldLeft (x) {
-				case (r, _) =>
-					
-				numeric.times (r, x);
+	private val pow = maybeBinary {
+		(x : A, y : A) =>
+			
+		Result {
+			(numeric.signum (y) > 0).option {
+				(1 until numeric.toInt (y)).foldLeft (x) {
+					case (r, _) =>
+						
+					numeric.times (r, x);
+					}.right[Boolean]
 				}
 			}
 		}
 	
 	private val times = binary {
-		(x, y) => numeric.times(x, y).right
+		(x : A, y : A) => numeric.times(x, y).right
 		}
 	
 	

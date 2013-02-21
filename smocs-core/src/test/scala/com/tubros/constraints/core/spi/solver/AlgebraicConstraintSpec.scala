@@ -46,7 +46,7 @@ class AlgebraicConstraintSpec
 		extends AlgebraicEquationConstraint.IntegralConstraint[Int] (equation)
 	{
 		def computed (in : Env[Int]) : Option[Int] =
-			interpreter (in) (equation.expression).toOption;
+			interpreter (in) (equation.expression).run.flatMap (_.toOption);
 	}
 	
 	

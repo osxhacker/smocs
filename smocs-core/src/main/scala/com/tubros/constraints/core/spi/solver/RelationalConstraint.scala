@@ -34,27 +34,27 @@ trait RelationalConstraint[A]
 	implicit val ordering : Ordering[A];
 	
 	private val equiv = binary {
-		(x, y) => ordering.equiv (x, y).left;
+		(x : A, y : A) => ordering.equiv (x, y).left;
 		}
 	
 	private val nequiv = binary {
-		(x, y) => (!ordering.equiv (x, y)).left;
+		(x : A, y : A) => (!ordering.equiv (x, y)).left;
 		}
 	
 	private val gt = binary {
-		(x, y) => ordering.gt (x, y).left;
+		(x : A, y : A) => ordering.gt (x, y).left;
 		}
 	
 	private val lt = binary {
-		(x, y) => ordering.lt (x, y).left;
+		(x : A, y : A) => ordering.lt (x, y).left;
 		}
 	
 	private val gte = binary {
-		(x, y) => ordering.gteq (x, y).left;
+		(x : A, y : A) => ordering.gteq (x, y).left;
 		}
 	
 	private val lte = binary {
-		(x, y) => ordering.lteq (x, y).left;
+		(x : A, y : A) => ordering.lteq (x, y).left;
 		}
 	
 
@@ -70,11 +70,11 @@ trait RelationalConstraint[A]
 			
 		_ match {
 			case LogicalAnd (l, r) => evalRelational (env) (l, r) {
-				_ && _
+				_ && _;
 				}
 			
 			case LogicalOr (l, r) => evalRelational (env) (l, r) {
-				_ || _
+				_ || _;
 				}
 			
 			case EqualTo (l, r) => eval (env) (l, r) flatMap (equiv);
@@ -92,8 +92,11 @@ trait RelationalConstraint[A]
 		(condition : (Boolean, Boolean) => Boolean)
 		: Result[A] =
 	{
-		(interpreter (env) (lhs), interpreter (env) (rhs)) match {
-			case (-\/ (l), -\/ (r)) => condition (l, r).left;
-			}
+		val reversed = for {
+			x <- interpreter (env) (lhs).swap
+			y <- interpreter (env) (rhs).swap
+		} yield condition (x, y);
+		
+		return (reversed.swap);
 	}
 }

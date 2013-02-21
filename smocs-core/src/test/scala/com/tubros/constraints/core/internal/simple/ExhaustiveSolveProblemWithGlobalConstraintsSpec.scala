@@ -10,10 +10,10 @@ import com.tubros.constraints.api.solver._
 
 
 /**
- * The '''ExhaustiveSolveProblemWithGlobalConstraintsUseCase''' type defines
+ * The '''ExhaustiveSolveProblemWithGlobalConstraintsSpec''' type defines
  * a concrete Use Case implementation of the
  * [[com.tubros.constraints.api.solver.SolveProblemWithGlobalConstraintsUseCase]]
- * by using
+ * by using the
  * [[com.tubros.constraints.core.internal.simple.ExhaustiveFiniteDomainSolver]]
  * to solve the equations given.
  *
@@ -21,7 +21,7 @@ import com.tubros.constraints.api.solver._
  *
  */
 @RunWith (classOf[JUnitRunner])
-class ExhaustiveSolveProblemWithGlobalConstraintsUseCase
+class ExhaustiveSolveProblemWithGlobalConstraintsSpec
 	extends SolveProblemWithGlobalConstraintsUseCase[
 		ExhaustiveFiniteDomainSolver[Double]#SolverState,
 		ExhaustiveFiniteDomainSolver[Double]
