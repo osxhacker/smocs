@@ -30,10 +30,11 @@ class ExhaustiveSolvePositionalEquationSpec
 		]
 		with ExhaustiveSolverUsage[Symbol]
 {
-	/// Instance Properties
-	implicit val cc : CanConstrain[Equation, Symbol] =
-		new PositionalEquationConstraint[Symbol];
+	/// Class Imports
+	import positional._
 	
+	
+	/// Instance Properties
 	override val solvable = new DefaultExhaustiveSolverUsage;
 	override val unsolvable = solvable;
 }

@@ -41,6 +41,13 @@ package object simple
 			new RelationalEquationConstraint[T];
 	}
 	
+	object positional
+	{
+		implicit def constrainOrderedEquation[T : Ordering]
+			: CanConstrain[Equation, T] =
+			new PositionalEquationConstraint[T];
+	}
+	
 	
 	/// Instance Properties
 	val constraints = ToCanConstrainOps;
