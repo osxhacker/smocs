@@ -102,7 +102,6 @@ trait SolvePositionalEquationUseCase[
 				def apply = ('a @== 'b - 1) && ('a > first);
 				}
 			
-			import scalaz.syntax.show._
 			And ("a Domain of ['v1, 'v2, 'v3, 'v4]");
 			
 			val values = List ('v1, 'v2, 'v3, 'v4);
