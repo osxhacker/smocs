@@ -125,14 +125,17 @@ trait SolvePositionalEquationUseCase[
 			answers should not be ('empty);
 			
 			And ("each one should have adjacent (a, b) values");
+			
+			val sorted = values.sorted (SymbolOrdering);
+			
 			answers.forall {
 				answer =>
-					
-				implicitly[Ordering[Symbol]].lt (
-					answer (0).value,
-					answer (1).value
-					);
-				} should be === (true);
+
+				val (a, b) = (answer (0).value, answer (1).value);
+				val aToB = sorted.dropWhile (_ != a).takeWhile (_ != b).to[Set];
+				
+				aToB.contains (answer (2).value);
+				} should be === (false);
 				
 			And ("each answer should not have 'a <> 'v1");
 			answers.toList.map {

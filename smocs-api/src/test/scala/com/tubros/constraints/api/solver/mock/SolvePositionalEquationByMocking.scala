@@ -49,7 +49,7 @@ trait SolvePositionalEquationByMocking
 			val answer = mo.zero |+|
 				Answer ('a -> 'v3).point[C] |+|
 				Answer ('b -> 'v2).point[C] |+|
-				Answer ('c -> 'v4).point[C];
+				Answer ('c -> 'v1).point[C];
 			
 			Stream (answer);
 		}
