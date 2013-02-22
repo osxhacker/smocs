@@ -34,14 +34,10 @@ class ExhaustiveFiniteDomainSolver[A]
 	(implicit override val canConstrain : CanConstrain[Equation, A])
 	extends Solver[
 		A,
-		({ type L[+X] = State[VariableStore[A], X]})#L,
+		StateBasedSolver[A, ExhaustiveFiniteDomainSolver[A]]#SolverState,
 		ExhaustiveFiniteDomainSolver[A]
 		]
-		with StateBasedSolver[
-			A,
-			({ type L[+X] = State[VariableStore[A], X]})#L,
-			ExhaustiveFiniteDomainSolver[A]
-			]
+		with StateBasedSolver[A, ExhaustiveFiniteDomainSolver[A]]
 {
 	/// Class Imports
 	import scalaz.std.list._
@@ -56,14 +52,6 @@ class ExhaustiveFiniteDomainSolver[A]
 	type Map[K, +V] = scala.collection.Map[K, V]
 	
 	
-	override def apply[C[_]] (
-		context : ExhaustiveFiniteDomainSolver[A] =>
-			SolverState[Stream[C[Answer[A]]]]
-		)
-		: Stream[C[Answer[A]]] =
-		context (this).eval (VariableStore.empty[A]);
-		
-		
 	/**
 	 * The '''ExhaustiveFiniteDomainSolver''' version of the run method
 	 * simply produces the combination of all remaining

@@ -23,10 +23,13 @@ import solver._
  * @author svickers
  *
  */
-trait StateBasedSolver[A, M[+_], +SolverT <: Solver[A, M, SolverT]]
+trait StateBasedSolver[
+	A,
+	+SolverT <: Solver[A, ({ type L[+X] = State[VariableStore[A], X]})#L, SolverT]
+	]
 {
 	/// Self Type Constraints
-	this : Solver[A, M, SolverT] =>
+	self : SolverT =>
 		
 
 	/// Class Imports
@@ -57,6 +60,12 @@ trait StateBasedSolver[A, M[+_], +SolverT <: Solver[A, M, SolverT]]
 		problem.equations.traverseS (add) map (_ => ());
 	
 	
+	override def apply[C[_]] (
+		context : SolverT => SolverState[Stream[C[Answer[A]]]])
+		: Stream[C[Answer[A]]] =
+		context (self).eval (VariableStore.empty[A]);
+		
+		
 	override def impose[C[_]] (constraint : C[A] => Boolean)
 		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
 		: SolverState[Unit] =
