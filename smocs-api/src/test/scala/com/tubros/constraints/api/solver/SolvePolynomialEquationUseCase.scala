@@ -71,7 +71,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 					x <- solver.newVar ('x, domain (solver, 2 to 10))
 					y <- solver.newVar ('y, domain (solver, 0 to 5))
 					_ <- solver.add (polynomial)
-					stream <- solver.run[Set]
+					stream <- solver.run[List]
 					} yield stream;
 				}
 			
@@ -80,7 +80,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			answers should not be ('empty);
 			answers should have size (1);
 			answers.head should be === (
-				Set (Answer ('x -> 2), Answer ('y -> 2))
+				List (Answer ('x -> 2), Answer ('y -> 2))
 				);
 		}
 		

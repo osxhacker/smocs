@@ -23,35 +23,14 @@ package object simple
 {
 	/// Class Types
 	object algebraic
-	{
-		implicit def constrainFractionalEquations[T : Numeric : Fractional]
-			: CanConstrain[Equation, T] =
-			new FractionalAlgebraicEquationConstraint[T];
-		
-		
-		implicit def constrainIntegralEquations[T : Numeric : Integral]
-			: CanConstrain[Equation, T] =
-			new IntegralAlgebraicEquationConstraint[T];
-	}
+		extends AlgebraicEquationConstraintInstances
 	
+		
 	object relational
-	{
-		implicit def constrainOrderedEquations[T : Ordering]
-			: CanConstrain[Equation, T] =
-			new RelationalEquationConstraint[T];
-	}
+		extends RelationalEquationConstraintInstances
 	
+		
 	object positional
-	{
-		implicit def constrainOrderedEquation[T : Ordering]
-			: CanConstrain[Equation, T] =
-			new PositionalEquationConstraint[T];
-	}
-	
-	
-	/// Instance Properties
-	val constraints = ToCanConstrainOps;
-	
-	
-	/// Implicit Conversions
+		extends PositionalEquationConstraintInstances
 }
+

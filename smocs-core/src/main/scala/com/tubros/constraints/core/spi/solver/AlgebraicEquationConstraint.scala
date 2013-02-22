@@ -49,6 +49,19 @@ class IntegralAlgebraicEquationConstraint[A : Numeric : Integral]
 }
 
 
+trait AlgebraicEquationConstraintInstances
+{
+	implicit def constrainFractionalEquations[T : Numeric : Fractional]
+		: CanConstrain[Equation, T] =
+		new FractionalAlgebraicEquationConstraint[T];
+	
+	
+	implicit def constrainIntegralEquations[T : Numeric : Integral]
+		: CanConstrain[Equation, T] =
+		new IntegralAlgebraicEquationConstraint[T];
+}
+
+
 object AlgebraicEquationConstraint
 {
 	/// Class Imports

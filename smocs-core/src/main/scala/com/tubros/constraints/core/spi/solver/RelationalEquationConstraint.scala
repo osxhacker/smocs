@@ -26,6 +26,14 @@ class RelationalEquationConstraint[A : Ordering]
 }
 
 
+trait RelationalEquationConstraintInstances
+{
+	implicit def constrainOrderedEquations[T : Ordering]
+		: CanConstrain[Equation, T] =
+		new RelationalEquationConstraint[T];
+}
+
+
 object RelationalEquationConstraint
 {
 	/// Class Types

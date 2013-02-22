@@ -46,7 +46,7 @@ object Smocs
 	/// Instance Properties
 	lazy val buildSettings = Seq (
 		organization := "com.tubros",
-		version := "0.3-SNAPSHOT",
+		version := "0.4-SNAPSHOT",
 		scalaVersion := "2.10.0"
 		);
 
@@ -110,7 +110,7 @@ object Dependencies
 
 	object Scalaz
 	{
-		private val version = "7.0.0-M7";
+		private val version = "7.0.0-M8";
 
 		lazy val core = Seq (
 			"org.scalaz" % "scalaz-core_2.10" % version,

@@ -1,9 +1,9 @@
 /**
  * Created on: Jan 31, 2013
  */
-package com.tubros.constraints.core.internal.simple
+package com.tubros.constraints.core.internal
+package simple
 
-import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.LinkedHashMap
 import scala.language.higherKinds
 
@@ -18,7 +18,6 @@ import problem.{
 	}
 import solver._
 import solver.error._
-import ExhaustiveFiniteDomainSolver._
 
 
 /**
@@ -32,15 +31,19 @@ import ExhaustiveFiniteDomainSolver._
  *
  */
 class ExhaustiveFiniteDomainSolver[A]
-	(implicit val cc : CanConstrain[Equation, A])
+	(implicit override val canConstrain : CanConstrain[Equation, A])
 	extends Solver[
 		A,
 		({ type L[+X] = State[VariableStore[A], X]})#L,
 		ExhaustiveFiniteDomainSolver[A]
 		]
+		with StateBasedSolver[
+			A,
+			({ type L[+X] = State[VariableStore[A], X]})#L,
+			ExhaustiveFiniteDomainSolver[A]
+			]
 {
 	/// Class Imports
-	import constraints._
 	import scalaz.std.list._
 	import scalaz.std.stream._
 	import scalaz.syntax.applicative._
@@ -50,19 +53,7 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	
 	/// Class Types
-	type DomainType[T] = DiscreteDomain[T]
 	type Map[K, +V] = scala.collection.Map[K, V]
-	type SolverState[+T] = ({ type L[+X] = State[VariableStore[A], X]})#L[T]
-	
-	
-	override def add (equation : Equation[A]) : SolverState[Unit] =
-		modify {
-			_.addConstraint (equation.constrains);
-			}
-	
-	
-	override def add (problem : Problem[A]) : SolverState[Unit] =
-		problem.equations.traverseS (add) map (_ => ());
 	
 	
 	override def apply[C[_]] (
@@ -71,42 +62,6 @@ class ExhaustiveFiniteDomainSolver[A]
 		)
 		: Stream[C[Answer[A]]] =
 		context (this).eval (VariableStore.empty[A]);
-	
-	
-	override def impose[C[_]] (constraint : C[A] => Boolean)
-		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
-		: SolverState[Unit] =
-		modify {
-			_.addAnswerFilter (new AnswerConstraint (constraint));
-			}
-	
-	
-	override def newVar (name : VariableName, domain : DomainType[A])
-		: SolverState[Variable[A, DomainType]] =
-		State {
-			vs =>
-				
-			val variable = DiscreteVariable (name, domain);
-			
-			(vs.addVariable (variable), variable);
-			}
-	
-	
-	override def newVars[C[_]] (domain : DomainType[A])
-		(names : C[VariableName])
-		(implicit F : Foldable[C])
-		: SolverState[List[Variable[A, DomainType]]] =
-		State {
-			vs =>
-				
-			val created = F.foldMap (names) {
-				name =>
-					
-				List (DiscreteVariable (name, domain));
-				}
-			
-			(vs.addVariables (created), created);
-			}
 		
 		
 	/**
@@ -183,43 +138,4 @@ class ExhaustiveFiniteDomainSolver[A]
 		gets {
 			_.variables;
 			}
-}
-
-
-object ExhaustiveFiniteDomainSolver
-{
-	/// Class Imports
-	import scalaz.std.AllInstances._
-	import scalaz.std.AllFunctions._
-	import scalaz.syntax.monoid._
-	
-	
-	/// Class Types
-	case class VariableStore[A] (
-		variables : Vector[Variable[A, DiscreteDomain]],
-		constraints : Set[Constraint[A]],
-		answerFilters : Set[Constraint[A]]
-		)
-	{
-		def addAnswerFilter (entry : Constraint[A]) =
-			copy (answerFilters = answerFilters + entry);
-		
-		def addConstraint (entry : Constraint[A]) =
-			copy (constraints = constraints + entry);
-			
-		def addVariable (entry : DiscreteVariable[A]) =
-			copy (variables = variables :+ entry);
-		
-		def addVariables (entries : Seq[DiscreteVariable[A]]) =
-			copy (variables = variables ++ entries);
-	}
-	
-	object VariableStore
-	{
-		def empty[A] = new VariableStore[A] (
-			variables = Vector.empty,
-			constraints = Set.empty,
-			answerFilters = Set.empty
-			);
-	}
 }

@@ -25,7 +25,13 @@ class PositionalEquationConstraint[A] (implicit o : Ordering[A])
 	
 	override def constrains (equation : Equation[A]) : Constraint[A] =
 		new DefaultPositionalConstraint[A] (equation);
+}
 
+trait PositionalEquationConstraintInstances
+{
+	implicit def constrainOrderedEquation[T : Ordering]
+		: CanConstrain[Equation, T] =
+		new PositionalEquationConstraint[T];
 }
 
 
