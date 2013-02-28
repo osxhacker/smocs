@@ -107,7 +107,7 @@ class TreeFiniteDomainSolver[A]
 			val justForTesting = tree.expand (
 				tree.root,
 				root :: children.to[List],
-				((_ : Variable[A, DomainType]).domain)
+				(_, v : Variable[A, DomainType]) => v.domain
 				);
 			
 			val all : Stream[Seq[Answer[A]]] = {

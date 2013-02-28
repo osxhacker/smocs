@@ -52,7 +52,7 @@ final case class SolutionTree[A] (
 	override def expand[M[+_], N[_]] (
 		location : LocationType,
 		variables : M[VariableType],
-		valuesFor : VariableType => N[A]
+		valuesFor : ValueGenerator[N]
 		)
 		(implicit fm : Foldable[M], fn : Foldable[N])
 		: SolutionTree[A] =
@@ -79,7 +79,7 @@ final case class SolutionTree[A] (
 		location : LocationType,
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
-		valuesFor : VariableType => N[A]
+		valuesFor : ValueGenerator[N]
 		)
 		(implicit fm : Foldable[M], fn : Foldable[N])
 		: SolutionTree[A] =
@@ -92,7 +92,7 @@ final case class SolutionTree[A] (
 		parent : LocationType,
 		frontier : Frontier[NodeType],
 		vars : List[VariableType],
-		valuesFor : VariableType => N[A]
+		valuesFor : ValueGenerator[N]
 		)
 		(implicit f : Foldable[N])
 		: (Option[LocationType], Frontier[NodeType]) =
@@ -101,7 +101,11 @@ final case class SolutionTree[A] (
 				(None, frontier);
 				
 			case last :: Nil =>
-				val (node, newFrontier) = valuesFor (last).foldLeft ((parent, frontier)) {
+				val allowedValues = valuesFor (
+					parent.getLabel.assignments,
+					last
+					);
+				val (node, newFrontier) = allowedValues.foldLeft ((parent, frontier)) {
 					case (p, value) =>
 						
 					val (parent, frontier) = p;
@@ -109,10 +113,16 @@ final case class SolutionTree[A] (
 					createChildNode (parent, last, value) :-> (frontier.enqueue);
 					}
 				
+				/// We only propagate changes if any were introduced
 				(node.hasChildren.option (node), newFrontier);
 				
 			case intermediary :: tail =>
-				valuesFor (intermediary).foldLeft ((parent.some, frontier)) {
+				val allowedValues = valuesFor (
+					parent.getLabel.assignments,
+					intermediary
+					);
+				
+				allowedValues.foldLeft ((parent.some, frontier)) {
 					case (p, value) =>
 						
 					val (updatedParent, newFrontier) = expander (
@@ -126,6 +136,7 @@ final case class SolutionTree[A] (
 						valuesFor
 						);
 					
+					/// As with leaf generation, only propagate changes if there
 					(
 						updatedParent filter (_.hasChildren) flatMap (_.parent),
 						newFrontier
