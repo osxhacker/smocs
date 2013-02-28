@@ -3,7 +3,6 @@
  */
 package com.tubros.constraints.core.internal
 
-import com.tubros.constraints.api.problem.Equation
 import com.tubros.constraints.core.spi.solver._
 
 
@@ -20,17 +19,5 @@ import com.tubros.constraints.core.spi.solver._
  *
  */
 package object simple
-{
-	/// Class Types
-	object algebraic
-		extends AlgebraicEquationConstraintInstances
-	
-		
-	object relational
-		extends RelationalEquationConstraintInstances
-	
-		
-	object positional
-		extends PositionalEquationConstraintInstances
-}
+	extends BuiltinEquationConstraintCategories
 

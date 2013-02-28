@@ -3,6 +3,9 @@
  */
 package com.tubros.constraints.core.internal
 
+import scalax.collection.GraphEdge.UnDiEdge
+import scalax.collection.constrained.Graph
+
 
 /**
  * The '''graph''' `package` defines
@@ -13,7 +16,6 @@ package com.tubros.constraints.core.internal
  *
  */
 package object graph
+	extends BuiltinEquationConstraintCategories
 {
-
 }
-

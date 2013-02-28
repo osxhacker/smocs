@@ -91,6 +91,7 @@ trait DiscreteDomainInstances
 	 */
 	implicit object ScalazDiscreteDomain
 		extends Each[DiscreteDomain]
+			with Foldable[DiscreteDomain]
 			with IsEmpty[DiscreteDomain]
 			with Length[DiscreteDomain]
 			with MonadPlus[DiscreteDomain]
@@ -104,6 +105,21 @@ trait DiscreteDomainInstances
 			: Unit = fa foreach f;
 		
 		override def empty[A] : DiscreteDomain[A] = DiscreteDomain.empty[A];
+		
+		override def foldMap[A, B] (fa : DiscreteDomain[A])
+			(f : A => B)
+			(implicit MO : Monoid[B])
+			: B =
+			fa.foldLeft (MO.zero) {
+				case (accum, element) =>
+					
+				MO.append (accum, f (element));
+				}
+		
+		override def foldRight[A, B] (fa : DiscreteDomain[A], z : => B)
+			(f : (A, => B) => B)
+			: B =
+			fa.foldRight (z) (f (_, _));
 		
 		override def isEmpty[A] (fa : DiscreteDomain[A]) : Boolean =
 			fa.isEmpty;

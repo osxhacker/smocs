@@ -19,6 +19,9 @@ final case class Answer[A] (
 	val name : VariableName,
 	val value : A
 	)
+{
+	def toTuple = Answer.AnswerIsoFunctor.to (this);
+}
 	
 	
 object Answer
@@ -70,5 +73,11 @@ object Answer
 			override val G = implicitly[Equal[VariableNameTuple[A]]];
 			override val iso : Answer[A] <=> VariableNameTuple[A] =
 				answerIso[A];
+			}
+	
+	
+	implicit def answerShow[A : Show] : Show[Answer[A]] =
+		new Show[Answer[A]] {
+			override def shows (a : Answer[A]) = a.toString;
 			}
 }

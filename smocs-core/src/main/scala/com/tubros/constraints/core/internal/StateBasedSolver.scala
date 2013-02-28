@@ -43,6 +43,7 @@ trait StateBasedSolver[
 	
 	/// Class Types
 	override type DomainType[T] = DiscreteDomain[T]
+	type Map[K, +V] = scala.collection.Map[K, V]
 	type SolverState[+T] = ({ type L[+X] = State[VariableStore[A], X]})#L[T]
 	
 	

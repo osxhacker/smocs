@@ -26,6 +26,7 @@ class AnswerSpec
 	/// Class Imports
 	import scalaz.std.AllInstances._
 	import scalaz.syntax.comonad._
+	import scalaz.syntax.show._
 	
 	
 	"An Answer" should "have both a VariableName and a value" in
@@ -34,6 +35,13 @@ class AnswerSpec
 		
 		answer.name must be === ('x);
 		answer.value must be === (42);
+	}
+	
+	it should "support transformations to/from Tuple2" in
+	{
+		val answer = Answer ('y, "just for test");
+		
+		answer.toTuple should be === (('y, "just for test"));
 	}
 	
 	it should "support Scalaz Functor" in
@@ -66,5 +74,12 @@ class AnswerSpec
 		val a = Answer ('a, 42);
 		
 		a.copoint should be === (42);
+	}
+	
+	it should "support Scalaz Show" in
+	{
+		val cord = Answer ('z, 99).show;
+		
+		cord must not be === (null);
 	}
 }

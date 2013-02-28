@@ -4,6 +4,8 @@
 package com.tubros.constraints.api
 package solver
 
+import scalaz.Foldable
+
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -119,6 +121,16 @@ class DiscreteDomainSpec
 		
 		functor (ints) (n => n + 1) must be === (
 			DiscreteDomain.empty[Int] ++ Seq (5, 6, 7)
+			);
+	}
+	
+	it should "support Foldable use" in
+	{
+		val values = List (4, 5, 6, 7);
+		val ints = DiscreteDomain.empty[Int] ++ values;
+		
+		Foldable[DiscreteDomain].foldMap (ints) (a => a) should be === (
+			values.sum
 			);
 	}
 	

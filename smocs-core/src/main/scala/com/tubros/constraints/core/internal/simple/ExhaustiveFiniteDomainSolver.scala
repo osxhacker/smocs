@@ -49,7 +49,6 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	
 	/// Class Types
-	type Map[K, +V] = scala.collection.Map[K, V]
 	
 	
 	/**
@@ -103,7 +102,7 @@ class ExhaustiveFiniteDomainSolver[A]
 				
 			vs.answerFilters.toVector ++ vs.constraints;
 			}
-	
+			
 	
 	private def label[C[_]] (variables : Stream[Map[VariableName, A]])
 		(implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
@@ -119,7 +118,7 @@ class ExhaustiveFiniteDomainSolver[A]
 			
 			answers;
 			}
-			
+	
 	
 	private def variables ()
 		: SolverState[Seq[Variable[A, DomainType]]] =
