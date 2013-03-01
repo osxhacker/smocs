@@ -11,7 +11,9 @@ import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
 import com.tubros.constraints.api._
+import com.tubros.constraints.api.problem._
 import com.tubros.constraints.api.solver._
+import com.tubros.constraints.core.spi.solver._
 
 
 /**
@@ -30,6 +32,14 @@ class TreeFiniteDomainSolverSpec
 	/// Class Imports
 	import scalaz.std.AllInstances._
 	import algebraic._
+	
+	
+	/// Class Types
+	trait PolynomialEquation[T]
+		extends Equation[T]
+			with ArithmeticSupport[T]
+			with PropositionalSupport[T]
+			with RelationalSupport[T]
 	
 	
 	"A TreeFiniteDomainSolver" should "be able to be constructed" in
@@ -61,5 +71,33 @@ class TreeFiniteDomainSolverSpec
 				
 			answer.contains (List (Answer ('a, a), Answer ('b, b))) should be === (true);
 			}
+	}
+	
+	it should "employ constraint propagation" in
+	{
+		val problem = Problem (
+			new PolynomialEquation[Int] {
+				def apply = 'y @== 'x ** 3 
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'x @== 2
+				}
+			);
+		val solver = new TreeFiniteDomainSolver[Int];
+		val domain = FiniteDiscreteDomain (1 to 1000);
+		val answer = solver {
+			s =>
+				
+			for {
+				_ <- s.newVar ('x, domain)
+				_ <- s.newVar ('y, domain)
+				_ <- s.add (problem)
+				stream <- s.run[Vector]
+				} yield stream;
+			}
+		
+		answer should not be ('empty);
+		answer should have size (1);
+		answer.head should be === (Vector (Answer ('x, 2), Answer ('y, 8)));
 	}
 }

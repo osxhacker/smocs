@@ -23,10 +23,7 @@ import com.tubros.constraints.core.spi.solver._
  *
  */
 class TreeFiniteDomainSolver[A]
-	(implicit
-		override val canConstrain : CanConstrain[Equation, A],
-		manifest : Manifest[A]
-	)
+	(implicit override val canConstrain : CanConstrain[Equation, A])
 	extends Solver[
 		A,
 		StateBasedSolver[A, TreeFiniteDomainSolver[A]]#SolverState,
@@ -36,6 +33,8 @@ class TreeFiniteDomainSolver[A]
 {
 	/// Class Imports
 	import std.list._
+	import std.stream._
+	import std.vector._
 	import syntax.all._
 	import State._
 
@@ -104,10 +103,10 @@ class TreeFiniteDomainSolver[A]
 			val tree = SolutionTree[A] ();
 			
 			// TOOO: this is a *very* temporary approach, as it hits all nodes!
-			val justForTesting = tree.expand (
+			val bruteForce = tree.expand (
 				tree.root,
 				root :: children.to[List],
-				(_, v : Variable[A, DomainType]) => v.domain
+				new ConstraintPropagation[A, DomainType] (vs.constraints)
 				);
 			
 			val all : Stream[Seq[Answer[A]]] = {
@@ -118,26 +117,14 @@ class TreeFiniteDomainSolver[A]
 					cur.map (_.assignments) #:: step (nextFrontier);
 					}
 				
-				val (first, frontier) = justForTesting.frontier.dequeue;
+				val (first, frontier) = bruteForce.frontier.dequeue;
 				
-				(first.map (_.assignments) #:: step (frontier)) takeWhile (_.isDefined) map (_.get);
+				// TODO: this is an ugly form that needs to get cleaned up.
+				(first.map (_.assignments) #:: step (frontier)) takeWhile (
+					_.isDefined
+					) map (_.get);
 				}
 			
 			all;
-				/*
-			val pickVar = (vars : Seq[Variable[A, DomainType]]) => vars.head;
-			val pickValue = (vals : DomainType[A]) => vals.head;
-			val tree = search (Node.empty[A], root +: children, pickVar, pickValue) (
-				SolutionTree (Node.empty[A])
-				);
-			
-			println ("### tree: %s".format (tree))
-			tree.answers (children.size + 1).to[Stream].map {
-				answer =>
-					
-				answer.flatMap (_.assignment).map (_.toTuple).toMap
-				}
-				* 
-				*/
 			}
 }

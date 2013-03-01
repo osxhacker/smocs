@@ -29,7 +29,10 @@ import com.tubros.constraints.api.solver.error.SolverError
  *
  */
 trait Constraint[A]
-	extends (Map[VariableName, A] => SolverError \/ Map[VariableName, A])
+	extends PartialFunction[
+		Map[VariableName, A],
+		SolverError \/ Map[VariableName, A]
+		]
 {
 	/// Class Types
 	type Env[A] = Map[VariableName, A]
@@ -44,6 +47,14 @@ trait Constraint[A]
 	 * domains.
 	 */
 	def apply (in : Env[A]) : SolverError \/ Env[A];
+	
+	
+	override def isDefinedAt (values : Env[A]) : Boolean =
+		isDefinedAt (values.keySet);
+	
+	
+	def isDefinedAt (names : Set[VariableName]) : Boolean =
+		(variables &~ names).isEmpty;
 }
 
 

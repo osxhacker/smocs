@@ -105,6 +105,7 @@ final case class SolutionTree[A] (
 					parent.getLabel.assignments,
 					last
 					);
+				
 				val (node, newFrontier) = allowedValues.foldLeft ((parent, frontier)) {
 					case (p, value) =>
 						
@@ -138,7 +139,7 @@ final case class SolutionTree[A] (
 					
 					/// As with leaf generation, only propagate changes if there
 					(
-						updatedParent filter (_.hasChildren) flatMap (_.parent),
+						updatedParent.flatMap (_.parent).orElse (p._1),
 						newFrontier
 					);
 					}
