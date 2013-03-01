@@ -34,6 +34,11 @@ trait Constraint[A]
 		SolverError \/ Map[VariableName, A]
 		]
 {
+	/// Class Imports
+	import std.anyVal._
+	import syntax.equal._
+	
+	
 	/// Class Types
 	type Env[A] = Map[VariableName, A]
 	
@@ -47,6 +52,17 @@ trait Constraint[A]
 	 * domains.
 	 */
 	def apply (in : Env[A]) : SolverError \/ Env[A];
+	
+	
+	/**
+	 * The exactMatch method determines whether or not this '''Constraint'''
+	 * requires precisely all of the
+	 * [[com.tubros.constraints.api.VariableName]]s present in the '''names'''
+	 * [[scala.collection.Set]].
+	 */
+	def exactMatch (names : Set[VariableName]) : Boolean =
+		(variables.isEmpty || variables.size === names.size) && 
+			isDefinedAt (names);
 	
 	
 	override def isDefinedAt (values : Env[A]) : Boolean =

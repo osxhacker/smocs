@@ -163,8 +163,8 @@ object Dependencies
 		"org.jmock" % "jmock-junit4" % "2.5.1" % "test" intransitive(),
 		"org.jmock" % "jmock-legacy" % "2.5.1" % "test",
 		"org.scalacheck" % "scalacheck_2.10" % "1.10.0" % "test",
-		"org.scalamock" % "scalamock-core_2.10" % "3.0" % "test",
-		"org.scalamock" % "scalamock-scalatest-support_2.10" % "3.0" % "test",
+		"org.scalamock" % "scalamock-core_2.10" % "3.0.1" % "test",
+		"org.scalamock" % "scalamock-scalatest-support_2.10" % "3.0.1" % "test",
 		"org.scalatest" % "scalatest_2.10" % "2.0.M5b" % "test",
 		"org.slf4j" % "slf4j-jdk14" % "1.7.2" % "test"
 		);

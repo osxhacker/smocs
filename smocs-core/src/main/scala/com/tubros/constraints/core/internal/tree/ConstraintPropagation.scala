@@ -35,7 +35,7 @@ class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 	{
 		val available = assignments.map (_.name).to[Set] + variable.name;
 		val applicableConstraints = constraints.filter (
-			_.isDefinedAt (available)
+			_.exactMatch (available)
 			);
 		val priorVariables = evaluate (
 			assignments.map (_.toTuple).toMap,
