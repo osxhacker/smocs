@@ -7,7 +7,10 @@ import scala.collection.immutable.{
 	Stack,
 	Queue
 	}
-import scala.language.higherKinds
+import scala.language.{
+	higherKinds,
+	postfixOps
+	}
 
 import scalaz._
 
@@ -22,23 +25,8 @@ import scalaz._
  *
  */
 sealed trait Frontier[A]
+	extends FrontierLike[A, Frontier[A]]
 {
-	/**
-	 * The enqueue method takes an '''element''' and places it in the
-	 * '''Frontier''' based on the [[scalaz.Lens]] policy responsible for
-	 * addition.
-	 */
-	def enqueue (element : A) : Frontier[A];
-	
-	
-	/**
-	 * The dequeue method attempts to produce the next unexplored ''A''
-	 * managed by the '''Frontier''' if one is available.  If not, the tuple
-	 * returned will have a [[scala.None]] for its first element.
-	 */
-	def dequeue : (Option[A], Frontier[A]);
-	
-	
 	/**
 	 * The isEmpty method indicates whether or not the '''Frontier''' has no
 	 * more unexplored elements within it.
@@ -53,14 +41,102 @@ sealed trait Frontier[A]
 }
 
 
-private case class DefaultFrontier[A, C[+_]] (
+sealed trait FrontierLike[A, +This <: FrontierLike[A, This] with Frontier[A]]
+{
+	/**
+	 * The enqueue method takes an '''element''' and places it in the
+	 * '''Frontier''' based on the [[scalaz.Lens]] policy responsible for
+	 * addition.
+	 */
+	def enqueue (element : A) : This;
+	
+	
+	/**
+	 * This version of enqueue allows an arbitrary number of ''elements'' to
+	 * be placed into the '''Frontier'''.
+	 */
+	def enqueue (elements : Traversable[A]) : This;
+	
+	
+	/**
+	 * The dequeue method attempts to produce the next unexplored ''A''
+	 * managed by the '''Frontier''' if one is available.  If not, the tuple
+	 * returned will have a [[scala.None]] for its first element.
+	 */
+	def dequeue : (Option[A], This);
+}
+
+
+final case class LifoFrontier[A] (private[internal] val stack : Stack[A])
+	extends Frontier[A]
+		with FrontierLike[A, LifoFrontier[A]]
+{
+	/// Class Imports
+	import syntax.std.boolean._
+	
+	
+	/// Instance Properties
+	override val isEmpty : Boolean = stack.isEmpty;
+	override val size : Int = stack.size;
+	
+	
+	override def enqueue (element : A) : LifoFrontier[A] =
+		copy (stack = stack.push (element));
+	
+	override def enqueue (elements : Traversable[A]) : LifoFrontier[A] =
+		copy (stack = stack.pushAll (elements));
+	
+	override def dequeue : (Option[A], LifoFrontier[A]) =
+		stack.isEmpty.fold (
+			(None, this),
+			(stack.headOption, copy (stack = stack.pop))
+			);
+}
+
+
+final case class FifoFrontier[A] (private[internal] val queue : Queue[A])
+	extends Frontier[A]
+		with FrontierLike[A, FifoFrontier[A]]
+{
+	/// Class Imports
+	import std.tuple._
+	import syntax.bifunctor._
+	import syntax.std.boolean._
+	import syntax.std.option._
+	
+	
+	/// Instance Properties
+	override val isEmpty : Boolean = queue.isEmpty;
+	override val size : Int = queue.size;
+	
+	
+	override def enqueue (element : A) : FifoFrontier[A] =
+		copy (queue = queue.enqueue (element));
+	
+	override def enqueue (elements : Traversable[A]) : FifoFrontier[A] =
+		copy (queue = queue ++ elements);
+	
+	override def dequeue : (Option[A], FifoFrontier[A]) =
+		queue.isEmpty.fold (
+			(None, this),
+			((_ : A).some) <-: queue.dequeue :-> {
+				q =>
+					
+				copy (queue = q);
+				}
+			);
+}
+
+
+private case class GenericFrontier[A, C[+_]] (
 	override val size : Int,
 	private val container : C[A],
-	private val add : Lens[C[A], Option[A]],
-	private val remove : Lens[C[A], Option[A]]
+	private val add : C[A] @> Option[A],
+	private val remove : C[A] @> Option[A]
 	)
 	(implicit ie : IsEmpty[C])
 	extends Frontier[A]
+		with FrontierLike[A, GenericFrontier[A, C]]
 {
 	/// Class Imports
 	import std.option._
@@ -69,11 +145,18 @@ private case class DefaultFrontier[A, C[+_]] (
 	import syntax.std.option._
 	
 	
-	override def enqueue (element : A) : Frontier[A] =
+	override def enqueue (element : A) : GenericFrontier[A, C] =
 		copy (size = size + 1, container = add.set (container, element.some));
 	
 	
-	override def dequeue : (Option[A], Frontier[A]) =
+	override def enqueue (elements : Traversable[A]) : GenericFrontier[A, C] =
+		elements.foldLeft (this) {
+			case (q, e) =>
+			
+			q.enqueue (e);
+			}
+		
+	override def dequeue : (Option[A], GenericFrontier[A, C]) =
 		isEmpty fold (
 			(none[A], this),
 			{
@@ -101,78 +184,63 @@ object Frontier
 	import Lens._
 	
 	
-	/// Class Types
-	implicit object StackIsEmpty
-		extends IsEmpty[Stack]
-	{
-		override def empty[A] = Stack.empty[A];
-		override def isEmpty[A] (sa : Stack[A]) = sa.isEmpty;
-		override def plus[A] (a : Stack[A], b : => Stack[A]) = a.pushAll (b);
-	}
-	
-	
-	implicit object QueueIsEmpty
-		extends IsEmpty[Queue]
-	{
-		override def empty[A] = Queue.empty[A];
-		override def isEmpty[A] (qa : Queue[A]) = qa.isEmpty;
-		override def plus[A] (a : Queue[A], b : => Queue[A]) = a.enqueue (b);
-	}
-	
-	
 	/**
 	 * The apply method allows clients to create a '''Frontier''' instance
 	 * which will use the '''add'' [[scalaz.Lens]] when an element needs to
 	 * be retained and the '''remove''' [[scalaz.Lens]] to remove one.
 	 */
 	def apply[A, C[+_]] (
-		add : Lens[C[A], Option[A]],
-		remove : Lens[C[A], Option[A]]
+		add : C[A] @> Option[A],
+		remove : C[A] @> Option[A]
 		)
 		(implicit ie : IsEmpty[C], mo : Monoid[C[A]])
 		: Frontier[A] =
-		DefaultFrontier[A, C] (0, mzero[C[A]], add, remove);
+		GenericFrontier[A, C] (0, mzero[C[A]], add, remove);
 	
 	
 	/**
 	 * The fifo method creates a '''Frontier''' where an `enqueue` invocation
 	 * results in the element being the first available for `dequeue`.
 	 */
-	def fifo[A] : Frontier[A] =
-		DefaultFrontier[A, Stack] (
-			0,
-			Stack.empty[A],
-			add = lensu[Stack[A], Option[A]] (
-				get = s => s.headOption,
-				set = (s, e) => e.fold (s) (a => s.push (a))
-				),
-			remove = lensu[Stack[A], Option[A]] (
-				get = s => s.headOption,
-				set = (s, e) => e.fold (s) (_ => s.pop)
-				)
-			);
+	def fifo[A] : FifoFrontier[A] = FifoFrontier[A] (Queue.empty[A]);
 	
 	
 	/**
 	 * The lifo method creates a '''Frontier''' where an `enqueue` invocation
 	 * results in the element being the last available for `dequeue`.
 	 */
-	def lifo[A] : Frontier[A] =
-		DefaultFrontier[A, Queue] (
-			0,
-			Queue.empty[A],
-			add = lensu[Queue[A], Option[A]] (
-				get = q => q.headOption,
-				set = (q, e) => e.fold (q) (a => q.enqueue (a))
-				),
-			remove = lensu[Queue[A], Option[A]] (
-				get = q => q.headOption,
-				set = (q, e) => e.fold (q) (_ => q.dequeue._2)
-				)
-			);
-	
+	def lifo[A] : LifoFrontier[A] = LifoFrontier[A] (Stack.empty[A]);
+
 	
 	/// Implicit Conversions
+	implicit def frontierFifoMonoid[A] : Monoid[FifoFrontier[A]] =
+		new Monoid[FifoFrontier[A]]
+		{
+			lazy val zero : FifoFrontier[A] = fifo[A];
+			
+			override def append (a : FifoFrontier[A], b : => FifoFrontier[A])
+				: FifoFrontier[A] =
+				if (a.isEmpty)
+					b;
+				else
+					FifoFrontier[A] (a.queue ++ b.queue);
+		}
+	
+	
+	implicit def frontierLifoMonoid[A] : Monoid[LifoFrontier[A]] =
+		new Monoid[LifoFrontier[A]]
+		{
+			lazy val zero : LifoFrontier[A] = lifo[A];
+			
+			override def append (a : LifoFrontier[A], b : => LifoFrontier[A])
+				: LifoFrontier[A] =
+				if (a.isEmpty)
+					b;
+				else
+					LifoFrontier[A] (a.stack.pushAll (b.stack));
+		}
+	
+	
 	implicit def frontierShow[A] : Show[Frontier[A]] =
 		new Show[Frontier[A]]
 		{

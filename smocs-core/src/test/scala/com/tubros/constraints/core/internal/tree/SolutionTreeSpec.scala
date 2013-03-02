@@ -55,7 +55,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			variables,
-			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable.domain
+			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable
 			);
 		
 		expanded.frontier should not be ('empty);
@@ -72,7 +72,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			variables,
-			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable.domain
+			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable
 			);
 		
 		expanded.frontier should not be ('empty);
@@ -90,7 +90,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			preExpansionVariables,
-			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable.domain
+			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable
 			);
 		
 		expanded.frontier should be ('empty);
@@ -105,7 +105,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			preExpansionVariables,
-			valuesFor = (_, _ : Variable[Int, DiscreteDomain]) => List.empty[Int]
+			valuesFor = (_, v : Variable[Int, DiscreteDomain]) => v.filter (_ => false)
 			);
 		
 		expanded.frontier should be ('empty);

@@ -29,8 +29,8 @@ import com.tubros.constraints.api.solver._
  *
  */
 final case class SolutionTree[A] (
-	private val tree : Tree[SolutionTree[A]#NodeType],
-	override val frontier : Frontier[SolutionTree[A]#NodeType]
+	private val tree : Tree[SolutionTree[A]#NodeType[A]],
+	override val frontier : Frontier[SolutionTree[A]#NodeType[A]]
 	)
 	extends SolutionSpace[A, Tree, DiscreteDomain]
 {
@@ -40,8 +40,9 @@ final case class SolutionTree[A] (
 	
 	
 	/// Class Types
-	override type LocationType = TreeLoc[NodeType]
-	override type NodeType = SolutionTreeNode[A]
+	override type LocationType = TreeLoc[NodeType[A]]
+	override type NodeType[T] = SolutionTreeNode[T]
+	type TreeType[T] = Tree[SolutionTreeNode[T]]
 	
 	
 	/// Instance Properties
@@ -49,12 +50,12 @@ final case class SolutionTree[A] (
 	private val NodeType = SolutionTreeNode;
 	
 	
-	override def expand[M[+_], N[_]] (
+	override def expand[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
-		valuesFor : ValueGenerator[N]
+		valuesFor : ValueGenerator
 		)
-		(implicit fm : Foldable[M], fn : Foldable[N])
+		(implicit fm : Foldable[M])
 		: SolutionTree[A] =
 		{
 			val (subTree, newFrontier) = expander (
@@ -65,37 +66,36 @@ final case class SolutionTree[A] (
 				);
 			
 			copy (
-				tree = subTree.fold (location.toTree) (_.toTree),
+				tree = subTree.fold (tree) (_.toTree),
 				frontier = newFrontier
 				);
 		}
-	
+		
 	
 	override def prune (location : LocationType) : SolutionTree[A] =
 		copy (tree = location.delete.map (_.toTree) getOrElse (tree));
 	
 	
-	override def search[M[+_], N[_]] (
+	override def search[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
-		valuesFor : ValueGenerator[N]
+		valuesFor : ValueGenerator
 		)
-		(implicit fm : Foldable[M], fn : Foldable[N])
+		(implicit fm : Foldable[M])
 		: SolutionTree[A] =
 	{
 		expand (location, choose (variables), valuesFor);
 	}
 
 	
-	private def expander[N[_]] (
+	private def expander (
 		parent : LocationType,
-		frontier : Frontier[NodeType],
+		frontier : Frontier[NodeType[A]],
 		vars : List[VariableType],
-		valuesFor : ValueGenerator[N]
+		valuesFor : ValueGenerator
 		)
-		(implicit f : Foldable[N])
-		: (Option[LocationType], Frontier[NodeType]) =
+		: (Option[LocationType], Frontier[NodeType[A]]) =
 		vars match {
 			case Nil =>
 				(None, frontier);
@@ -104,7 +104,7 @@ final case class SolutionTree[A] (
 				val allowedValues = valuesFor (
 					parent.getLabel.assignments,
 					last
-					);
+					).domain;
 				
 				val (node, newFrontier) = allowedValues.foldLeft ((parent, frontier)) {
 					case (p, value) =>
@@ -121,7 +121,7 @@ final case class SolutionTree[A] (
 				val allowedValues = valuesFor (
 					parent.getLabel.assignments,
 					intermediary
-					);
+					).domain;
 				
 				allowedValues.foldLeft ((parent.some, frontier)) {
 					case (p, value) =>
@@ -151,7 +151,7 @@ final case class SolutionTree[A] (
 		variable : VariableType,
 		value : A
 		)
-		: (LocationType, NodeType) =
+		: (LocationType, NodeType[A]) =
 	{
 		val node = NodeType (
 			parent.getLabel.assignments :+ Answer (variable.name, value)
@@ -222,7 +222,7 @@ object SolutionTree
 		import syntax.tree._
 		
 		
-		implicit def showSolution[A : Show] : Show[SolutionTree[A]] =
+		implicit def solutionShow[A : Show] : Show[SolutionTree[A]] =
 			new ShowSolutionTree[A];
 	}
 }

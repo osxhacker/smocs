@@ -16,7 +16,7 @@ import com.tubros.constraints.core.spi.solver._
 
 /**
  * The '''TreeFiniteDomainSolver''' type uses the
- * [[com.tubros.constraints.core.internal.graph.Tree]] type to define a
+ * [[com.tubros.constraints.core.internal.tree.SolutionTree]] type to define a
  * tree-based [[com.tubros.constraints.api.solver.Solver]].
  *
  * @author svickers
@@ -41,7 +41,7 @@ class TreeFiniteDomainSolver[A]
 	
 	/**
 	 * The '''TreeFiniteDomainSolver''' version of the run method drives a
-	 * [[com.tubros.constraints.core.internal.graph.SolutionTree]]-based
+	 * [[com.tubros.constraints.core.internal.tree.SolutionTree]]-based
 	 * search space to solve the problem in question.
 	 */
 	override def run[C[_]] (
@@ -110,7 +110,7 @@ class TreeFiniteDomainSolver[A]
 				);
 			
 			val all : Stream[Seq[Answer[A]]] = {
-				def step (frontier : Frontier[SolutionTree[A]#NodeType])
+				def step (frontier : Frontier[SolutionTree[A]#NodeType[A]])
 					: Stream[Option[Seq[Answer[A]]]] = {
 					val (cur, nextFrontier) = frontier.dequeue;
 					

@@ -36,20 +36,6 @@ class FrontierSpec
 	
 	"The Frontier" should "support a LIFO configuration" in
 	{
-		val lifo = Frontier.lifo[String]
-		
-		lifo must not be === (null);
-	}
-	
-	it should "support a FIFO configuration" in
-	{
-		val fifo = Frontier.fifo[Double]
-		
-		fifo must not be === (null);
-	}
-	
-	it should "satisfy LIFO expectations when enqueuing" in
-	{
 		val lifo = Frontier (
 			add = lensu[Vector[String], Option[String]] (
 				get = _.headOption,
@@ -61,20 +47,12 @@ class FrontierSpec
 				)
 			);
 		
-		val populated = lifo.enqueue ("first").enqueue ("second");
-		
-		populated should not be ('empty);
-		
-		val (oldest, frontier) = populated.dequeue;
-		
-		oldest should be ('defined);
-		oldest should be === (Some ("first"));
-		frontier should not be ('empty);
+		lifo must not be === (null);
 	}
 	
-	it should "satisfy FIFO expectations when enqueuing" in
+	it should "support a FIFO configuration" in
 	{
-		val lifo = Frontier (
+		val fifo = Frontier (
 			add = lensu[Vector[String], Option[String]] (
 				get = _.headOption,
 				set = (l, e) => e.fold (l) (_ +: l)
@@ -85,14 +63,54 @@ class FrontierSpec
 				)
 			);
 		
+		fifo must not be === (null);
+	}
+	
+	it should "satisfy LIFO expectations when enqueuing" in
+	{
+		val lifo = Frontier.lifo[String];
 		val populated = lifo.enqueue ("first").enqueue ("second");
+		
+		populated should not be ('empty);
+		
+		val (newest, frontier) = populated.dequeue;
+		
+		newest should be ('defined);
+		newest should be === (Some ("second"));
+		frontier should not be ('empty);
+	}
+	
+	it should "satisfy FIFO expectations when enqueuing" in
+	{
+		val fifo = Frontier.fifo[String]
+		val populated = fifo.enqueue ("first").enqueue ("second");
 		
 		populated should not be ('empty);
 		
 		val (oldest, frontier) = populated.dequeue;
 		
 		oldest should be ('defined);
-		oldest should be === (Some ("second"));
+		oldest should be === (Some ("first"));
 		frontier should not be ('empty);
+	}
+	
+	it should "conform to the Monoid laws" in
+	{
+		implicit object FifoEqual
+			extends Equal[FifoFrontier[Int]]
+		{
+			override def equal (a : FifoFrontier[Int], b : FifoFrontier[Int]) =
+				a.queue.to[List] == b.queue.to[List];
+		}
+		
+		val fifo = Frontier.fifo[Int].enqueue (1).enqueue (2);
+		val more = Frontier.fifo[Int].enqueue (3).enqueue (4);
+		val someMore = Frontier.fifo[Int].enqueue (5);
+		val monoid = implicitly[scalaz.Monoid[FifoFrontier[Int]]];
+		val laws = monoid.monoidLaw;
+		
+		laws.leftIdentity (fifo) must be === (true);
+		laws.rightIdentity (fifo) must be === (true);
+		laws.associative (fifo, more, someMore) must be === (true);
 	}
 }

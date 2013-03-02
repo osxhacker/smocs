@@ -22,18 +22,18 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	/// Class Types
 	type LocationType
 	final type VariableType = Variable[A, DomainT]
-	type ValueGenerator[C[_]] = (Seq[Answer[A]], VariableType) => C[A]
+	type ValueGenerator = (Seq[Answer[A]], VariableType) => VariableType
 	
 	
 	def prune (location : LocationType) : Repr;
 	
 	
-	def search[M[+_], N[_]] (
+	def search[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
-		valuesFor : ValueGenerator[N]
+		valuesFor : ValueGenerator
 		)
-		(implicit fm : Foldable[M], fn : Foldable[N])
+		(implicit fm : Foldable[M])
 		: Repr;
 }

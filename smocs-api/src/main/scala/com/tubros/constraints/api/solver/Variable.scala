@@ -62,6 +62,15 @@ trait Variable[A, DomainT[A] <: Domain[A]]
 	
 	
 	/**
+	 * The filterNot method is a syntactic convenience opposite of the
+	 * `filter` method, in that it will allow values which do ''not'' satisfy
+	 * the given '''predicate'''.
+	 */
+	def filterNot (predicate : A => Boolean) : Variable[A, DomainT] =
+		filter (a => !predicate (a));
+	
+	
+	/**
 	 * The flatMap method builds a new '''Variable''' by applying a function
 	 * to the [[com.tubros.constraints.api.VariableName]] and
 	 * [[com.tubros.constraints.api.solver.Domain]] pair.
@@ -70,6 +79,13 @@ trait Variable[A, DomainT[A] <: Domain[A]]
 		f : (VariableName, DomainT[A]) => Variable[B, DomainT]
 		)
 		: Variable[B, DomainT];
+	
+	
+	/**
+	 * The isEmpty method indicates whether or not this '''Variable''' has no
+	 * [[com.tubros.constraints.api.solver.Domain]] values.
+	 */
+	def isEmpty : Boolean = domain.headOption.isEmpty;
 	
 	
 	/**

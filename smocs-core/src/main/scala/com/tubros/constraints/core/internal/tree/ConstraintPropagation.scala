@@ -25,13 +25,13 @@ import com.tubros.constraints.core.spi.solver._
 class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 	val constraints : Set[Constraint[A]]
 	)
-	extends ((Seq[Answer[A]], Variable[A, DomainT]) => Vector[A])
+	extends ((Seq[Answer[A]], Variable[A, DomainT]) => Variable[A, DomainT])
 {
 	override def apply (
 		assignments : Seq[Answer[A]],
 		variable : Variable[A, DomainT]
 		)
-		: Vector[A] =
+		: Variable[A, DomainT] =
 	{
 		val available = assignments.map (_.name).to[Set] + variable.name;
 		val applicableConstraints = constraints.filter (
@@ -42,7 +42,7 @@ class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 			variable.name
 			) _;
 		
-		variable.domain.to[Vector] filter {
+		variable.filter {
 			value =>
 				
 			applicableConstraints.forall (priorVariables (value));

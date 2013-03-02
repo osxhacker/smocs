@@ -22,12 +22,12 @@ trait SolutionSpace[A, M[_], DomainT[X] <: Domain[X]]
 	extends Searchable[A, SolutionSpace[A, M, DomainT], DomainT]
 {
 	/// Class Types
-	type NodeType <: SolutionSpace.Node[A]
+	type NodeType[T] <: SolutionSpace.Node[T]
 	type ThisType = SolutionSpace[A, M, DomainT]
 	
 	
 	/// Instance Properties
-	def frontier : Frontier[NodeType];
+	def frontier : Frontier[NodeType[A]];
 	
 	
 	/**
@@ -37,12 +37,12 @@ trait SolutionSpace[A, M[_], DomainT[X] <: Domain[X]]
 	 * filtered out such that their introduction to the '''SolutionSpace'''
 	 * is blocked.
 	 */
-	def expand[M[+_], N[_]] (
+	def expand[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
-		valuesFor : ValueGenerator[N]
+		valuesFor : ValueGenerator
 		)
-		(implicit fm : Foldable[M], fn : Foldable[N])
+		(implicit fm : Foldable[M])
 		: ThisType;
 }
 

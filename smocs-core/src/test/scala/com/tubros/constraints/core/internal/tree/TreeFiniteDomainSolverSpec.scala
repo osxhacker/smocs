@@ -4,6 +4,11 @@
 package com.tubros.constraints.core.internal
 package tree
 
+import Predef.{
+	any2stringadd => _,
+	_
+	}
+
 import scalaz._
 
 import org.junit.runner.RunWith

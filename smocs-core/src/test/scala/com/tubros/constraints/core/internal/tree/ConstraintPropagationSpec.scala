@@ -58,7 +58,6 @@ class ConstraintPropagationSpec
 	val gamma = DiscreteVariable ('gamma, FiniteDiscreteDomain (101 to 200));
 
 
-	// TODO: add coverage with mocked Constraint instances
 	"ConstraintPropagation" should "be able to operate with no Constraints" in
 	{
 		val unconstrained = new ConstraintPropagation[Int, DiscreteDomain] (
@@ -67,7 +66,7 @@ class ConstraintPropagationSpec
 
 		unconstrained (
 			createPriorAssignments (alpha, beta), gamma
-			) should be === (gamma.domain.to[Vector]);
+			) should be === (gamma);
 	}
 
 	it should "apply a Constraint and produce a different value set" in
@@ -78,7 +77,7 @@ class ConstraintPropagationSpec
 			);
 
 		constrain (createPriorAssignments (alpha), beta) should be === (
-			Vector (10)
+			DiscreteVariable (beta.name, FiniteDiscreteDomain (10))
 			);
 	}
 	
@@ -99,8 +98,8 @@ class ConstraintPropagationSpec
 			Set[Constraint[Int]] (allowAll)
 			);
 		
-		constrain (createPriorAssignments (alpha), beta).sorted should be === (
-			beta.domain.to[Vector].sorted
+		constrain (createPriorAssignments (alpha), beta).domain should be === (
+			beta.domain
 			);
 	}
 
