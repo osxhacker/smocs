@@ -1,7 +1,7 @@
 /**
  * Created on: Feb 28, 2013
  */
-package com.tubros.constraints.core.internal.tree
+package com.tubros.constraints.core.spi.solver.heuristic
 
 import scalaz._
 
@@ -11,10 +11,9 @@ import org.scalatest.junit.JUnitRunner
 
 import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
-
-import problem._
-import solver._
-import solver.error._
+import com.tubros.constraints.api.problem._
+import com.tubros.constraints.api.solver._
+import com.tubros.constraints.api.solver.error._
 
 
 

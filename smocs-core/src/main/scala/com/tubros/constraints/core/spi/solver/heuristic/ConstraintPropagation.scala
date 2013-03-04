@@ -1,7 +1,7 @@
 /**
  * Created on: Feb 28, 2013
  */
-package com.tubros.constraints.core.internal.tree
+package com.tubros.constraints.core.spi.solver.heuristic
 
 import scala.language.higherKinds
 
@@ -22,20 +22,20 @@ import com.tubros.constraints.core.spi.solver._
  * @author svickers
  *
  */
-class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
+case class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 	val constraints : Set[Constraint[A]]
 	)
-	extends ((Seq[Answer[A]], Variable[A, DomainT]) => Variable[A, DomainT])
+	extends ((Iterable[Answer[A]], Variable[A, DomainT]) => Variable[A, DomainT])
 {
 	override def apply (
-		assignments : Seq[Answer[A]],
+		assignments : Iterable[Answer[A]],
 		variable : Variable[A, DomainT]
 		)
 		: Variable[A, DomainT] =
 	{
 		val available = assignments.map (_.name).to[Set] + variable.name;
 		val applicableConstraints = constraints.filter (
-			_.exactMatch (available)
+			_.isDefinedAt (available)
 			);
 		val priorVariables = evaluate (
 			assignments.map (_.toTuple).toMap,
@@ -48,6 +48,10 @@ class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 			applicableConstraints.forall (priorVariables (value));
 			}
 	}
+	
+	
+	def apply (variable : Variable[A, DomainT]) : Variable[A, DomainT] =
+		apply (Seq.empty[Answer[A]], variable);
 	
 	
 	private def evaluate (variables : Map[VariableName, A], name : VariableName)

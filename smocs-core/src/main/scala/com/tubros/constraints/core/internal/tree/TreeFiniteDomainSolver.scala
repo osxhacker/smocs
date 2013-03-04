@@ -5,13 +5,16 @@ package com.tubros.constraints.core.internal
 package tree
 
 import scala.language.higherKinds
-
 import scalaz._
-
 import com.tubros.constraints.api._
 import com.tubros.constraints.api.problem._
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
+import heuristic.{
+	AssignmentImpact,
+	ConstraintPropagation
+	}
+import com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact
 
 
 /**
@@ -22,8 +25,13 @@ import com.tubros.constraints.core.spi.solver._
  * @author svickers
  *
  */
-class TreeFiniteDomainSolver[A]
-	(implicit override val canConstrain : CanConstrain[Equation, A])
+class TreeFiniteDomainSolver[A] (
+	private val variableRanking : VariableRankingPolicy[A]
+	)
+	(implicit
+		override val canConstrain : CanConstrain[Equation, A],
+		e : Equal[A]
+	)
 	extends Solver[
 		A,
 		StateBasedSolver[A, TreeFiniteDomainSolver[A]]#SolverState,
@@ -32,11 +40,7 @@ class TreeFiniteDomainSolver[A]
 		with StateBasedSolver[A, TreeFiniteDomainSolver[A]]
 {
 	/// Class Imports
-	import std.list._
-	import std.stream._
-	import std.vector._
-	import syntax.all._
-	import State._
+	import Scalaz._
 
 	
 	/**
@@ -56,7 +60,7 @@ class TreeFiniteDomainSolver[A]
 			(root, children) = chosen
 			
 			satisfactory <- search (root, children)
-			answers <- label (satisfactory)
+			answers <- label[C] (satisfactory)
 			} yield answers;
 	
 	
@@ -68,16 +72,22 @@ class TreeFiniteDomainSolver[A]
 	
 	private def chooseRootFrom (available : Seq[Variable[A, DomainType]])
 		: SolverState[(Variable[A, DomainType], Seq[Variable[A, DomainType]])] =
-		state {
-			// TODO: use heuristics to pick a good root
-			(available.head, available.drop (1))
+		gets {
+			vs =>
+				
+			val prioritize = variableRanking[Set];
+			val ranked = prioritize (vs.constraints) (available.toList);
+			
+			(ranked.head, ranked.tail);
 			}
 			
 
 	private def label[C[_]] (variables : Stream[Seq[Answer[A]]])
 		(implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
 		: SolverState[Stream[C[Answer[A]]]] =
-		state {
+		gets {
+			vs =>
+				
 			val answers = variables.map {
 				cur =>
 					
@@ -100,6 +110,7 @@ class TreeFiniteDomainSolver[A]
 		gets {
 			vs =>
 				
+			implicit val order = new VariableStore.AnswerOrdering[A] (vs);
 			val tree = SolutionTree[A] ();
 			
 			// TOOO: this is a *very* temporary approach, as it hits all nodes!
@@ -111,7 +122,7 @@ class TreeFiniteDomainSolver[A]
 			
 			val all : Stream[Seq[Answer[A]]] = {
 				def step (frontier : Frontier[SolutionTree[A]#NodeType[A]])
-					: Stream[Option[Seq[Answer[A]]]] = {
+					: Stream[Option[Set[Answer[A]]]] = {
 					val (cur, nextFrontier) = frontier.dequeue;
 					
 					cur.map (_.assignments) #:: step (nextFrontier);
@@ -122,7 +133,7 @@ class TreeFiniteDomainSolver[A]
 				// TODO: this is an ugly form that needs to get cleaned up.
 				(first.map (_.assignments) #:: step (frontier)) takeWhile (
 					_.isDefined
-					) map (_.get);
+					) map (_.get.toSeq);
 				}
 			
 			all;

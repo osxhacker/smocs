@@ -47,14 +47,19 @@ class TreeFiniteDomainSolverSpec
 			with RelationalSupport[T]
 	
 	
+	/// Testing Collaborators
+	val rankingPolicy =
+		ImpactRankingPolicy[Int] () andThen PreferSmallerDomain[Int] ();
+	
+	
 	"A TreeFiniteDomainSolver" should "be able to be constructed" in
 	{
-		val aSolver = new TreeFiniteDomainSolver[Int];
+		val aSolver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
 	}
 	
 	it should "produce a cartesian product with no constraints" in
 	{
-		val solver = new TreeFiniteDomainSolver[Int];
+		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
 		val domain = FiniteDiscreteDomain (1 to 10);
 		val answer = solver {
 			s =>
@@ -88,7 +93,7 @@ class TreeFiniteDomainSolverSpec
 				def apply = 'x @== 2
 				}
 			);
-		val solver = new TreeFiniteDomainSolver[Int];
+		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
 		val domain = FiniteDiscreteDomain (1 to 1000);
 		val answer = solver {
 			s =>

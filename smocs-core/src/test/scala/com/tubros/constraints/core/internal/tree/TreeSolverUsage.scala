@@ -38,7 +38,9 @@ trait TreeSolverUsage[A]
 	class DefaultTreeSolverUsage (implicit cc : CanConstrain[Equation, A])
 		extends SolverUsage
 	{
-		private val solver = new TreeFiniteDomainSolver[A];
+		private val solver = new TreeFiniteDomainSolver[A] (
+			new ImpactRankingPolicy[A]
+			);
 		
 		override def withSolver[C[_]] (
 			block : SolverType => MonadType[Stream[C[Answer[A]]]]
@@ -57,4 +59,5 @@ trait TreeSolverUsage[A]
 			
 	/// Instance Properties
 	implicit val monad = Monad[TreeFiniteDomainSolver[A]#SolverState];
+	implicit val equal : Equal[A];
 }

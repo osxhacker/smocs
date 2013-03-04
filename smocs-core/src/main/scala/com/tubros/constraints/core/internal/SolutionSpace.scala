@@ -52,6 +52,6 @@ object SolutionSpace
 	trait Node[A]
 	{
 		/// Instance Properties
-		def assignments : Seq[Answer[A]]
+		def assignments : Set[Answer[A]]
 	}
 }

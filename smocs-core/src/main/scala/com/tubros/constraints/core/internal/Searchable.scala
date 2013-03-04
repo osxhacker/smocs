@@ -22,7 +22,7 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	/// Class Types
 	type LocationType
 	final type VariableType = Variable[A, DomainT]
-	type ValueGenerator = (Seq[Answer[A]], VariableType) => VariableType
+	type ValueGenerator = (Iterable[Answer[A]], VariableType) => VariableType
 	
 	
 	def prune (location : LocationType) : Repr;

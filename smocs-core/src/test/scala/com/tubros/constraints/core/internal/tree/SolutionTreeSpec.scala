@@ -4,7 +4,10 @@
 package com.tubros.constraints.core.internal
 package tree
 
-import scalaz._
+import scalaz.{
+	Ordering => _,
+	_
+	}
 
 import org.junit.runner.RunWith
 import org.scalatest._
@@ -32,6 +35,13 @@ class SolutionTreeSpec
 	import syntax.std.option._
 	import SolutionTree._
 	import SolutionTree.implicits._
+	
+	
+	/// Testing Collaborators
+	implicit def answerOrdering[A] = new Ordering[Answer[A]] {
+		override def compare (x : Answer[A], y : Answer[A]) =
+			x.name.toString.compareTo (y.name.toString);
+		}
 	
 	
 	"A SolutionTree" should "be agnostic to its node type" in

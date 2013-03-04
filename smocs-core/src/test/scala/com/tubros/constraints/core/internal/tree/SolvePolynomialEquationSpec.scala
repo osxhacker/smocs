@@ -3,6 +3,8 @@
  */
 package com.tubros.constraints.core.internal.tree
 
+import scalaz._
+
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
@@ -30,9 +32,11 @@ class SolvePolynomialEquationSpec
 {
 	/// Class Imports
 	import algebraic._
+	import Scalaz._
 	
 	
 	/// Instance Properties
+	override implicit val equal = Equal.equalA[Int];
 	override val solvable = new DefaultTreeSolverUsage;
 	override val unsolvable = solvable;
 }

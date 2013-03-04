@@ -35,8 +35,8 @@ object EstimatedSearchSpace
 		implicit val r = countAndProduct[A, DomainT];
 		
 		foldReduce[C, DomainT[A], (Long, Long @@ Multiplication)] (domains) match {
-			case (0L, _) => 0L
-			case (_, size) => size;
+			case (0L, _) => 0L;
+			case e @ (_, size) => size;
 			}
 	}
 	

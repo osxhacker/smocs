@@ -10,7 +10,10 @@ import scala.language.{
 	postfixOps
 	}
 
-import scalaz._
+import scalaz.{
+	Ordering => _,
+	_
+	}
 
 import com.tubros.constraints.api.solver._
 
@@ -24,6 +27,11 @@ import com.tubros.constraints.api.solver._
  * '''SolutionTree''' does satisfy the requirements set forth by
  * [[com.tubros.constraints.core.internal.SolutionSpace]] and is designed to
  * integrate with ''search combinators''.
+ * 
+ * Also, each node has its assignments kept in the [[scala.math.Ordering]]
+ * `implicitly` provided to this instance.  Doing this satisfies the contract
+ * for [[com.tubros.constraints.api.solver.Variable]] position stability,
+ * needed by global constraints.
  *
  * @author svickers
  *
@@ -32,6 +40,7 @@ final case class SolutionTree[A] (
 	private val tree : Tree[SolutionTree[A]#NodeType[A]],
 	override val frontier : Frontier[SolutionTree[A]#NodeType[A]]
 	)
+	(implicit val ao : Ordering[Answer[A]])
 	extends SolutionSpace[A, Tree, DiscreteDomain]
 {
 	/// Class Imports
@@ -154,7 +163,7 @@ final case class SolutionTree[A] (
 		: (LocationType, NodeType[A]) =
 	{
 		val node = NodeType (
-			parent.getLabel.assignments :+ Answer (variable.name, value)
+			 parent.getLabel.assignments + Answer (variable.name, value)
 			);
 		
 		(
@@ -168,6 +177,7 @@ final case class SolutionTree[A] (
 object SolutionTree
 {
 	/// Class Imports
+	import collection.immutable.SortedSet
 	import syntax.monoid._
 	import syntax.show._
 	
@@ -178,7 +188,7 @@ object SolutionTree
 	
 	
 	case class SolutionTreeNode[A] (
-		override val assignments : Seq[Answer[A]]
+		override val assignments : SortedSet[Answer[A]]
 		)
 		extends SolutionSpace.Node[A]
 	
@@ -206,12 +216,12 @@ object SolutionTree
 	 * This apply method is provided to enable functional-style creation and
 	 * is defined in terms of the `empty` method.
 	 */
-	def apply[A] () = empty[A];
+	def apply[A] () (implicit ao : Ordering[Answer[A]]) = empty[A];
 	
 	
-	def empty[A] : SolutionTree[A] =
+	def empty[A] (implicit ao : Ordering[Answer[A]]) : SolutionTree[A] =
 		new SolutionTree (
-			Tree (SolutionTreeNode[A] (Seq.empty[Answer[A]])),
+			Tree (SolutionTreeNode[A] (SortedSet.empty[Answer[A]])),
 			Frontier.fifo[NodeType[A]]
 			);
 	
