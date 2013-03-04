@@ -27,6 +27,15 @@ trait SolutionSpace[A, M[_], DomainT[X] <: Domain[X]]
 	
 	
 	/// Instance Properties
+	/**
+	 * The focus property indicates where in the '''SolutionSpace''' the
+	 * instance will initiate searches/expansions from.
+	 */
+	def focus : LocationType;
+	
+	/**
+	 * The frontier property contains unexplored nodes, if any.
+	 */
 	def frontier : Frontier[NodeType[A]];
 	
 	

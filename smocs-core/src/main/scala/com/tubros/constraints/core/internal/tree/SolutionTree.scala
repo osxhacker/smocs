@@ -4,7 +4,6 @@
 package com.tubros.constraints.core.internal
 package tree
 
-import scala.collection.immutable.Stack
 import scala.language.{
 	higherKinds,
 	postfixOps
@@ -96,8 +95,15 @@ final case class SolutionTree[A] (
 		: Option[SolutionTree[A]] =
 	{
 		val (location, nextFrontier) = frontier.dequeue;
+		val maybeExpandFrom = location.flatMap {
+			node =>
+				
+			/// Try finding it under the current focus first, dropping back
+			/// to the root for nodes in the frontier "outside" of the focus.
+			findNodeUnder (focus, node) orElse findNodeUnder (tree.loc, node);
+			}
 		
-		location.flatMap (node => tree.loc.findChild (_.rootLabel == node)).map {
+		maybeExpandFrom.map {
 			from =>
 				
 			copy (frontier = nextFrontier).expand (
@@ -182,6 +188,29 @@ final case class SolutionTree[A] (
 			node
 		);
 	}
+	
+	
+	private def findNodeUnder (startingAt : LocationType, node : NodeType[A])
+		: Option[LocationType] =
+	{
+		implicit val boolMonoid = booleanInstance.disjunction;
+		val delta = node.assignments &~ startingAt.getLabel.assignments;
+		
+		def finder (loc : LocationType, assignments : List[Answer[A]])
+			: Option[LocationType] =
+			assignments.isEmpty.fold (
+				Some (loc),
+				loc.findChild {
+					node =>
+						
+					node.rootLabel.assignments.headOption.map (
+						assignments.contains _
+						).orZero;
+					}.flatMap (finder (_, assignments.tail))
+				);
+		
+		return (finder (startingAt, delta.toList));
+	}
 }
 	
 	
@@ -205,6 +234,9 @@ object SolutionTree
 	
 	object SolutionTreeNode
 	{
+		implicit def equalNode[A] : Equal[SolutionTreeNode[A]] = Equal.equalA;
+		
+		
 		implicit def showNode[A] : Show[SolutionTreeNode[A]] =
 			new Show[SolutionTreeNode[A]] {
 				override def shows (n : SolutionTreeNode[A]) = n.toString;
