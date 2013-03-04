@@ -38,6 +38,7 @@ import com.tubros.constraints.api.solver._
  */
 final case class SolutionTree[A] (
 	private val tree : Tree[SolutionTree[A]#NodeType[A]],
+	val focus : SolutionTree[A]#LocationType,
 	override val frontier : Frontier[SolutionTree[A]#NodeType[A]]
 	)
 	(implicit val ao : Ordering[Answer[A]])
@@ -76,6 +77,7 @@ final case class SolutionTree[A] (
 			
 			copy (
 				tree = subTree.fold (tree) (_.toTree),
+				focus = subTree.getOrElse (location),
 				frontier = newFrontier
 				);
 		}
@@ -86,15 +88,24 @@ final case class SolutionTree[A] (
 	
 	
 	override def search[M[+_]] (
-		location : LocationType,
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
 		valuesFor : ValueGenerator
 		)
 		(implicit fm : Foldable[M])
-		: SolutionTree[A] =
+		: Option[SolutionTree[A]] =
 	{
-		expand (location, choose (variables), valuesFor);
+		val (location, nextFrontier) = frontier.dequeue;
+		
+		location.flatMap (node => tree.loc.findChild (_.rootLabel == node)).map {
+			from =>
+				
+			copy (frontier = nextFrontier).expand (
+				from,
+				choose (variables),
+				valuesFor
+				);
+			}
 	}
 
 	
@@ -116,10 +127,8 @@ final case class SolutionTree[A] (
 					).domain;
 				
 				val (node, newFrontier) = allowedValues.foldLeft ((parent, frontier)) {
-					case (p, value) =>
+					case ((parent, frontier), value) =>
 						
-					val (parent, frontier) = p;
-					
 					createChildNode (parent, last, value) :-> (frontier.enqueue);
 					}
 				
@@ -133,22 +142,24 @@ final case class SolutionTree[A] (
 					).domain;
 				
 				allowedValues.foldLeft ((parent.some, frontier)) {
-					case (p, value) =>
+					case ((Some (prevParent), prevFrontier), value) =>
 						
 					val (updatedParent, newFrontier) = expander (
 						createChildNode (
-							p._1.get,
+							prevParent,
 							intermediary,
 							value
 							)._1.lastChild.get,
-						p._2,
+						prevFrontier,
 						tail,
 						valuesFor
 						);
 					
 					/// As with leaf generation, only propagate changes if there
 					(
-						updatedParent.flatMap (_.parent).orElse (p._1),
+						updatedParent.flatMap (_.parent).orElse {
+							Some (prevParent)
+							},
 						newFrontier
 					);
 					}
@@ -220,10 +231,11 @@ object SolutionTree
 	
 	
 	def empty[A] (implicit ao : Ordering[Answer[A]]) : SolutionTree[A] =
-		new SolutionTree (
-			Tree (SolutionTreeNode[A] (SortedSet.empty[Answer[A]])),
-			Frontier.fifo[NodeType[A]]
-			);
+	{
+		val tree = Tree (SolutionTreeNode[A] (SortedSet.empty[Answer[A]]));
+		
+		new SolutionTree (tree, tree.loc, Frontier.lifo[NodeType[A]]);
+	}
 	
 	
 	object implicits

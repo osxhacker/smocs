@@ -29,11 +29,10 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	
 	
 	def search[M[+_]] (
-		location : LocationType,
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
 		valuesFor : ValueGenerator
 		)
 		(implicit fm : Foldable[M])
-		: Repr;
+		: Option[Repr];
 }

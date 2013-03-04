@@ -120,4 +120,43 @@ class SolutionTreeSpec
 		
 		expanded.frontier should be ('empty);
 	}
+	
+	it should "be able to iteratively search" in
+	{
+		val empty = SolutionTree[Int] ();
+		val variables = List[Variable[Int, DiscreteDomain]] (
+			DiscreteVariable ('a, FiniteDiscreteDomain (1, 2, 3)),
+			DiscreteVariable ('b, FiniteDiscreteDomain (10, 20)),
+			DiscreteVariable ('c, FiniteDiscreteDomain (100, 200))
+			);
+		val selector : SolutionTree[Int]#ValueGenerator =
+			(bound, variable) => variable;
+		val expanded = empty.expand (
+			empty.root,
+			variables.headOption,
+			valuesFor = selector
+			);
+		
+		expanded.frontier should not be ('empty);
+		expanded.frontier.dequeue._1 should be ('defined);
+		expanded.frontier.dequeue._1.get.assignments.size should be === (1);
+		
+		val secondLevel = expanded.search (
+			variables,
+			(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (1)),
+			selector
+			);
+		
+		secondLevel should be ('defined);
+		
+		secondLevel foreach {
+			space =>
+				
+			space.focus must not be === (null);
+			space.focus.hasChildren should be === (true);
+			space.frontier should not be ('empty);
+			space.frontier.dequeue._1 should be ('defined);
+			space.frontier.dequeue._1.get.assignments.size should be === (2);
+			}
+	}
 }
