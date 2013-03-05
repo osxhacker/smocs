@@ -93,8 +93,8 @@ object Equation
 {
 	/// Class Types
 	class RichSymbolSyntax (v : Symbol)
+		extends ArrayNamingPolicy
 	{
-		def apply (index : Int) =
-			VariableUse (Symbol (v.name.toString + "_subscript_" + index));
+		def apply (index : Int) = VariableUse (compose (v, index));
 	}
 }

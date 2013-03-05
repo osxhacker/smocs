@@ -27,6 +27,7 @@ trait StateBasedSolver[
 	A,
 	+SolverT <: Solver[A, ({ type L[+X] = State[VariableStore[A], X]})#L, SolverT]
 	]
+	extends ArrayNamingPolicy
 {
 	/// Self Type Constraints
 	self : SolverT =>
@@ -87,10 +88,7 @@ trait StateBasedSolver[
 			val array = List.tabulate (size) {
 				index =>
 					
-				DiscreteVariable[A] (
-					Symbol (name.name.toString + "_subscript_" + index),
-					domain
-					);
+				DiscreteVariable[A] (compose (name, index), domain);
 				}
 			
 			(vs.addVariables (array), array);

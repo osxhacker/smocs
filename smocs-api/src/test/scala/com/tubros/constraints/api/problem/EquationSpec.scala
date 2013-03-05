@@ -94,10 +94,14 @@ class EquationSpec
 		/// Due to Scalatest having a conversion for Symbols, the definition of
 		/// the Equation must be outside of the test case.
 		val equation = EquationSpec.usingSubscripts;
+		val nameComposer = new ArrayNamingPolicy {};
 		
 		equation.arity should be === (2);
-		equation.variables.map (_.name.toString) should be === (
-			Set ("array_subscript_0", "array_subscript_1")
+		equation.variables should be === (
+			Set (
+				nameComposer.compose ('array, 0),
+				nameComposer.compose ('array, 1)
+				)
 			);
 	}
 }

@@ -21,4 +21,7 @@ object VariableName
 {
 	def apply (name : Symbol) : VariableName =
 		Tag[Symbol, VariableNameTag] (name);
+	
+	
+	def apply (name : String) : VariableName = apply (Symbol (name));
 }
