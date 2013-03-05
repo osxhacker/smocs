@@ -37,14 +37,7 @@ class TreeFiniteDomainSolverSpec
 	/// Class Imports
 	import scalaz.std.AllInstances._
 	import algebraic._
-	
-	
-	/// Class Types
-	trait PolynomialEquation[T]
-		extends Equation[T]
-			with ArithmeticSupport[T]
-			with PropositionalSupport[T]
-			with RelationalSupport[T]
+	import TreeFiniteDomainSolverSpec.PolynomialEquation
 	
 	
 	/// Testing Collaborators
@@ -110,4 +103,66 @@ class TreeFiniteDomainSolverSpec
 		answer should have size (1);
 		answer.head should be === (Vector (Answer ('x, 2), Answer ('y, 8)));
 	}
+	
+	it should "be able to solve the 'all intervals problem'" in
+	{
+		val problem = TreeFiniteDomainSolverSpec.allIntervalsProblem;
+		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
+		val domainOfX = FiniteDiscreteDomain (0 to 4);
+		val domainOfD = FiniteDiscreteDomain (1 to 4);
+		val alldiff : List[Int] => Boolean =
+			vals => {
+				val (xs, ds) = vals.splitAt (domainOfX.size);
+				
+				(xs.distinct.size == xs.size) && (ds.distinct.size == ds.size);
+			}
+			
+		val answer = solver {
+			s =>
+				
+			for {
+				_ <- s.newArrayVar ('x, domainOfX.size, domainOfX)
+				_ <- s.newArrayVar ('d, domainOfD.size, domainOfD)
+				_ <- s.add (problem)
+				_ <- s.impose (alldiff)
+				stream <- s.run[Vector]
+				} yield stream;
+			}
+		
+		pending;
+		answer should not be ('empty);
+	}
+}
+
+
+object TreeFiniteDomainSolverSpec
+{
+	/// Class Types
+	trait PolynomialEquation[T]
+		extends Equation[T]
+			with ArithmeticSupport[T]
+			with PropositionalSupport[T]
+			with RelationalSupport[T]
+	
+	
+	val allIntervalsProblem = Problem (
+			new PolynomialEquation[Int] {
+				def apply = 'd (0) @== abs ('x (0) - 'x (1));
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'd (1) @== abs ('x (1) - 'x (2));
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'd (2) @== abs ('x (2) - 'x (3));
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'd (3) @== abs ('x (3) - 'x (4));
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'x (0) < 'x (4);
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'd (0) < 'd (1);
+				}
+			);
 }

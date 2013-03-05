@@ -75,6 +75,28 @@ trait StateBasedSolver[
 			}
 	
 	
+	override def newArrayVar (
+		name : VariableName,
+		size : Int,
+		domain : DomainType[A]
+		)
+		: SolverState[List[Variable[A, DomainType]]] =
+		State {
+			vs =>
+				
+			val array = List.tabulate (size) {
+				index =>
+					
+				DiscreteVariable[A] (
+					Symbol (name.name.toString + "_subscript_" + index),
+					domain
+					);
+				}
+			
+			(vs.addVariables (array), array);
+		}
+	
+	
 	override def newVar (name : VariableName, domain : DomainType[A])
 		: SolverState[Variable[A, DomainType]] =
 		State {

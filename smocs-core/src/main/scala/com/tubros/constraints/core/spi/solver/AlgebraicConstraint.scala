@@ -43,6 +43,10 @@ trait AlgebraicConstraint[A]
 	implicit val numeric : Numeric[A];
 		
 	
+	private val abs = unary {
+		(x : A) => numeric.abs (x).right;
+		}
+	
 	private val minus = binary {
 		(x : A, y : A) => numeric.minus (x, y).right;
 		}
@@ -85,6 +89,7 @@ trait AlgebraicConstraint[A]
 		env =>
 			
 		_ match {
+			case AbsoluteValue (e) => interpreter (env) (e) flatMap (abs);
 			case Minus (l, r) => eval (env) (l, r) flatMap (minus);
 			case Negate (e) => interpreter (env) (e) flatMap (negate);
 			case Plus (l, r) => eval (env) (l, r) flatMap (plus);

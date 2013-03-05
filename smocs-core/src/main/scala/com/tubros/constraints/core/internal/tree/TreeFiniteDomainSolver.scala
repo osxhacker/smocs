@@ -4,17 +4,20 @@
 package com.tubros.constraints.core.internal
 package tree
 
+import scala.collection.mutable.LinkedHashMap
 import scala.language.higherKinds
+
 import scalaz._
+
 import com.tubros.constraints.api._
-import com.tubros.constraints.api.problem._
-import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
+
 import heuristic.{
 	AssignmentImpact,
 	ConstraintPropagation
 	}
-import com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact
+import problem._
+import solver._
 
 
 /**
@@ -119,7 +122,18 @@ class TreeFiniteDomainSolver[A] (
 				root :: children,
 				new ConstraintPropagation[A, DomainType] (vs.constraints)
 				);
+			val c = vs.answerFilters.foldLeft (Constraint.kleisliUnit[A]) {
+				case (accum, c) =>
+					
+				accum >==> c;
+				}
 			
-			bruteForce.toStream (expected = children.length + 1);
+			bruteForce.toStream (expected = children.length + 1).filter {
+				candidate =>
+					
+				val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
+				
+				c.run (args.toMap).isRight;
+				}
 			}
 }

@@ -83,5 +83,18 @@ trait Equation[T]
 	
 	implicit def symbolToVariableUse (name : Symbol) : Expression[Nothing] =
 		VariableUse (name);
+	
+	implicit def richSymbolSyntax (name : Symbol) =
+		new Equation.RichSymbolSyntax (name);
 }
 
+
+object Equation
+{
+	/// Class Types
+	class RichSymbolSyntax (v : Symbol)
+	{
+		def apply (index : Int) =
+			VariableUse (Symbol (v.name.toString + "_subscript_" + index));
+	}
+}

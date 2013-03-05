@@ -25,15 +25,9 @@ class EquationSpec
 {
 	/// Class Imports
 	import ast._
+	import EquationSpec.RelationalEquation
 	
 	
-	/// Class Types
-	trait RelationalEquation
-		extends Equation[Int]
-			with PropositionalSupport[Int]
-			with RelationalSupport[Int]
-
-
 	"An Equation" should "support a constant assignment" in
 	{
 		val const = new Equation[Int] {
@@ -94,4 +88,29 @@ class EquationSpec
 		
 		xBeforeY.arity should be === (2);
 	}
+	
+	it should "support array syntax" in
+	{
+		/// Due to Scalatest having a conversion for Symbols, the definition of
+		/// the Equation must be outside of the test case.
+		val equation = EquationSpec.usingSubscripts;
+		
+		equation.arity should be === (2);
+		equation.variables.map (_.name.toString) should be === (
+			Set ("array_subscript_0", "array_subscript_1")
+			);
+	}
+}
+
+object EquationSpec
+{
+	/// Class Types
+	trait RelationalEquation
+		extends Equation[Int]
+			with PropositionalSupport[Int]
+			with RelationalSupport[Int]
+	
+	val usingSubscripts = new RelationalEquation {
+		def apply = 'array (1) < 'array (0);
+		}
 }

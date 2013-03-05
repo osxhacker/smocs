@@ -37,6 +37,9 @@ trait ArithmeticSupport[T]
 	}
 			
 		
+	def abs (exp : Expression[T]) : Expression[T] =
+		AbsoluteValue (exp);
+	
 	def add (lhs : Expression[T], rhs : Expression[T]) : Expression[T] =
 		Plus (lhs, rhs);
 
@@ -63,6 +66,10 @@ trait ArithmeticSupport[T]
 package ast
 {
 
+case class AbsoluteValue[T] (override val operand : Expression[T])
+	extends Expression[T]
+		with UnaryOperator[T]
+	
 case class Minus[T] (
 	override val lhs : Expression[T],
 	override val rhs : Expression[T]

@@ -69,6 +69,17 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	
 	
 	/**
+	 * Similar to the `newVar` method, the newArrayVar method creates a new
+	 * [[com.tubros.constraints.api.solver.Variable]] having the unique
+	 * '''name''' given and a specific '''domain''' of values it can take.
+	 * Furthermore, it allows for resolution of array-like syntax as defined
+	 * in the [[com.tubros.constraints.api.problem.Equation]] class.
+	 */
+	def newArrayVar (name : VariableName, size : Int, domain : DomainType[A])
+		: M[List[Variable[A, DomainType]]];
+	
+	
+	/**
 	 * The newVar method creates a new
 	 * [[com.tubros.constraints.api.solver.Variable]] having the unique
 	 * '''name''' given and a specific '''domain''' of values it can take.

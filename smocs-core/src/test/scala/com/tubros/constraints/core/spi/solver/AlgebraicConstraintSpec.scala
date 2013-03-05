@@ -42,6 +42,7 @@ class AlgebraicConstraintSpec
 		extends Equation[Int]
 			with ArithmeticSupport[Int]
 	
+	
 	class IntConstraints (override val equation : Equation[Int])
 		extends AlgebraicEquationConstraint.IntegralConstraint[Int] (equation)
 	{
@@ -94,8 +95,22 @@ class AlgebraicConstraintSpec
 			VariableName ('b) -> 20
 			);
 		
-		
 		c (vars) should be === (\/- (vars));
 		c.computed (vars) should be === (Some (16));
+	}
+	
+	it should "support function-style (abs) operations" in
+	{
+		val c = new IntConstraints (
+			new PolyEquation {
+				def apply = abs ('a);
+				}
+			);
+		val vars = Map[VariableName, Int] (
+			VariableName ('a) -> -99
+			);
+		
+		c (vars) should be === (\/- (vars));
+		c.computed (vars) should be === (Some (99));
 	}
 }
