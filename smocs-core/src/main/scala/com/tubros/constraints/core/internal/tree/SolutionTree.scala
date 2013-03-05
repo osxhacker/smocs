@@ -113,6 +113,18 @@ final case class SolutionTree[A] (
 				);
 			}
 	}
+	
+	
+	/**
+	 * The toStream method creates a [[scala.collection.immutable.Stream]]
+	 * containing answers which have the '''expected''' number of assignments.
+	 */
+	def toStream (expected : Int) : Stream[Seq[Answer[A]]] =
+		tree.flatten.filter (_.assignments.size === expected).map {
+			node =>
+				
+			node.assignments.toSeq;
+			}
 
 	
 	private def expander (
@@ -203,9 +215,7 @@ final case class SolutionTree[A] (
 				loc.findChild {
 					node =>
 						
-					node.rootLabel.assignments.headOption.map (
-						assignments.contains _
-						).orZero;
+					node.rootLabel.assignments.contains (assignments.head);
 					}.flatMap (finder (_, assignments.tail))
 				);
 		
@@ -247,9 +257,16 @@ object SolutionTree
 	class ShowSolutionTree[A : Show]
 		extends Show[SolutionTree[A]]
 	{
+		/// Class Imports
+		import Cord._
+		
+		
 		override def show (solution : SolutionTree[A]) : Cord =
 			Cord ("SolutionTree(\n") ++
-			Cord.stringToCord (solution.tree.drawTree) ++
+			stringToCord (solution.tree.drawTree) ++
+			Cord ("Focus(") ++
+			stringToCord (solution.focus.getLabel.toString) ++
+			Cord (")\n") ++
 			solution.frontier.show ++
 			Cord ("\n)");
 	}

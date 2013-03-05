@@ -71,7 +71,7 @@ class TreeFiniteDomainSolver[A] (
 	
 	
 	private def chooseRootFrom (available : Seq[Variable[A, DomainType]])
-		: SolverState[(Variable[A, DomainType], Seq[Variable[A, DomainType]])] =
+		: SolverState[(Variable[A, DomainType], List[Variable[A, DomainType]])] =
 		gets {
 			vs =>
 				
@@ -104,7 +104,7 @@ class TreeFiniteDomainSolver[A] (
 	
 	private def search (
 		root : Variable[A, DomainType],
-		children : Seq[Variable[A, DomainType]]
+		children : List[Variable[A, DomainType]]
 		)
 		: SolverState[Stream[Seq[Answer[A]]]] =
 		gets {
@@ -116,26 +116,10 @@ class TreeFiniteDomainSolver[A] (
 			// TOOO: this is a *very* temporary approach, as it hits all nodes!
 			val bruteForce = tree.expand (
 				tree.root,
-				root :: children.to[List],
+				root :: children,
 				new ConstraintPropagation[A, DomainType] (vs.constraints)
 				);
 			
-			val all : Stream[Seq[Answer[A]]] = {
-				def step (frontier : Frontier[SolutionTree[A]#NodeType[A]])
-					: Stream[Option[Set[Answer[A]]]] = {
-					val (cur, nextFrontier) = frontier.dequeue;
-					
-					cur.map (_.assignments) #:: step (nextFrontier);
-					}
-				
-				val (first, frontier) = bruteForce.frontier.dequeue;
-				
-				// TODO: this is an ugly form that needs to get cleaned up.
-				(first.map (_.assignments) #:: step (frontier)) takeWhile (
-					_.isDefined
-					) map (_.get.toSeq);
-				}
-			
-			all;
+			bruteForce.toStream (expected = children.length + 1);
 			}
 }

@@ -158,5 +158,22 @@ class SolutionTreeSpec
 			space.frontier.dequeue._1 should be ('defined);
 			space.frontier.dequeue._1.get.assignments.size should be === (2);
 			}
+		
+		val thirdLevel = secondLevel.get.search (
+			variables,
+			(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (2)),
+			selector
+			);
+		
+		thirdLevel should be ('defined);
+		thirdLevel foreach {
+			space =>
+				
+			space.focus must not be === (null);
+			space.focus.hasChildren should be === (true);
+			space.frontier should not be ('empty);
+			space.frontier.dequeue._1 should be ('defined);
+			space.frontier.dequeue._1.get.assignments.size should be === (3);
+			}
 	}
 }

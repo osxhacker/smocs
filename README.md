@@ -75,6 +75,15 @@ Keeping performance concerns disjoint from a correct, albeit potentially slow,
 implementation hopefully makes this fascinating subject approachable to
 developers seeking to apply *CSP*'s in their daily work.
 
+#### Tree ####
+
+The next level of sophistication regarding *CSP* solvers resides in the
+`com.tubros.constraint.core.internal.tree` package.  Here, the
+`TreeFiniteDomainSolver` employs a `SolutionTree` to search the problem space
+for satisfactory answers.  It uses a small set of heuristics to make
+informed decisions regarding variable ordering within the `SolutionTree`
+and also uses constraint propagation.
+
 #### Graph ####
 
 TBD
