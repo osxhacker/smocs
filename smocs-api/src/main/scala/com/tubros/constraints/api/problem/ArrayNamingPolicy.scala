@@ -54,6 +54,17 @@ trait ArrayNamingPolicy
 	
 	
 	/**
+	 * The isArrayMember method determines whether or not the '''candidate'''
+	 * [[com.tubros.constraints.api.VariableName]] is an array variable
+	 * previously `compose`d from '''root'''.
+	 */
+	def isArrayMember (root : VariableName)
+		(candidate : VariableName)
+		: Boolean =
+		candidate.name.toString.startsWith (root.name.toString + separator);
+			
+			
+	/**
 	 * The whenArrayName method allows for higher-ordered functions to be
 	 * applied when the '''candidate''' name has been `compose`d by this
 	 * policy.
@@ -70,14 +81,14 @@ trait ArrayNamingPolicy
 	 * '''candidate''' name is ''not'' an array name.
 	 */
 	def unlessArrayName[R] (candidate : VariableName)
-		(block : (VariableName) => R)
+		(block : (VariableName) => Option[R])
 		: Option[R] =
-		isArrayName (candidate) ? none[R] | Option (block (candidate));
+		isArrayName (candidate) ? none[R] | block (candidate);
 }
 
 
 object ArrayNamingPolicy
 {
 	/// Instance Properties
-	private val separator = "__$ub$cript__";
+	private val separator = "__subscript__";
 }

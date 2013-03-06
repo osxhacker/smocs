@@ -32,15 +32,9 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 {
 	/// Class Imports
 	import Scalaz._
+	import SolverUseCaseSpec._
 	
 	
-	/// Class Types
-	trait PolynomialEquation
-		extends Equation[Int]
-			with ArithmeticSupport[Int]
-			with RelationalSupport[Int]
-			
-			
 	/// Test Collaborators
 	implicit val solvable : SolverUsage;
 	implicit val unsolvable : SolverUsage;
@@ -58,7 +52,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			
 			Given ("a solvable polynomial Equation");
 			
-			val polynomial = new PolynomialEquation {
+			val polynomial = new PolynomialEquation[Int] {
 				def apply = 'x ** 2 + 'x * 4 - 4 @== 'y ** 3;
 				}
 			
@@ -90,7 +84,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			
 			Given ("a valid, but unsolvable within the domain, Equation");
 		
-			val polynomial = new PolynomialEquation {
+			val polynomial = new PolynomialEquation[Int] {
 				def apply = ('x ** 5) - ('x * 3) + 1 @== 0;
 				}
 		

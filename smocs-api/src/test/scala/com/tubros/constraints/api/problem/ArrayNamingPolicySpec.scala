@@ -64,7 +64,7 @@ class ArrayNamingPolicySpec
 		whenArrayName (compose ('test, 2)) ((a, b) => a) should be ('defined);
 		whenArrayName ('scalarName) ((a, b) => a) should not be ('defined);
 		
-		unlessArrayName (compose ('test, 2)) (a => a) should not be ('defined);
-		unlessArrayName ('scalarName) (a => a) should be ('defined);
+		unlessArrayName (compose ('test, 2)) (a => Some (a)) should not be ('defined);
+		unlessArrayName ('scalarName) (a => Some (a)) should be ('defined);
 	}
 }

@@ -72,6 +72,13 @@ trait StateBasedSolver[
 		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
 		: SolverState[Unit] =
 		modify {
+			_.addAnswerFilter (new AnswerValueConstraint (constraint));
+			}
+	
+	
+	override def impose (constraint : PartialFunction[Seq[Answer[A]], Boolean])
+		: SolverState[Unit] =
+		modify {
 			_.addAnswerFilter (new AnswerConstraint (constraint));
 			}
 	

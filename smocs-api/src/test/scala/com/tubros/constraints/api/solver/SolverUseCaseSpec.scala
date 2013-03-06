@@ -8,6 +8,7 @@ import scala.language.higherKinds
 import scalaz._
 
 import com.tubros.constraints.api.UseCaseSpec
+import com.tubros.constraints.api.problem._
 
 
 /**
@@ -29,4 +30,14 @@ trait SolverUseCaseSpec[A, M[+_], SolverT <: Solver[A, M, SolverT]]
 		
 		def domain (solver : SolverT, range : Seq[A]) : solver.DomainType[A];
 	}
+}
+
+
+object SolverUseCaseSpec
+{
+	/// Class Types
+	trait PolynomialEquation[A]
+		extends Equation[A]
+			with ArithmeticSupport[A]
+			with RelationalSupport[A]
 }

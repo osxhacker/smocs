@@ -11,8 +11,6 @@ import scala.language.{
 
 import scalaz._
 
-import problem.ArrayNamingPolicy
-
 
 /**
  * The '''Variable''' type defines the API contract all types representing a
@@ -120,39 +118,4 @@ object Variable
 					variable.map (f (variable.name, _));
 				}
 		}
-}
-
-
-/**
- * The '''ScalarNamed''' extractor can be used with [[scala.PartialFunction]]s
- * to `match` an individual [[com.tubros.constraints.api.solver.Variable]]
- * when performing global constraints, such as:
- * 
- * {{{
- * 		_ match {
- *   		case ScalarNamed ('a, value) =>
- *				doSomethingWith (value);
- *     		}
- * }}}
- */
-object ScalarNamed
-	extends ArrayNamingPolicy
-{
-	def unapply[A] (answer : Answer[A]) : Option[(VariableName, A)] =
-		if (isArrayName (answer.name))
-			None;
-		else
-			Some (answer.name, answer.value);
-}
-
-
-object ArrayNamed
-	extends ArrayNamingPolicy
-{
-	def unapply[A] (answer : Answer[A]) : Option[(VariableName, Int, A)] =
-		whenArrayName (answer.name) {
-			case (root, index) =>
-				
-			(root, index, answer.value);
-			}
 }

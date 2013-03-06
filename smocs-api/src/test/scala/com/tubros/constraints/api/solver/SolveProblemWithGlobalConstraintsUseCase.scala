@@ -37,13 +37,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 {
 	/// Class Imports
 	import Scalaz._
-	
-	
-	/// Class Types
-	trait PolynomialEquation
-		extends Equation[Double]
-			with ArithmeticSupport[Double]
-			with RelationalSupport[Double]
+	import SolverUseCaseSpec._
 	
 	
 	/// Test Collaborators
@@ -71,7 +65,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 			
 			Given ("an Equation of 'x ** 3 @== 'y * 2")
 			
-			val polynomial = new PolynomialEquation {
+			val polynomial = new PolynomialEquation[Double] {
 				def apply = 'x ** 3 @== 'y * 2;
 				}
 			val range = (0 |=> 10) map (_.toDouble) toSeq;
@@ -109,7 +103,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 			
 			Given ("an Equation of 'x ** 3 @== 'y * 2")
 			
-			val polynomial = new PolynomialEquation {
+			val polynomial = new PolynomialEquation[Double] {
 				def apply = 'x ** 3 @== 'y * 2;
 				}
 			val range = (0 |=> 10) map (_.toDouble) toSeq;
@@ -154,7 +148,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 			
 			Given ("an Equation of 'x ** 3 @== 'y * 2")
 			
-			val polynomial = new PolynomialEquation {
+			val polynomial = new PolynomialEquation[Double] {
 				def apply = 'x ** 3 @== 'y * 2;
 				}
 			val range = (1 |=> 10) map (_.toDouble) toSeq;

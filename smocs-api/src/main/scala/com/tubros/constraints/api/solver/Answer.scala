@@ -4,7 +4,14 @@
 package com.tubros.constraints.api
 package solver
 
+import scala.language.{
+	higherKinds,
+	postfixOps
+	}
+
 import scalaz._
+
+import problem.ArrayNamingPolicy
 
 
 /**
@@ -77,7 +84,69 @@ object Answer
 	
 	
 	implicit def answerShow[A : Show] : Show[Answer[A]] =
-		new Show[Answer[A]] {
-			override def shows (a : Answer[A]) = a.toString;
+		new Show[Answer[A]]
+			with ArrayNamingPolicy
+			{
+			override def shows (a : Answer[A]) =
+				"Answer(%s,%s)".format (
+					decompose (a.name).fold (a.name.toString) {
+						case (root, index) =>
+							
+						"%s(%s)".format (root.name, index);
+						},
+					a.value
+					);
 			}
+}
+
+
+/**
+ * The '''ScalarNamed''' extractor can be used with [[scala.PartialFunction]]s
+ * to `match` an individual [[com.tubros.constraints.api.solver.Variable]]
+ * when performing global constraints, such as:
+ * 
+ * {{{
+ * 		_ match {
+ *   		case ScalarNamed ('a, value) =>
+ *				doSomethingWith (value);
+ *     		}
+ * }}}
+ */
+object ScalarNamed
+	extends ArrayNamingPolicy
+{
+	/// Class Imports
+	import syntax.equal._
+	import syntax.std.boolean._
+	
+	
+	def unapply[A] (answer : Answer[A]) : Option[(VariableName, A)] =
+		unlessArrayName (answer.name) {
+			name =>
+				
+			(name === answer.name) option (answer.toTuple);
+			}
+}
+
+
+object ArrayVariables
+	extends ArrayNamingPolicy
+{
+	def unapplySeq[A] (answers : Seq[Answer[A]]) : Option[Seq[Map[Int, A]]] =
+	{
+		val arrays = answers.view.filter (a => isArrayName (a.name)).flatMap {
+			answer =>
+				
+			decompose (answer.name) map (parts => (parts._1, parts._2, answer));
+			}.groupBy {
+				case (name, index, answer) =>
+				
+				name;
+			}.mapValues (triplets => triplets.map(t => (t._2, t._3.value)));
+			
+		if (arrays.isEmpty)
+			None
+		else
+			Some (arrays.values.view.toSeq.map (_.toMap));
+	}
 }

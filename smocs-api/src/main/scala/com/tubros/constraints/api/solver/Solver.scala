@@ -49,7 +49,7 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	 * the syntax of:
 	 * 
 	 * {{{
-	 * val answers = solver (s => defineConstraints (s));
+	 * 		val answers = solver (s => defineConstraints (s));
 	 * }}}
 	 * 
 	 * Concrete implementations can perform whatever actions ''they'' deem fit
@@ -60,11 +60,31 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	
 	
 	/**
-	 * The impose method allows '''Solver''' clients to enforce a global
-	 * transformation, applicable
+	 * This impose method allows '''Solver''' clients to enforce a global
+	 * requirement, applicable to all
+	 * [[com.tubros.constraints.api.solver.Variable]]s in the CSP.
 	 */
 	def impose[C[_]] (constraint : C[A] => Boolean)
 		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
+		: M[Unit];
+	
+	
+	/**
+	 * This version of the impose method allows '''Solver''' clients to use
+	 * global requirements of the form:
+	 * 
+	 * {{{
+	 * 		val myConstraint : PartialFunction[Seq[Answer[SomeType]], Boolean] =
+	 *   	{
+	 *   		case ArrayVariables (first, second, third) =>
+	 *     			...
+	 *        
+	 *        	case ScalarNamed ('foo, v1) :: _ :: ScalarNamed ('bar, v2) =>
+	 *         		...
+	 *   	}
+	 * }}}
+	 */
+	def impose (constraint : PartialFunction[Seq[Answer[A]], Boolean])
 		: M[Unit];
 	
 	
