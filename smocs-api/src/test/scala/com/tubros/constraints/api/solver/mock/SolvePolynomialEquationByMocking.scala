@@ -12,6 +12,8 @@ import org.scalatest._
 
 import com.tubros.constraints.api.solver._
 
+import error.SolverError
+
 
 /**
  * The '''SolvePolynomialEquationByMocking''' type provides the API with a
@@ -40,35 +42,35 @@ trait SolvePolynomialEquationByMocking
 	override val monad = Monad[Option];
 	
 	override val solvable = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Int] => Option[SolverError \/ Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-			: Stream[C[Answer[Int]]] =
+			: SolverError \/ Stream[C[Answer[Int]]] =
 		{
 			val answer = mo.zero |+|
 				Answer ('x -> 2).point[C] |+|
 				Answer ('y -> 2).point[C];
 			
-			Stream (answer);
+			\/- (Stream (answer));
 		}
 		
-		def domain (solver : MockSolver[Int], range : Seq[Int])
+		override def domain (solver : MockSolver[Int], range : Seq[Int])
 			: solver.DomainType[Int] = 
 			FiniteDiscreteDomain (range);
 		}
 	
 	override val unsolvable = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Int] => Option[SolverError \/ Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-			: Stream[C[Answer[Int]]] =
+			: SolverError \/ Stream[C[Answer[Int]]] =
 		{
-			Stream ();
+			\/- (Stream.empty);
 		}
 		
-		def domain (solver : MockSolver[Int], range : Seq[Int])
+		override def domain (solver : MockSolver[Int], range : Seq[Int])
 			: solver.DomainType[Int] = 
 			FiniteDiscreteDomain (range);
 		}

@@ -18,6 +18,7 @@ import heuristic.{
 	}
 import problem._
 import solver._
+import solver.error._
 
 
 /**
@@ -55,7 +56,7 @@ class TreeFiniteDomainSolver[A] (
 		implicit mo : Monoid[C[Answer[A]]],
 		a : Applicative[C]
 		)
-		: SolverState[Stream[C[Answer[A]]]] =
+		: SolverState[SolverError \/ Stream[C[Answer[A]]]] =
 		for {
 			available <- variables ()
 			chosen <- chooseRootFrom (available)
@@ -64,7 +65,7 @@ class TreeFiniteDomainSolver[A] (
 			
 			satisfactory <- search (root, children)
 			answers <- label[C] (satisfactory)
-			} yield answers;
+			} yield \/- (answers);
 	
 	
 	private def variables () : SolverState[Seq[Variable[A, DomainType]]] =

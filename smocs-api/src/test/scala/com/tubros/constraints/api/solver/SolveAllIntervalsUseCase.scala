@@ -76,7 +76,12 @@ trait SolveAllIntervalsUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			
 			Then ("there should be at least one answer");
 			
-			answers should not be ('empty);
+			answers should be ('right);
+			answers foreach {
+				a =>
+					
+				a should not be ('empty);
+				}
 		}
 	}
 }

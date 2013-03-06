@@ -13,6 +13,7 @@ import com.tubros.constraints.core.spi.solver._
 
 import problem._
 import solver._
+import solver.error._
 
 
 /**
@@ -63,8 +64,8 @@ trait StateBasedSolver[
 	
 	
 	override def apply[C[_]] (
-		context : SolverT => SolverState[Stream[C[Answer[A]]]])
-		: Stream[C[Answer[A]]] =
+		context : SolverT => SolverState[SolverError \/ Stream[C[Answer[A]]]])
+		: SolverError \/ Stream[C[Answer[A]]] =
 		context (self).eval (VariableStore.empty[A]);
 		
 		

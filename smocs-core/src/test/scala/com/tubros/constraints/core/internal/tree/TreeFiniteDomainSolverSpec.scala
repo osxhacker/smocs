@@ -18,7 +18,9 @@ import org.scalatest.junit.JUnitRunner
 import com.tubros.constraints.api._
 import com.tubros.constraints.api.problem._
 import com.tubros.constraints.api.solver._
+import com.tubros.constraints.api.solver.error._
 import com.tubros.constraints.core.spi.solver._
+
 
 
 /**
@@ -62,7 +64,7 @@ class TreeFiniteDomainSolverSpec
 				_ <- s.newVar ('b, domain)
 				stream <- s.run[Vector]
 				} yield stream;
-			}
+			}.valueOr (_ => Stream.empty);
 		val expected = for {
 			a <- domain
 			b <- domain
@@ -88,7 +90,7 @@ class TreeFiniteDomainSolverSpec
 			);
 		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
 		val domain = FiniteDiscreteDomain (1 to 1000);
-		val answer = solver {
+		val solution = solver {
 			s =>
 				
 			for {
@@ -99,9 +101,14 @@ class TreeFiniteDomainSolverSpec
 				} yield stream;
 			}
 		
-		answer should not be ('empty);
-		answer should have size (1);
-		answer.head should be === (Vector (Answer ('x, 2), Answer ('y, 8)));
+		solution should be ('right);
+		solution foreach {
+			answer =>
+				
+			answer should not be ('empty);
+			answer should have size (1);
+			answer.head should be === (Vector (Answer ('x, 2), Answer ('y, 8)));
+			}
 	}
 }
 

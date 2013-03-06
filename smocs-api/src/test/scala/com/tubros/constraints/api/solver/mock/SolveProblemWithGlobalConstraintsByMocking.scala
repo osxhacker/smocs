@@ -12,6 +12,8 @@ import org.scalatest._
 
 import com.tubros.constraints.api.solver._
 
+import error.SolverError
+
 
 /**
  * The '''SolveProblemWithGlobalConstraintsByMocking''' type fulfills the
@@ -41,35 +43,35 @@ trait SolveProblemWithGlobalConstraintsByMocking
 	override val monad = Monad[Option];
 	
 	override val allDiffConstrained = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Double] => Option[Stream[C[Answer[Double]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Double] => Option[SolverError \/ Stream[C[Answer[Double]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Double]]])
-			: Stream[C[Answer[Double]]] =
+			: SolverError \/ Stream[C[Answer[Double]]] =
 		{
 			val answer = mo.zero |+|
 				Answer ('x -> 2.0).point[C] |+|
 				Answer ('y -> 4.0).point[C];
 			
-			Stream (answer);
+			\/- (Stream (answer));
 		}
 		
-		def domain (solver : MockSolver[Double], range : Seq[Double])
+		override def domain (solver : MockSolver[Double], range : Seq[Double])
 			: solver.DomainType[Double] = 
 			FiniteDiscreteDomain (range);
 		}
 	
 	override val allSameConstrained = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Double] => Option[Stream[C[Answer[Double]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Double] => Option[SolverError \/ Stream[C[Answer[Double]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Double]]])
-			: Stream[C[Answer[Double]]] =
+			: SolverError \/ Stream[C[Answer[Double]]] =
 		{
-			Stream.empty;
+			\/- (Stream.empty);
 		}
 		
-		def domain (solver : MockSolver[Double], range : Seq[Double])
+		override def domain (solver : MockSolver[Double], range : Seq[Double])
 			: solver.DomainType[Double] = 
 			FiniteDiscreteDomain (range);
 		}

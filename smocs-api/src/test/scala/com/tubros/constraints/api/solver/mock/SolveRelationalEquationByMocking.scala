@@ -12,6 +12,8 @@ import org.scalatest._
 
 import com.tubros.constraints.api.solver._
 
+import error.SolverError
+
 
 /**
  * The '''SolveRelationalEquationByMocking''' type provides the API with a
@@ -40,36 +42,36 @@ trait SolveRelationalEquationByMocking
 	override val monad = Monad[Option];
 	
 	override val solvable = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Symbol] => Option[Stream[C[Answer[Symbol]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Symbol] => Option[SolverError \/ Stream[C[Answer[Symbol]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Symbol]]])
-			: Stream[C[Answer[Symbol]]] =
+			: SolverError \/ Stream[C[Answer[Symbol]]] =
 		{
 			val answer = mo.zero |+|
 				Answer ('first -> 'b).point[C] |+|
 				Answer ('head -> 'a).point[C] |+|
 				Answer ('next -> 'c).point[C];
 			
-			Stream (answer);
+			\/- (Stream (answer));
 		}
 		
-		def domain (solver : MockSolver[Symbol], candidates : Seq[Symbol])
+		override def domain (solver : MockSolver[Symbol], candidates : Seq[Symbol])
 			: solver.DomainType[Symbol] = 
 			FiniteDiscreteDomain (candidates);
 		}
 	
 	override val unsolvable = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Symbol] => Option[Stream[C[Answer[Symbol]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Symbol] => Option[SolverError \/ Stream[C[Answer[Symbol]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Symbol]]])
-			: Stream[C[Answer[Symbol]]] =
+			: SolverError \/ Stream[C[Answer[Symbol]]] =
 		{
-			Stream ();
+			\/- (Stream ());
 		}
 		
-		def domain (solver : MockSolver[Symbol], candidates : Seq[Symbol])
+		override def domain (solver : MockSolver[Symbol], candidates : Seq[Symbol])
 			: solver.DomainType[Symbol] = 
 			FiniteDiscreteDomain (candidates);
 		}

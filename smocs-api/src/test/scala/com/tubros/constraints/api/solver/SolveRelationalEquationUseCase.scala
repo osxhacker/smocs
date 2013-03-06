@@ -100,7 +100,7 @@ trait SolveRelationalEquationUseCase[M[+_], SolverT <: Solver[Symbol, M, SolverT
 					_ <- solver.add (problem)
 					stream <- solver.run[List]
 					} yield stream;
-				}
+				}.valueOr (_ => Stream.empty);
 			
 			Then ("there should be one answer");
 			

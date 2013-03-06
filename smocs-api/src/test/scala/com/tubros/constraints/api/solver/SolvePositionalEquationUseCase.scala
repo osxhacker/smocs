@@ -119,7 +119,7 @@ trait SolvePositionalEquationUseCase[
 					_ <- solver.impose (allDiff)
 					resultSet <- solver.run[Vector]
 					} yield resultSet;
-				}
+				}.valueOr (_ => Stream.empty);
 			
 			Then ("there should be an answer");
 			answers should not be ('empty);

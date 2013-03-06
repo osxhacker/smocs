@@ -3,6 +3,11 @@
  */
 package com.tubros.constraints.core.internal.simple
 
+import scalaz.{
+	Ordering => _,
+	_
+	}
+
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -10,6 +15,7 @@ import org.scalatest.junit.JUnitRunner
 import com.tubros.constraints.api._
 
 import solver._
+import solver.error._
 
 
 /**
@@ -39,7 +45,7 @@ class ExhaustiveFiniteDomainSolverSpec
 	{
 		val solver = new ExhaustiveFiniteDomainSolver[Int];
 		val domain = FiniteDiscreteDomain (1 to 5);
-		val answer : Stream[List[Answer[Int]]] = solver {
+		val answerProduced : SolverError \/ Stream[List[Answer[Int]]] = solver {
 			s =>
 				
 			for {
@@ -49,10 +55,22 @@ class ExhaustiveFiniteDomainSolverSpec
 				} yield stream;
 			}
 			
-		answer.contains (List (Answer ('x -> 1), Answer ('y -> 1))) should be === (true);
-		answer.contains (List (Answer ('x -> 2), Answer ('y -> 5))) should be === (true);
-		answer.contains (List (Answer ('x -> 5), Answer ('y -> 5))) should be === (true);
-		answer should have size (25);
+		answerProduced should be ('right);
+		
+		answerProduced foreach {
+			answer =>
+				
+			answer.contains (
+				List (Answer ('x -> 1), Answer ('y -> 1))
+				) should be === (true);
+			answer.contains (
+				List (Answer ('x -> 2), Answer ('y -> 5))
+				) should be === (true);
+			answer.contains (
+				List (Answer ('x -> 5), Answer ('y -> 5))
+				) should be === (true);
+			answer should have size (25);
+			}
 	}
 	
 	it should "produce answers with stable positions" in
@@ -66,7 +84,7 @@ class ExhaustiveFiniteDomainSolverSpec
 				vars <- s.newVars[List] (domain) (List ('a, 'b, 'c, 'd))
 				stream <- s.run[Stream]
 				} yield stream;
-			}
+			}.valueOr (_ => Stream.empty);
 		
 		answer must not be ('empty);
 		

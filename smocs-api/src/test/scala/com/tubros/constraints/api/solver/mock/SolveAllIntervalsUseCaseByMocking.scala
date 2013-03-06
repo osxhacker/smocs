@@ -14,6 +14,8 @@ import com.tubros.constraints.api._
 
 import problem.ArrayNamingPolicy
 import solver._
+import solver.error.SolverError
+
 
 
 /**
@@ -44,11 +46,11 @@ trait SolveAllIntervalsUseCaseByMocking
 	
 	override val fiveElements : SolverUsage =
 		new SolverUsage with ArrayNamingPolicy {
-			def withSolver[C[_]] (
-				block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
+			override def withSolver[C[_]] (
+				block : MockSolver[Int] => Option[SolverError \/ Stream[C[Answer[Int]]]]
 				)
 				(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-				: Stream[C[Answer[Int]]] =
+				: SolverError \/ Stream[C[Answer[Int]]] =
 			{
 				val items = List (
 					Answer (compose ('x, 0), 3),
@@ -68,25 +70,25 @@ trait SolveAllIntervalsUseCaseByMocking
 					accum |+| item.point[C];
 					}
 				
-				Stream (answer);
+				\/- (Stream (answer));
 			}
 		
-			def domain (solver : MockSolver[Int], range : Seq[Int])
+			override def domain (solver : MockSolver[Int], range : Seq[Int])
 				: solver.DomainType[Int] = 
 				FiniteDiscreteDomain (range);
 			}
 		
 	override val unsolvable = new SolverUsage {
-		def withSolver[C[_]] (
-			block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
+		override def withSolver[C[_]] (
+			block : MockSolver[Int] => Option[SolverError \/ Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
-			: Stream[C[Answer[Int]]] =
+			: SolverError \/ Stream[C[Answer[Int]]] =
 		{
-			Stream ();
+			\/- (Stream.empty);
 		}
 		
-		def domain (solver : MockSolver[Int], range : Seq[Int])
+		override def domain (solver : MockSolver[Int], range : Seq[Int])
 			: solver.DomainType[Int] = 
 			FiniteDiscreteDomain (range);
 		}

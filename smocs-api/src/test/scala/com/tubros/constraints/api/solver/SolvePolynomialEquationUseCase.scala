@@ -67,7 +67,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 					_ <- solver.add (polynomial)
 					stream <- solver.run[List]
 					} yield stream;
-				}
+				}.valueOr (_ => Stream.empty);
 			
 			Then ("there should be one answer");
 			
@@ -102,7 +102,7 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 				
 			Then ("there should be no answers");
 			
-			answers should be ('empty);
+			answers should be ('right);
 		}
 	}
 }

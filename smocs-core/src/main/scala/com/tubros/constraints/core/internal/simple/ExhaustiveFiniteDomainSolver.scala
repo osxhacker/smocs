@@ -62,13 +62,13 @@ class ExhaustiveFiniteDomainSolver[A]
 		implicit mo : Monoid[C[Answer[A]]],
 		a : Applicative[C]
 		)
-		: SolverState[Stream[C[Answer[A]]]] =
+		: SolverState[SolverError \/ Stream[C[Answer[A]]]] =
 		for {
 			vars <- variables ()
 			filters <- filterAnswers ()
 			constrained <- applyConstraints (vars, filters)
 			answers <- label (constrained)
-			} yield answers;
+			} yield \/- (answers);
 	
 	
 	private def applyConstraints (

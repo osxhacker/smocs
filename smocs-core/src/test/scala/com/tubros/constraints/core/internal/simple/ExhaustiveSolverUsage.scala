@@ -11,6 +11,8 @@ import com.tubros.constraints.api.problem._
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
 
+import error.SolverError
+
 
 /**
  * The '''ExhaustiveSolverUsage''' type factors the common definition of
@@ -41,10 +43,10 @@ trait ExhaustiveSolverUsage[A]
 		private val solver = new ExhaustiveFiniteDomainSolver[A];
 		
 		override def withSolver[C[_]] (
-			block : SolverType => MonadType[Stream[C[Answer[A]]]]
+			block : SolverType => MonadType[SolverError \/ Stream[C[Answer[A]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[A]]])
-			: Stream[C[Answer[A]]] =
+			: SolverError \/ Stream[C[Answer[A]]] =
 		{
 			return (solver (block));
 		}
