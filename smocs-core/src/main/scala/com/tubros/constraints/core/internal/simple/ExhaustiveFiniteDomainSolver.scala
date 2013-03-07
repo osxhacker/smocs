@@ -31,7 +31,10 @@ import solver.error._
  *
  */
 class ExhaustiveFiniteDomainSolver[A]
-	(implicit override val canConstrain : CanConstrain[Equation, A])
+	(implicit
+		override val canConstrain : CanConstrain[Equation, A],
+		override val MS : MonadState[StateBasedSolver.SolverStateT, VariableStore[A]]
+	)
 	extends Solver[
 		A,
 		StateBasedSolver[A, ExhaustiveFiniteDomainSolver[A]]#SolverState,
@@ -45,10 +48,6 @@ class ExhaustiveFiniteDomainSolver[A]
 	import scalaz.syntax.applicative._
 	import scalaz.syntax.id._
 	import scalaz.syntax.traverse._
-	import State._
-	
-	
-	/// Class Types
 	
 	
 	/**
@@ -62,13 +61,13 @@ class ExhaustiveFiniteDomainSolver[A]
 		implicit mo : Monoid[C[Answer[A]]],
 		a : Applicative[C]
 		)
-		: SolverState[SolverError \/ Stream[C[Answer[A]]]] =
+		: SolverState[Stream[C[Answer[A]]]] =
 		for {
 			vars <- variables ()
 			filters <- filterAnswers ()
 			constrained <- applyConstraints (vars, filters)
 			answers <- label (constrained)
-			} yield \/- (answers);
+			} yield answers;
 	
 	
 	private def applyConstraints (
@@ -76,7 +75,7 @@ class ExhaustiveFiniteDomainSolver[A]
 		filters : Seq[Constraint[A]]
 		)
 		: SolverState[Stream[Map[VariableName, A]]] =
-		gets {
+		MS.gets {
 			vs =>
 				
 			val streams = vars.view.to[Stream].map (_.enumerate.to[Stream]);
@@ -86,7 +85,6 @@ class ExhaustiveFiniteDomainSolver[A]
 				accum >==> c;
 				}
 			
-			// TODO: this needs to return SolverError \/ Stream
 			streams.sequence.map (LinkedHashMap.apply).filter {
 				candidate =>
 					
@@ -97,7 +95,7 @@ class ExhaustiveFiniteDomainSolver[A]
 	
 	private def filterAnswers ()
 		: SolverState[Seq[Constraint[A]]] =
-		gets {
+		MS.gets {
 			vs =>
 				
 			vs.answerFilters.toVector ++ vs.constraints;
@@ -107,7 +105,9 @@ class ExhaustiveFiniteDomainSolver[A]
 	private def label[C[_]] (variables : Stream[Map[VariableName, A]])
 		(implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
 		: SolverState[Stream[C[Answer[A]]]] =
-		state {
+		StateT {
+			vs =>
+
 			val answers = variables.map {
 				_.to[List].foldMap {
 					cur =>
@@ -116,13 +116,14 @@ class ExhaustiveFiniteDomainSolver[A]
 					}
 				}
 			
-			answers;
+			\/- (vs, answers);
 			}
 	
 	
 	private def variables ()
 		: SolverState[Seq[Variable[A, DomainType]]] =
-		gets {
+		MS.gets {
 			_.variables;
 			}
 }
+

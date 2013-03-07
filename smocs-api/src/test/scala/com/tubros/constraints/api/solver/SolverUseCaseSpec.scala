@@ -26,9 +26,7 @@ trait SolverUseCaseSpec[A, M[+_], SolverT <: Solver[A, M, SolverT]]
 	/// Class Types
 	trait SolverUsage
 	{
-		def withSolver[C[_]] (
-			block : SolverT => M[SolverError \/ Stream[C[Answer[A]]]]
-			)
+		def withSolver[C[_]] (block : SolverT => M[Stream[C[Answer[A]]]])
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[A]]])
 			: SolverError \/ Stream[C[Answer[A]]];
 		

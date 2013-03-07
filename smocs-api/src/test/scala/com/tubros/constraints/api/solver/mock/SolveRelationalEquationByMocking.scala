@@ -43,7 +43,7 @@ trait SolveRelationalEquationByMocking
 	
 	override val solvable = new SolverUsage {
 		override def withSolver[C[_]] (
-			block : MockSolver[Symbol] => Option[SolverError \/ Stream[C[Answer[Symbol]]]]
+			block : MockSolver[Symbol] => Option[Stream[C[Answer[Symbol]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Symbol]]])
 			: SolverError \/ Stream[C[Answer[Symbol]]] =
@@ -63,7 +63,7 @@ trait SolveRelationalEquationByMocking
 	
 	override val unsolvable = new SolverUsage {
 		override def withSolver[C[_]] (
-			block : MockSolver[Symbol] => Option[SolverError \/ Stream[C[Answer[Symbol]]]]
+			block : MockSolver[Symbol] => Option[Stream[C[Answer[Symbol]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Symbol]]])
 			: SolverError \/ Stream[C[Answer[Symbol]]] =

@@ -1,7 +1,8 @@
 /**
  * Created on: Feb 17, 2013
  */
-package com.tubros.constraints.core.internal.simple
+package com.tubros.constraints.core.internal
+package simple
 
 import scala.language.higherKinds
 
@@ -43,7 +44,7 @@ trait ExhaustiveSolverUsage[A]
 		private val solver = new ExhaustiveFiniteDomainSolver[A];
 		
 		override def withSolver[C[_]] (
-			block : SolverType => MonadType[SolverError \/ Stream[C[Answer[A]]]]
+			block : SolverType => MonadType[Stream[C[Answer[A]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[A]]])
 			: SolverError \/ Stream[C[Answer[A]]] =
@@ -58,5 +59,5 @@ trait ExhaustiveSolverUsage[A]
 			
 			
 	/// Instance Properties
-	implicit val monad = Monad[ExhaustiveFiniteDomainSolver[A]#SolverState];
+	implicit val monad = StateBasedSolver.solverMonad[A];
 }

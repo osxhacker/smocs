@@ -47,7 +47,7 @@ trait SolveAllIntervalsUseCaseByMocking
 	override val fiveElements : SolverUsage =
 		new SolverUsage with ArrayNamingPolicy {
 			override def withSolver[C[_]] (
-				block : MockSolver[Int] => Option[SolverError \/ Stream[C[Answer[Int]]]]
+				block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
 				)
 				(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
 				: SolverError \/ Stream[C[Answer[Int]]] =
@@ -80,7 +80,7 @@ trait SolveAllIntervalsUseCaseByMocking
 		
 	override val unsolvable = new SolverUsage {
 		override def withSolver[C[_]] (
-			block : MockSolver[Int] => Option[SolverError \/ Stream[C[Answer[Int]]]]
+			block : MockSolver[Int] => Option[Stream[C[Answer[Int]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Int]]])
 			: SolverError \/ Stream[C[Answer[Int]]] =

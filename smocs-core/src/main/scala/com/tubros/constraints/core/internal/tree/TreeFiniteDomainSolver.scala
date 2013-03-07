@@ -34,6 +34,7 @@ class TreeFiniteDomainSolver[A] (
 	)
 	(implicit
 		override val canConstrain : CanConstrain[Equation, A],
+		override val MS : MonadState[StateBasedSolver.SolverStateT, VariableStore[A]],
 		e : Equal[A]
 	)
 	extends Solver[
@@ -46,7 +47,6 @@ class TreeFiniteDomainSolver[A] (
 {
 	/// Class Imports
 	import Scalaz._
-	import Kleisli._
 
 	
 	/**
@@ -55,10 +55,10 @@ class TreeFiniteDomainSolver[A] (
 	 * search space to solve the problem in question.
 	 */
 	override def run[C[_]] (
-		implicit mo : Monoid[C[Answer[A]]],
-		a : Applicative[C]
+		implicit MO : Monoid[C[Answer[A]]],
+		AC : Applicative[C]
 		)
-		: SolverState[SolverError \/ Stream[C[Answer[A]]]] =
+		: SolverState[Stream[C[Answer[A]]]] =
 		for {
 			available <- variables ()
 			chosen <- chooseRootFrom (available)
@@ -68,94 +68,83 @@ class TreeFiniteDomainSolver[A] (
 
 	
 	private def variables ()
-		: SolverState[SolverError \/ Seq[Variable[A, DomainType]]] =
-		gets {
+		: SolverState[Seq[Variable[A, DomainType]]] =
+		StateT {
 			vs =>
 				
 			val validations = for {
 				_ <- hasVariables (vs.variables, vs.constraints.to[Seq])
 				_ <- hasUnknownVariables (vs.variables, vs.constraints.to[Seq])
-				} yield vs.variables;
+				} yield vs.variables.toSeq;
 				
-			\/.fromEither (validations.toEither);
+			validations match {
+				case Success (vars) =>
+					\/- (vs, vars);
+
+				case Failure (err) =>
+					-\/ (err);
+				}
 			}
 	
 	
-	private def chooseRootFrom (
-		maybeAvailable : SolverError \/ Seq[Variable[A, DomainType]]
-		)
-		: SolverState[SolverError\/ List[Variable[A, DomainType]]] =
-		gets {
+	private def chooseRootFrom (available : Seq[Variable[A, DomainType]])
+		: SolverState[List[Variable[A, DomainType]]] =
+		MS.gets {
 			vs =>
 				
-			maybeAvailable.map {
-				available =>
-				
-				val prioritize = variableRanking[Set];
-				
-				prioritize (vs.constraints) (available.toList);
-				}
+			val prioritize = variableRanking[Set];
+			
+			prioritize (vs.constraints) (available.toList);
 			}
 			
 
-	private def label[C[_]] (
-		maybeAnswers : SolverError \/ Stream[Seq[Answer[A]]]
-		)
-		(implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
-		: SolverState[SolverError \/ Stream[C[Answer[A]]]] =
-		gets {
+	private def label[C[_]] (answers : Stream[Seq[Answer[A]]])
+		(implicit MO : Monoid[C[Answer[A]]], a : Applicative[C])
+		: SolverState[Stream[C[Answer[A]]]] =
+		MS.gets {
 			vs =>
 				
-			maybeAnswers.map {
-				answers =>
+			val convertedStream = answers.map {
+				cur =>
 					
-				val convertedStream = answers.map {
-					cur =>
+				cur.foldLeft (MO.zero) {
+					case (accum, answer) =>
 						
-					cur.foldLeft (mo.zero) {
-						case (accum, answer) =>
-							
-						accum |+| answer.point[C];
-						}
+					accum |+| answer.point[C];
 					}
-				
-				convertedStream;
 				}
+			
+			convertedStream;
 			}
 	
 	
-	private def search (
-		maybeVariables : SolverError \/ List[Variable[A, DomainType]]
-		)
-		: SolverState[SolverError \/ Stream[Seq[Answer[A]]]] =
-		gets {
+	private def search (variables : List[Variable[A, DomainType]])
+		: SolverState[Stream[Seq[Answer[A]]]] =
+		MS.gets {
 			vs =>
 				
-			maybeVariables map {
-				variables =>
+			implicit val order = new VariableStore.AnswerOrdering[A] (vs);
+			val tree = SolutionTree[A] ();
+			
+			// TOOO: this is a *very* temporary approach, as it hits all nodes!
+			val bruteForce = tree.expand (
+				tree.root,
+				variables,
+				new ConstraintPropagation[A, DomainType] (vs.constraints)
+				);
+			val c = vs.answerFilters.foldLeft (Constraint.kleisliUnit[A]) {
+				case (accum, c) =>
 					
-				implicit val order = new VariableStore.AnswerOrdering[A] (vs);
-				val tree = SolutionTree[A] ();
-				
-				// TOOO: this is a *very* temporary approach, as it hits all nodes!
-				val bruteForce = tree.expand (
-					tree.root,
-					variables,
-					new ConstraintPropagation[A, DomainType] (vs.constraints)
-					);
-				val c = vs.answerFilters.foldLeft (Constraint.kleisliUnit[A]) {
-					case (accum, c) =>
-						
-					accum >==> c;
-					}
-				
-				bruteForce.toStream (expected = variables.length).filter {
-					candidate =>
-						
-					val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
+				accum >==> c;
+				}
+			
+			bruteForce.toStream (expected = variables.length).filter {
+				candidate =>
 					
-					c.run (args.toMap).isRight;
-					}
+				val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
+				
+				c.run (args.toMap).isRight;
 				}
 			}
 }
+

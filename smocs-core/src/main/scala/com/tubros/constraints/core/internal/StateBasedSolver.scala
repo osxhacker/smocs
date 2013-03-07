@@ -18,7 +18,7 @@ import solver.error._
 
 /**
  * The '''StateBasedSolver''' type captures behavior common to all
- * [[com.tubros.constraints.api.solver.Solver]]s which use [[scalaz.State]]
+ * [[com.tubros.constraints.api.solver.Solver]]s which use [[scalaz.StateT]]
  * as their implementation [[scalaz.Monad]].
  *
  * @author svickers
@@ -26,13 +26,13 @@ import solver.error._
  */
 trait StateBasedSolver[
 	A,
-	+SolverT <: Solver[A, ({ type L[+X] = State[VariableStore[A], X]})#L, SolverT]
+	+SolverT <: Solver[A, ({ type L[+X] = StateBasedSolver.SolverStateT[VariableStore[A], X] })#L, SolverT]
 	]
 	extends ArrayNamingPolicy
 {
 	/// Self Type Constraints
 	self : SolverT =>
-		
+
 
 	/// Class Imports
 	import constraints._
@@ -40,93 +40,111 @@ trait StateBasedSolver[
 	import scalaz.syntax.applicative._
 	import scalaz.syntax.id._
 	import scalaz.syntax.traverse._
-	import State._
-	
-	
+	import StateBasedSolver._
+
+
 	/// Class Types
 	override type DomainType[T] = DiscreteDomain[T]
 	type Map[K, +V] = scala.collection.Map[K, V]
-	type SolverState[+T] = State[VariableStore[A], T]
-	
-	
+	type SolverState[+T] = SolverStateT[VariableStore[A], T]
+
+
 	/// Instance Properties
 	implicit def canConstrain : CanConstrain[Equation, A];
-	
-	
+	implicit def MS : MonadState[SolverStateT, VariableStore[A]];
+
+
 	override def add (equation : Equation[A]) : SolverState[Unit] =
-		modify {
+		MS.modify {
 			_.addConstraint (equation.constrains);
 			}
-	
-	
+
+
 	override def add (problem : Problem[A]) : SolverState[Unit] =
-		problem.equations.traverseS (add) map (_ => ());
-	
-	
+		problem.equations.traverse (add) map (_ => ());
+
+
 	override def apply[C[_]] (
-		context : SolverT => SolverState[SolverError \/ Stream[C[Answer[A]]]])
+		context : SolverT => SolverState[Stream[C[Answer[A]]]])
 		: SolverError \/ Stream[C[Answer[A]]] =
 		context (self).eval (VariableStore.empty[A]);
-		
-		
+
+
 	override def impose[C[_]] (constraint : C[A] => Boolean)
 		(implicit cbf : CanBuildFrom[Nothing, A, C[A]])
 		: SolverState[Unit] =
-		modify {
+		MS.modify {
 			_.addAnswerFilter (new AnswerValueConstraint (constraint));
 			}
-	
-	
+
+
 	override def impose (constraint : PartialFunction[Seq[Answer[A]], Boolean])
 		: SolverState[Unit] =
-		modify {
+		MS.modify {
 			_.addAnswerFilter (new AnswerConstraint (constraint));
 			}
-	
-	
+
+
 	override def newArrayVar (
 		name : VariableName,
 		size : Int,
 		domain : DomainType[A]
 		)
 		: SolverState[List[Variable[A, DomainType]]] =
-		State {
+		StateT {
 			vs =>
-				
+
 			val array = List.tabulate (size) {
 				index =>
-					
+
 				DiscreteVariable[A] (compose (name, index), domain);
 				}
-			
-			(vs.addVariables (array), array);
-		}
-	
-	
+
+			\/- (vs.addVariables (array), array);
+			}
+
+
 	override def newVar (name : VariableName, domain : DomainType[A])
 		: SolverState[Variable[A, DomainType]] =
-		State {
+		StateT {
 			vs =>
-				
+
 			val variable = DiscreteVariable (name, domain);
-			
-			(vs.addVariable (variable), variable);
+
+			\/- (vs.addVariable (variable), variable);
 			}
-	
-	
+
+
 	override def newVars[C[_]] (domain : DomainType[A])
 		(names : C[VariableName])
 		(implicit F : Foldable[C])
 		: SolverState[List[Variable[A, DomainType]]] =
-		State {
+		StateT {
 			vs =>
-				
+
 			val created = F.foldMap (names) {
 				name =>
-					
+
 				List (DiscreteVariable (name, domain));
 				}
-			
-			(vs.addVariables (created), created);
+
+			\/- (vs.addVariables (created), created);
 			}
 }
+
+object StateBasedSolver
+{
+	/// Class Types
+	type ErrorOr[+T] = \/[SolverError, T]
+	type SolverStateT[S, +T] = StateT[ErrorOr, S, T]
+	
+	
+	/**
+	 * The solverMonad method is provided so that clients of
+	 * '''StateBasedSolver''' instances are insulated from the details of how
+	 * to properly provide a [[scalaz.Monad]] suitable for use.
+	 */
+	def solverMonad[A] : MonadState[SolverStateT, VariableStore[A]] =
+		implicitly[MonadState[SolverStateT, VariableStore[A]]];
+}
+

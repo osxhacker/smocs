@@ -1,7 +1,8 @@
 /**
  * Created on: Feb 17, 2013
  */
-package com.tubros.constraints.core.internal.tree
+package com.tubros.constraints.core.internal
+package tree
 
 import scala.language.higherKinds
 
@@ -31,8 +32,8 @@ trait TreeSolverUsage[A]
 		TreeFiniteDomainSolver[A]
 		]
 		=>
-			
-			
+
+
 	/// Class Types
 	type MonadType[T] = SolverType#SolverState[T]
 	type SolverType = TreeFiniteDomainSolver[A]
@@ -45,7 +46,7 @@ trait TreeSolverUsage[A]
 			);
 		
 		override def withSolver[C[_]] (
-			block : SolverType => MonadType[SolverError \/ Stream[C[Answer[A]]]]
+			block : SolverType => MonadType[Stream[C[Answer[A]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[A]]])
 			: SolverError \/ Stream[C[Answer[A]]] =
@@ -60,6 +61,6 @@ trait TreeSolverUsage[A]
 			
 			
 	/// Instance Properties
-	implicit val monad = Monad[TreeFiniteDomainSolver[A]#SolverState];
+	implicit val monad = StateBasedSolver.solverMonad[A];
 	implicit val equal : Equal[A];
 }

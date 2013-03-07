@@ -44,7 +44,7 @@ trait SolveProblemWithGlobalConstraintsByMocking
 	
 	override val allDiffConstrained = new SolverUsage {
 		override def withSolver[C[_]] (
-			block : MockSolver[Double] => Option[SolverError \/ Stream[C[Answer[Double]]]]
+			block : MockSolver[Double] => Option[Stream[C[Answer[Double]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Double]]])
 			: SolverError \/ Stream[C[Answer[Double]]] =
@@ -63,7 +63,7 @@ trait SolveProblemWithGlobalConstraintsByMocking
 	
 	override val allSameConstrained = new SolverUsage {
 		override def withSolver[C[_]] (
-			block : MockSolver[Double] => Option[SolverError \/ Stream[C[Answer[Double]]]]
+			block : MockSolver[Double] => Option[Stream[C[Answer[Double]]]]
 			)
 			(implicit a : Applicative[C], mo : Monoid[C[Answer[Double]]])
 			: SolverError \/ Stream[C[Answer[Double]]] =

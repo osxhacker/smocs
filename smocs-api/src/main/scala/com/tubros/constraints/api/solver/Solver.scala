@@ -56,7 +56,7 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	 * Concrete implementations can perform whatever actions ''they'' deem fit
 	 * before and after the '''Solver''' is defined.
 	 */
-	def apply[C[_]] (context : SolverT => M[SolverError \/ Stream[C[Answer[A]]]])
+	def apply[C[_]] (context : SolverT => M[Stream[C[Answer[A]]]])
 		: SolverError \/ Stream[C[Answer[A]]];
 	
 	
@@ -128,5 +128,5 @@ abstract class Solver[A, M[+_] : Monad, +SolverT <: Solver[A, M, SolverT]]
 	 * [[scala.collection.immutable.Stream]] of satisfactory results.
 	 */
 	def run[C[_]] (implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
-		: M[SolverError \/ Stream[C[Answer[A]]]];
+		: M[Stream[C[Answer[A]]]];
 }
