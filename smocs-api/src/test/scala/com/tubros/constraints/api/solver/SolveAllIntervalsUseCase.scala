@@ -110,7 +110,7 @@ object SolveAllIntervalsUseCase
 				}
 			);
 		val diffEquations =
-			for (n <- 0 until size)
+			for (n <- 0 until (size - 1))
 				yield new PolynomialEquation[Int] {
 					def apply = 'diffs (n) === abs ('x (n + 1) - 'x (n));
 					}

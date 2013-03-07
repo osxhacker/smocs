@@ -42,9 +42,11 @@ class TreeFiniteDomainSolver[A] (
 		TreeFiniteDomainSolver[A]
 		]
 		with StateBasedSolver[A, TreeFiniteDomainSolver[A]]
+		with ConsistencyChecks[A, DiscreteDomain]
 {
 	/// Class Imports
 	import Scalaz._
+	import Kleisli._
 
 	
 	/**
@@ -60,81 +62,100 @@ class TreeFiniteDomainSolver[A] (
 		for {
 			available <- variables ()
 			chosen <- chooseRootFrom (available)
-
-			(root, children) = chosen
-			
-			satisfactory <- search (root, children)
+			satisfactory <- search (chosen)
 			answers <- label[C] (satisfactory)
-			} yield \/- (answers);
+			} yield answers;
+
 	
-	
-	private def variables () : SolverState[Seq[Variable[A, DomainType]]] =
-		gets {
-			_.variables
-			}
-	
-	
-	private def chooseRootFrom (available : Seq[Variable[A, DomainType]])
-		: SolverState[(Variable[A, DomainType], List[Variable[A, DomainType]])] =
+	private def variables ()
+		: SolverState[SolverError \/ Seq[Variable[A, DomainType]]] =
 		gets {
 			vs =>
 				
-			val prioritize = variableRanking[Set];
-			val ranked = prioritize (vs.constraints) (available.toList);
-			
-			(ranked.head, ranked.tail);
+			val validations = for {
+				_ <- hasVariables (vs.variables, vs.constraints.to[Seq])
+				_ <- hasUnknownVariables (vs.variables, vs.constraints.to[Seq])
+				} yield vs.variables;
+				
+			\/.fromEither (validations.toEither);
+			}
+	
+	
+	private def chooseRootFrom (
+		maybeAvailable : SolverError \/ Seq[Variable[A, DomainType]]
+		)
+		: SolverState[SolverError\/ List[Variable[A, DomainType]]] =
+		gets {
+			vs =>
+				
+			maybeAvailable.map {
+				available =>
+				
+				val prioritize = variableRanking[Set];
+				
+				prioritize (vs.constraints) (available.toList);
+				}
 			}
 			
 
-	private def label[C[_]] (variables : Stream[Seq[Answer[A]]])
+	private def label[C[_]] (
+		maybeAnswers : SolverError \/ Stream[Seq[Answer[A]]]
+		)
 		(implicit mo : Monoid[C[Answer[A]]], a : Applicative[C])
-		: SolverState[Stream[C[Answer[A]]]] =
+		: SolverState[SolverError \/ Stream[C[Answer[A]]]] =
 		gets {
 			vs =>
 				
-			val answers = variables.map {
-				cur =>
+			maybeAnswers.map {
+				answers =>
 					
-				cur.foldLeft (mo.zero) {
-					case (accum, answer) =>
+				val convertedStream = answers.map {
+					cur =>
 						
-					accum |+| answer.point[C];
+					cur.foldLeft (mo.zero) {
+						case (accum, answer) =>
+							
+						accum |+| answer.point[C];
+						}
 					}
+				
+				convertedStream;
 				}
-			
-			answers;
 			}
 	
 	
 	private def search (
-		root : Variable[A, DomainType],
-		children : List[Variable[A, DomainType]]
+		maybeVariables : SolverError \/ List[Variable[A, DomainType]]
 		)
-		: SolverState[Stream[Seq[Answer[A]]]] =
+		: SolverState[SolverError \/ Stream[Seq[Answer[A]]]] =
 		gets {
 			vs =>
 				
-			implicit val order = new VariableStore.AnswerOrdering[A] (vs);
-			val tree = SolutionTree[A] ();
-			
-			// TOOO: this is a *very* temporary approach, as it hits all nodes!
-			val bruteForce = tree.expand (
-				tree.root,
-				root :: children,
-				new ConstraintPropagation[A, DomainType] (vs.constraints)
-				);
-			val c = vs.answerFilters.foldLeft (Constraint.kleisliUnit[A]) {
-				case (accum, c) =>
+			maybeVariables map {
+				variables =>
 					
-				accum >==> c;
-				}
-			
-			bruteForce.toStream (expected = children.length + 1).filter {
-				candidate =>
-					
-				val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
+				implicit val order = new VariableStore.AnswerOrdering[A] (vs);
+				val tree = SolutionTree[A] ();
 				
-				c.run (args.toMap).isRight;
+				// TOOO: this is a *very* temporary approach, as it hits all nodes!
+				val bruteForce = tree.expand (
+					tree.root,
+					variables,
+					new ConstraintPropagation[A, DomainType] (vs.constraints)
+					);
+				val c = vs.answerFilters.foldLeft (Constraint.kleisliUnit[A]) {
+					case (accum, c) =>
+						
+					accum >==> c;
+					}
+				
+				bruteForce.toStream (expected = variables.length).filter {
+					candidate =>
+						
+					val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
+					
+					c.run (args.toMap).isRight;
+					}
 				}
 			}
 }

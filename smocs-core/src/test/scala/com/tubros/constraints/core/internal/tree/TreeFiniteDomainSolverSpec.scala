@@ -110,6 +110,49 @@ class TreeFiniteDomainSolverSpec
 			answer.head should be === (Vector (Answer ('x, 2), Answer ('y, 8)));
 			}
 	}
+	
+	it should "detect when no variables are provided" in
+	{
+		val problem = Problem (
+			new PolynomialEquation[Int] {
+				def apply = 'a > 'b;
+				}
+			);
+		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
+		val solution = solver {
+			s =>
+				
+			for {
+				_ <- s.add (problem)
+				stream <- s.run[Vector]
+				} yield stream;
+			}
+		
+		solution should be ('left);
+	}
+	
+	it should "detect when variables are referenced but not provided" in
+	{
+		val problem = Problem (
+			new PolynomialEquation[Int] {
+				def apply = 'a > 'b;
+				}
+			);
+		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
+		val domain = FiniteDiscreteDomain (1 to 1000);
+		val solution = solver {
+			s =>
+				
+			for {
+				x <- s.newVar ('x, domain)
+				ys <- s.newArrayVar ('y, 20, domain)
+				_ <- s.add (problem)
+				stream <- s.run[Vector]
+				} yield stream;
+			}
+		
+		solution should be ('left);
+	}
 }
 
 
