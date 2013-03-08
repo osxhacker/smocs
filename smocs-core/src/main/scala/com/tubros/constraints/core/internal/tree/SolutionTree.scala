@@ -56,6 +56,7 @@ final case class SolutionTree[A] (
 	
 	/// Instance Properties
 	lazy val root : LocationType = tree.loc;
+	private implicit val frontierMonoid = frontier.monoid;
 	private val NodeType = SolutionTreeNode;
 	
 	
@@ -81,6 +82,35 @@ final case class SolutionTree[A] (
 				);
 		}
 		
+	
+	/**
+	 * The flatMap method gives the provided '''functor''' a
+	 * [[com.tubros.constraints.core.internal.Frontier]] based on this
+	 * instance and integrates the resultant '''SolutionTree''' into a newly
+	 * created '''SolutionTree'''.  Also, the new '''SolutionTree''' has its
+	 * `focus` set to the merged tree's location.
+	 */
+	def flatMap (
+		functor : Frontier[SolutionTree[A]#NodeType[A]] => SolutionTree[A]
+		)
+		: SolutionTree[A] =
+	{
+		val subTree = functor (frontier);
+		val parentNode = NodeType (subTree.root.getLabel.assignments.init);
+		
+		findNodeUnder (tree.loc, parentNode).fold (this) {
+			node =>
+				
+			val merged = node.insertDownLast (subTree.root.toTree).toTree;
+			
+			copy (
+				tree = merged,
+				focus = node,
+				frontier = frontier |+| subTree.frontier
+				);
+			}
+	}
+	
 	
 	override def prune (location : LocationType) : SolutionTree[A] =
 		copy (tree = location.delete.map (_.toTree) getOrElse (tree));
@@ -205,13 +235,12 @@ final case class SolutionTree[A] (
 	private def findNodeUnder (startingAt : LocationType, node : NodeType[A])
 		: Option[LocationType] =
 	{
-		implicit val boolMonoid = booleanInstance.disjunction;
 		val delta = node.assignments &~ startingAt.getLabel.assignments;
 		
 		def finder (loc : LocationType, assignments : List[Answer[A]])
 			: Option[LocationType] =
 			assignments.isEmpty.fold (
-				Some (loc),
+				Option (loc) filter (_.getLabel === node),
 				loc.findChild {
 					node =>
 						
@@ -228,8 +257,7 @@ object SolutionTree
 {
 	/// Class Imports
 	import collection.immutable.SortedSet
-	import syntax.monoid._
-	import syntax.show._
+	import Scalaz._
 	
 	
 	/// Class Types
@@ -276,7 +304,40 @@ object SolutionTree
 	 * This apply method is provided to enable functional-style creation and
 	 * is defined in terms of the `empty` method.
 	 */
-	def apply[A] () (implicit ao : Ordering[Answer[A]]) = empty[A];
+	def apply[A] ()
+		(implicit ao : Ordering[Answer[A]])
+		: SolutionTree[A] =
+		empty[A];
+	
+	
+	/**
+	 * This version of the apply method allows for convenient '''SolutionTree'''
+	 * creation when given the result of a
+	 * [[com.tubros.constraints.core.internal.Frontier]] `dequeue` operation.
+	 */
+	def apply[A] (root : Option[NodeType[A]], frontier : Frontier[NodeType[A]])
+		(implicit ao : Ordering[Answer[A]])
+		: SolutionTree[A] =
+		root.fold (empty[A]) {
+			node =>
+				
+			val tree = Tree (node);
+			
+			new SolutionTree[A] (tree, tree.loc, frontier);
+			}
+	
+			
+	def apply[A] (
+		variable : Variable[A, DiscreteDomain],
+		valuesFor : SolutionTree[A]#ValueGenerator
+		)
+		(implicit ao : Ordering[Answer[A]])
+		: SolutionTree[A] =
+	{
+		val space = empty[A];
+		
+		space.expand[Option] (space.root, Option (variable), valuesFor);
+	}
 	
 	
 	def empty[A] (implicit ao : Ordering[Answer[A]]) : SolutionTree[A] =
@@ -285,6 +346,21 @@ object SolutionTree
 		
 		new SolutionTree (tree, tree.loc, Frontier.lifo[NodeType[A]]);
 	}
+	
+	
+	/**
+	 * The fromFrontier method creates a '''SolutionTree''' based on the
+	 * next '''NodeType''' provided by the '''frontier'''.
+	 */
+	def fromFrontier[A] (frontier : Frontier[NodeType[A]])
+		(implicit ao : Ordering[Answer[A]])
+		: SolutionTree[A] =
+		(
+			SolutionTree (
+				_ : Option[SolutionTreeNode[A]],
+				_ : Frontier[SolutionTreeNode[A]]
+				)
+		).tupled (frontier.dequeue);
 	
 	
 	object implicits

@@ -34,6 +34,9 @@ sealed trait Frontier[A]
 	def isEmpty : Boolean;
 	
 	
+	def monoid : Monoid[Frontier[A]];
+	
+	
 	/**
 	 * The size method provides the caller with how large the '''Frontier'' is.
 	 */
@@ -77,6 +80,10 @@ final case class LifoFrontier[A] (private[internal] val stack : Stack[A])
 	
 	/// Instance Properties
 	override val isEmpty : Boolean = stack.isEmpty;
+	override val monoid : Monoid[Frontier[A]] =
+		new Monoid[Frontier[A]] with Frontier.RecursiveAppend[A] {
+			lazy val zero : Frontier[A] = Frontier.lifo[A];
+			}
 	override val size : Int = stack.size;
 	
 	
@@ -107,6 +114,11 @@ final case class FifoFrontier[A] (private[internal] val queue : Queue[A])
 	
 	/// Instance Properties
 	override val isEmpty : Boolean = queue.isEmpty;
+	override val monoid : Monoid[Frontier[A]] =
+		new Monoid[Frontier[A]] with Frontier.RecursiveAppend[A] {
+			lazy val zero : Frontier[A] = Frontier.fifo[A];
+			}
+	
 	override val size : Int = queue.size;
 	
 	
@@ -134,7 +146,7 @@ private case class GenericFrontier[A, C[+_]] (
 	private val add : C[A] @> Option[A],
 	private val remove : C[A] @> Option[A]
 	)
-	(implicit ie : IsEmpty[C])
+	(implicit IE : IsEmpty[C], MO : Monoid[C[A]])
 	extends Frontier[A]
 		with FrontierLike[A, GenericFrontier[A, C]]
 {
@@ -143,6 +155,14 @@ private case class GenericFrontier[A, C[+_]] (
 	import syntax.monoid._
 	import syntax.std.boolean._
 	import syntax.std.option._
+	
+	
+	/// Instance Properties
+	override val monoid : Monoid[Frontier[A]] =
+		new Monoid[Frontier[A]] with Frontier.RecursiveAppend[A] {
+			override def zero : Frontier[A] =
+				new GenericFrontier[A, C] (0, mzero[C[A]], add, remove);
+			}
 	
 	
 	override def enqueue (element : A) : GenericFrontier[A, C] =
@@ -184,6 +204,32 @@ object Frontier
 	import Lens._
 	
 	
+	/// Class Types
+	trait RecursiveAppend[A]
+	{
+		/// Self Type Constraints
+		this : Monoid[Frontier[A]] =>
+			
+			
+		override def append (a : Frontier[A], b : => Frontier[A])
+			: Frontier[A] =
+		{
+			lazy val other = b;
+			
+			if (a.isEmpty)
+				other;
+			else if (other.isEmpty)
+				a;
+			else
+			{
+				val (e, f) = other.dequeue;
+				
+				append (a enqueue (e), f);
+			}
+		}
+	}
+	
+	
 	/**
 	 * The apply method allows clients to create a '''Frontier''' instance
 	 * which will use the '''add'' [[scalaz.Lens]] when an element needs to
@@ -213,20 +259,6 @@ object Frontier
 
 	
 	/// Implicit Conversions
-	implicit def frontierFifoMonoid[A] : Monoid[FifoFrontier[A]] =
-		new Monoid[FifoFrontier[A]]
-		{
-			lazy val zero : FifoFrontier[A] = fifo[A];
-			
-			override def append (a : FifoFrontier[A], b : => FifoFrontier[A])
-				: FifoFrontier[A] =
-				if (a.isEmpty)
-					b;
-				else
-					FifoFrontier[A] (a.queue ++ b.queue);
-		}
-	
-	
 	implicit def frontierLifoMonoid[A] : Monoid[LifoFrontier[A]] =
 		new Monoid[LifoFrontier[A]]
 		{

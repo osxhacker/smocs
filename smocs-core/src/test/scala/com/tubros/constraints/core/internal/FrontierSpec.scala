@@ -96,18 +96,23 @@ class FrontierSpec
 	
 	it should "conform to the Monoid laws" in
 	{
-		implicit object FifoEqual
-			extends Equal[FifoFrontier[Int]]
+		implicit object FrontierEqual
+			extends Equal[Frontier[Int]]
 		{
-			override def equal (a : FifoFrontier[Int], b : FifoFrontier[Int]) =
-				a.queue.to[List] == b.queue.to[List];
+			override def equal (a : Frontier[Int], b : Frontier[Int]) =
+				if (a.isEmpty && b.isEmpty)
+					true;
+				else if (a.dequeue._1 != b.dequeue._1)
+					false;
+				else
+					equal (a.dequeue._2, b.dequeue._2);
 		}
 		
 		val fifo = Frontier.fifo[Int].enqueue (1).enqueue (2);
 		val more = Frontier.fifo[Int].enqueue (3).enqueue (4);
 		val someMore = Frontier.fifo[Int].enqueue (5);
-		val monoid = implicitly[scalaz.Monoid[FifoFrontier[Int]]];
-		val laws = monoid.monoidLaw;
+		val laws = fifo.monoid.monoidLaw;
+		implicit val m = fifo.monoid;
 		
 		laws.leftIdentity (fifo) must be === (true);
 		laws.rightIdentity (fifo) must be === (true);

@@ -121,9 +121,28 @@ class SolutionTreeSpec
 		expanded.frontier should be ('empty);
 	}
 	
+	it should "support flatMap operations" in
+	{
+		val identitySelector :
+			(Iterable[Answer[Int]], Variable[Int, DiscreteDomain])
+				=> Variable[Int, DiscreteDomain] =
+			(ia, variable) => variable;
+			
+		val expanded = SolutionTree[Int] (
+			DiscreteVariable ('a, FiniteDiscreteDomain (1, 2, 3)),
+			valuesFor = identitySelector
+			);
+		
+		expanded.frontier should not be ('empty);
+		
+		val mapped = expanded flatMap (SolutionTree.fromFrontier[Int]);
+		
+		mapped.root.getLabel should be === (expanded.root.getLabel);
+		mapped.root.hasChildren should be === (true);
+	}
+	
 	it should "be able to iteratively search" in
 	{
-		val empty = SolutionTree[Int] ();
 		val variables = List[Variable[Int, DiscreteDomain]] (
 			DiscreteVariable ('a, FiniteDiscreteDomain (1, 2, 3)),
 			DiscreteVariable ('b, FiniteDiscreteDomain (10, 20)),
@@ -131,9 +150,8 @@ class SolutionTreeSpec
 			);
 		val selector : SolutionTree[Int]#ValueGenerator =
 			(bound, variable) => variable;
-		val expanded = empty.expand (
-			empty.root,
-			variables.headOption,
+		val expanded = SolutionTree[Int] (
+			variables.head,
 			valuesFor = selector
 			);
 		
@@ -141,10 +159,12 @@ class SolutionTreeSpec
 		expanded.frontier.dequeue._1 should be ('defined);
 		expanded.frontier.dequeue._1.get.assignments.size should be === (1);
 		
-		val secondLevel = expanded.search (
-			variables,
-			(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (1)),
-			selector
+		val secondLevel = Some (expanded) flatMap (
+			_.search (
+				variables,
+				(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (1)),
+				selector
+				)
 			);
 		
 		secondLevel should be ('defined);
@@ -159,10 +179,12 @@ class SolutionTreeSpec
 			space.frontier.dequeue._1.get.assignments.size should be === (2);
 			}
 		
-		val thirdLevel = secondLevel.get.search (
-			variables,
-			(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (2)),
-			selector
+		val thirdLevel = secondLevel flatMap (
+			_.search (
+				variables,
+				(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (2)),
+				selector
+				)
 			);
 		
 		thirdLevel should be ('defined);
