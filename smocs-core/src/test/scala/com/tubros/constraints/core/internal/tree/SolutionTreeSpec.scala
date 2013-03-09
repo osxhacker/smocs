@@ -159,43 +159,38 @@ class SolutionTreeSpec
 		expanded.frontier.dequeue._1 should be ('defined);
 		expanded.frontier.dequeue._1.get.assignments.size should be === (1);
 		
-		val secondLevel = Some (expanded) flatMap (
-			_.search (
+		val secondLevel = expanded flatMap {
+			node =>
+				
+			SolutionTree.fromFrontier (node).search (
 				variables,
 				(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (1)),
 				selector
-				)
-			);
-		
-		secondLevel should be ('defined);
-		
-		secondLevel foreach {
-			space =>
-				
-			space.focus must not be === (null);
-			space.focus.hasChildren should be === (true);
-			space.frontier should not be ('empty);
-			space.frontier.dequeue._1 should be ('defined);
-			space.frontier.dequeue._1.get.assignments.size should be === (2);
+				).getOrElse (SolutionTree.empty[Int])
 			}
 		
-		val thirdLevel = secondLevel flatMap (
-			_.search (
+		secondLevel should not be === (null);
+		
+		secondLevel.focus must not be === (null);
+		secondLevel.focus.hasChildren should be === (true);
+		secondLevel.root.firstChild should be ('defined);
+		secondLevel.root.firstChild.map (_.rights.size) should be === (Some (2));
+		secondLevel.frontier should not be ('empty);
+		secondLevel.frontier.dequeue._1 should be ('defined);
+		secondLevel.frontier.dequeue._1.get.assignments.size should be === (2);
+		
+		val thirdLevel = secondLevel flatMap {
+			SolutionTree.fromFrontier (_).search (
 				variables,
 				(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (2)),
 				selector
-				)
-			);
-		
-		thirdLevel should be ('defined);
-		thirdLevel foreach {
-			space =>
-				
-			space.focus must not be === (null);
-			space.focus.hasChildren should be === (true);
-			space.frontier should not be ('empty);
-			space.frontier.dequeue._1 should be ('defined);
-			space.frontier.dequeue._1.get.assignments.size should be === (3);
+				).getOrElse (SolutionTree.empty[Int])
 			}
+		
+		thirdLevel.focus must not be === (null);
+		thirdLevel.focus.hasChildren should be === (true);
+		thirdLevel.frontier should not be ('empty);
+		thirdLevel.frontier.dequeue._1 should be ('defined);
+		thirdLevel.frontier.dequeue._1.get.assignments.size should be === (3);
 	}
 }

@@ -3,6 +3,9 @@
  */
 package com.tubros.constraints.core.internal
 
+import scala.annotation._
+import scala.collection.generic.CanBuildFrom
+
 import scala.collection.immutable.{
 	Stack,
 	Queue
@@ -34,6 +37,10 @@ sealed trait Frontier[A]
 	def isEmpty : Boolean;
 	
 	
+	/**
+	 * Each '''Frontier''' must be able to satisfy the [[scalaz.Monoid]] laws
+	 * and, as such, expose this through the monoid method.
+	 */
 	def monoid : Monoid[Frontier[A]];
 	
 	
@@ -41,6 +48,14 @@ sealed trait Frontier[A]
 	 * The size method provides the caller with how large the '''Frontier'' is.
 	 */
 	def size : Int;
+	
+	
+	/**
+	 * The toStream method provides collaborators with a collection-like
+	 * interaction to the '''Frontier''' ''without'' imposing a particular
+	 * representation assumption.
+	 */
+	def toStream : Stream[A];
 }
 
 
@@ -81,23 +96,36 @@ final case class LifoFrontier[A] (private[internal] val stack : Stack[A])
 	/// Instance Properties
 	override val isEmpty : Boolean = stack.isEmpty;
 	override val monoid : Monoid[Frontier[A]] =
-		new Monoid[Frontier[A]] with Frontier.RecursiveAppend[A] {
+		new Monoid[Frontier[A]] with Frontier.StreamAppend[A] {
 			lazy val zero : Frontier[A] = Frontier.lifo[A];
 			}
+	
 	override val size : Int = stack.size;
 	
 	
 	override def enqueue (element : A) : LifoFrontier[A] =
 		copy (stack = stack.push (element));
 	
+	
+	/**
+	 * This implementation of the enqueue method deserves special mention, as
+	 * it uses the `++:` operator on the managed
+	 * [[scala.collection.immutable.Stack]].  This allows the given
+	 * '''elements''' to retain their logical order when they are placed at the
+	 * top of the [[scala.collection.immutable.Stack]].
+	 */
 	override def enqueue (elements : Traversable[A]) : LifoFrontier[A] =
-		copy (stack = stack.pushAll (elements));
+		copy (stack = elements ++: stack);
+	
 	
 	override def dequeue : (Option[A], LifoFrontier[A]) =
 		stack.isEmpty.fold (
 			(None, this),
 			(stack.headOption, copy (stack = stack.pop))
 			);
+	
+	
+	override def toStream : Stream[A] = stack.toStream;
 }
 
 
@@ -115,9 +143,10 @@ final case class FifoFrontier[A] (private[internal] val queue : Queue[A])
 	/// Instance Properties
 	override val isEmpty : Boolean = queue.isEmpty;
 	override val monoid : Monoid[Frontier[A]] =
-		new Monoid[Frontier[A]] with Frontier.RecursiveAppend[A] {
+		new Monoid[Frontier[A]] with Frontier.StreamAppend[A] {
 			lazy val zero : Frontier[A] = Frontier.fifo[A];
 			}
+	
 	
 	override val size : Int = queue.size;
 	
@@ -125,8 +154,10 @@ final case class FifoFrontier[A] (private[internal] val queue : Queue[A])
 	override def enqueue (element : A) : FifoFrontier[A] =
 		copy (queue = queue.enqueue (element));
 	
+	
 	override def enqueue (elements : Traversable[A]) : FifoFrontier[A] =
 		copy (queue = queue ++ elements);
+	
 	
 	override def dequeue : (Option[A], FifoFrontier[A]) =
 		queue.isEmpty.fold (
@@ -137,6 +168,9 @@ final case class FifoFrontier[A] (private[internal] val queue : Queue[A])
 				copy (queue = q);
 				}
 			);
+	
+	
+	override def toStream : Stream[A] = queue.toStream;
 }
 
 
@@ -159,7 +193,7 @@ private case class GenericFrontier[A, C[+_]] (
 	
 	/// Instance Properties
 	override val monoid : Monoid[Frontier[A]] =
-		new Monoid[Frontier[A]] with Frontier.RecursiveAppend[A] {
+		new Monoid[Frontier[A]] with Frontier.StreamAppend[A] {
 			override def zero : Frontier[A] =
 				new GenericFrontier[A, C] (0, mzero[C[A]], add, remove);
 			}
@@ -175,6 +209,7 @@ private case class GenericFrontier[A, C[+_]] (
 			
 			q.enqueue (e);
 			}
+	
 		
 	override def dequeue : (Option[A], GenericFrontier[A, C]) =
 		isEmpty fold (
@@ -193,6 +228,20 @@ private case class GenericFrontier[A, C[+_]] (
 	
 		
 	override def isEmpty : Boolean = IsEmpty[C].isEmpty (container);
+	
+	
+	override def toStream : Stream[A] =
+	{
+		def loop[T] (oa : Option[T], frontier : GenericFrontier[T, C])
+			: Stream[T] =
+			oa.fold (Stream.empty[T]) {
+				a =>
+					
+				a #:: (loop[T] _).tupled (frontier.dequeue);
+				}
+		
+		(loop[A] _).tupled (dequeue);
+	}
 }
 
 
@@ -205,7 +254,7 @@ object Frontier
 	
 	
 	/// Class Types
-	trait RecursiveAppend[A]
+	trait StreamAppend[A]
 	{
 		/// Self Type Constraints
 		this : Monoid[Frontier[A]] =>
@@ -213,20 +262,10 @@ object Frontier
 			
 		override def append (a : Frontier[A], b : => Frontier[A])
 			: Frontier[A] =
-		{
-			lazy val other = b;
-			
 			if (a.isEmpty)
-				other;
-			else if (other.isEmpty)
-				a;
+				b;
 			else
-			{
-				val (e, f) = other.dequeue;
-				
-				append (a enqueue (e), f);
-			}
-		}
+				a.enqueue (b.toStream);
 	}
 	
 	
@@ -248,31 +287,17 @@ object Frontier
 	 * The fifo method creates a '''Frontier''' where an `enqueue` invocation
 	 * results in the element being the first available for `dequeue`.
 	 */
-	def fifo[A] : FifoFrontier[A] = FifoFrontier[A] (Queue.empty[A]);
+	def fifo[A] : Frontier[A] = FifoFrontier[A] (Queue.empty[A]);
 	
 	
 	/**
 	 * The lifo method creates a '''Frontier''' where an `enqueue` invocation
 	 * results in the element being the last available for `dequeue`.
 	 */
-	def lifo[A] : LifoFrontier[A] = LifoFrontier[A] (Stack.empty[A]);
+	def lifo[A] : Frontier[A] = LifoFrontier[A] (Stack.empty[A]);
 
 	
 	/// Implicit Conversions
-	implicit def frontierLifoMonoid[A] : Monoid[LifoFrontier[A]] =
-		new Monoid[LifoFrontier[A]]
-		{
-			lazy val zero : LifoFrontier[A] = lifo[A];
-			
-			override def append (a : LifoFrontier[A], b : => LifoFrontier[A])
-				: LifoFrontier[A] =
-				if (a.isEmpty)
-					b;
-				else
-					LifoFrontier[A] (a.stack.pushAll (b.stack));
-		}
-	
-	
 	implicit def frontierShow[A] : Show[Frontier[A]] =
 		new Show[Frontier[A]]
 		{
@@ -283,8 +308,8 @@ object Frontier
 			
 			/// Instance Properties
 			private val maxToPrint = 3;
-			
-			
+
+
 			override def show (frontier : Frontier[A]) : Cord =
 				Cord ("Frontier(") ++
 				mkCord (Cord (", "), nodes (frontier, 0) : _ *) ++

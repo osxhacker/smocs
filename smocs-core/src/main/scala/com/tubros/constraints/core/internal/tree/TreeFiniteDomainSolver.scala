@@ -123,9 +123,8 @@ class TreeFiniteDomainSolver[A] (
 		MS.gets {
 			vs =>
 				
-			val tree = SolutionTree[A] () (
-				new VariableStore.AnswerOrdering[A] (vs)
-				);
+			implicit val ordering = new VariableStore.AnswerOrdering[A] (vs);
+			val tree = SolutionTree[A] ();
 			
 			// TOOO: this is a *very* temporary approach, as it hits all nodes!
 			val bruteForce = tree.expand (

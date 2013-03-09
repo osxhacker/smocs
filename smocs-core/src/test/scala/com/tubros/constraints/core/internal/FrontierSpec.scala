@@ -26,11 +26,7 @@ class FrontierSpec
 	extends ProjectSpec
 {
 	/// Class Imports
-	import scalaz.std.AllInstances._
-	import scalaz.std.boolean._
-	import scalaz.syntax.monoid._
-	import scalaz.syntax.std.boolean._
-	import scalaz.syntax.std.option._
+	import Scalaz._
 	import Lens._
 	
 	
@@ -55,7 +51,7 @@ class FrontierSpec
 		val fifo = Frontier (
 			add = lensu[Vector[String], Option[String]] (
 				get = _.headOption,
-				set = (l, e) => e.fold (l) (_ +: l)
+				set = (l, e) => e.fold (l) (l :+ _)
 				),
 			remove = lensu[Vector[String], Option[String]] (
 				get = _.headOption,
@@ -64,6 +60,25 @@ class FrontierSpec
 			);
 		
 		fifo must not be === (null);
+	}
+	
+	it should "be able to stream its contents" in
+	{
+		val fifo = Frontier (
+			add = lensu[Vector[String], Option[String]] (
+				get = _.headOption,
+				set = (l, e) => e.fold (l) (l :+ _)
+				),
+			remove = lensu[Vector[String], Option[String]] (
+				get = _.headOption,
+				set = (l, _) => l.tail
+				)
+			);
+		val withThree = fifo.enqueue ("a").enqueue ("b").enqueue ("c");
+		val contents = withThree.toStream.toList;
+		
+		contents should have size (3);
+		contents should be === (List ("a", "b", "c"));
 	}
 	
 	it should "satisfy LIFO expectations when enqueuing" in
@@ -100,12 +115,7 @@ class FrontierSpec
 			extends Equal[Frontier[Int]]
 		{
 			override def equal (a : Frontier[Int], b : Frontier[Int]) =
-				if (a.isEmpty && b.isEmpty)
-					true;
-				else if (a.dequeue._1 != b.dequeue._1)
-					false;
-				else
-					equal (a.dequeue._2, b.dequeue._2);
+				a.toStream.toList == b.toStream.toList;
 		}
 		
 		val fifo = Frontier.fifo[Int].enqueue (1).enqueue (2);
@@ -117,5 +127,20 @@ class FrontierSpec
 		laws.leftIdentity (fifo) must be === (true);
 		laws.rightIdentity (fifo) must be === (true);
 		laws.associative (fifo, more, someMore) must be === (true);
+	}
+	
+	it should "retain ordering when using mappend" in
+	{
+		val five = Frontier.lifo[Int].enqueue (List.range (0, 5));
+		implicit val m = five.monoid;
+		val expected = List (0, 1, 2, 3, 4);
+		val copied = Frontier.lifo[Int].mappend (five);
+		
+		copied.toStream.toList should be === (expected);
+		
+		val another = Frontier.lifo[Int].enqueue (10).enqueue (20);
+		val copiedAgain = copied |+| another;
+		
+		copiedAgain.toStream.toList should be === (List (20, 10) ::: expected);
 	}
 }
