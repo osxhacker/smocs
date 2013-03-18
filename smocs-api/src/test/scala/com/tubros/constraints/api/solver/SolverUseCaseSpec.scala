@@ -41,5 +41,6 @@ object SolverUseCaseSpec
 	trait PolynomialEquation[A]
 		extends Equation[A]
 			with ArithmeticSupport[A]
+			with DerivedValueSupport[A]
 			with RelationalSupport[A]
 }

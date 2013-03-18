@@ -59,12 +59,12 @@ trait RelationalConstraint[A]
 	
 
 	abstract override protected def interpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 		env => (super.interpreter (env) orElse relationalInterpreter (env));
 			
 		
 	private def relationalInterpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 	{
 		env =>
 			
@@ -90,7 +90,7 @@ trait RelationalConstraint[A]
 	private def evalRelational (env : Env[A])
 		(lhs : Expression[A], rhs : Expression[A])
 		(condition : (Boolean, Boolean) => Boolean)
-		: Result[A] =
+		: InterpretedResult[A] =
 	{
 		val reversed = for {
 			x <- interpreter (env) (lhs).swap

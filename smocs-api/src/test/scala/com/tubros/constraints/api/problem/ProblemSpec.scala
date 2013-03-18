@@ -26,7 +26,7 @@ class ProblemSpec
 	"A Problem" should "require at least one Equation" in
 	{
 		val problem = Problem (
-			new Equation[Int] {
+			new Equation[Int] with DerivedValueSupport[Int] {
 				def apply = 'x := 99;
 				}
 			);

@@ -10,7 +10,9 @@ import scala.language.{
 	}
 
 import ast.{
+	Assignment,
 	Constant,
+	DerivedVariable,
 	VariableUse
 	}
 
@@ -23,7 +25,7 @@ import ast.{
  * 
  * {{{
  * val xBeforeY = new Equation {
- *		def apply = 'x < 'y
+ *		def apply = 'x < 'y;
  *		};
  * }}}
  *
@@ -42,9 +44,20 @@ trait Equation[T]
 	
 	/**
 	 * The arity property lets callers know how many ''distinct'' `variables`
-	 * are involved in the definition of this '''Equation'''.
+	 * are involved in the definition of this '''Equation'''.  These include
+	 * both references and `derived`
+	 * [[com.tubros.constraints.api.VariableName]].
 	 */
-	lazy val arity : Int = variables.size;
+	lazy val arity : Int = variables.size + derived.size;
+	
+	/**
+	 * The derived property indicates whether or not this '''Equation'''
+	 * defines a ''derived value''.  Semantically, only one
+	 * [[com.tubros.constraints.api.VariableName]] can be defined in an
+	 * '''Equation''', hence it's type is an [[scala.Option]].
+	 */
+	lazy val derived : Option[VariableName] =
+		derivedDefinition (expression);
 	
 	/**
 	 * The variables property contains the [[scala.collection.Set]] of
@@ -59,6 +72,17 @@ trait Equation[T]
 	 * which may conflict with formulae definition.
 	 */
 	def lit[T] (value : T) = Constant[T] (value);
+	
+	
+	private def derivedDefinition (expr : Expression[T])
+		: Option[VariableName] =
+		expr match {
+			case Assignment (DerivedVariable (derived), _) =>
+				Some (derived);
+				
+			case _ =>
+				None;
+			}
 	
 	
 	private def findVariables (expr : Expression[T]) : List[VariableName] =

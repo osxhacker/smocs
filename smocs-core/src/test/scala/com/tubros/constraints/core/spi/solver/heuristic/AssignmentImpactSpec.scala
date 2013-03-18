@@ -20,6 +20,7 @@ import com.tubros.constraints.api._
 import com.tubros.constraints.core.internal.BuiltinEquationConstraintCategories
 
 import problem._
+import runtime._
 import solver._
 
 
@@ -36,6 +37,7 @@ import solver._
 class AssignmentImpactSpec
 	extends ProjectSpec
 		with BuiltinEquationConstraintCategories
+		with ConstraintTestingSupport
 {
 	/// Class Imports
 	import algebraic._
@@ -73,19 +75,30 @@ class AssignmentImpactSpec
 			def apply = 'a > 0 && 'a < 5;
 			}
 		);
-	val constraints = problem.equations.map (canConstrain.constrains).list;
+	
+	object TestConstraints
+		extends TestConstraintProvider[Int]
+			with SymbolTableProvider
+	{
+		val constraints = problem.equations.map (canConstrain.constrains).list.to[Set];
+		val symbols = variables.foldLeft (SymbolTable.empty) {
+			case (st, v) =>
+				
+			st addSymbol (v.name);
+			}
+	}
 	
 	
 	"The AssignmentImpact heuristic" should "gracefully deal with empty sets" in
 	{
-		val assessor = AssignmentImpact (emptyVariables, constraints);
+		val assessor = AssignmentImpact (emptyVariables, TestConstraints);
 		
 		assessor (Seq.empty[Answer[Int]], alpha, 0) should be === (1.0);
 	}
 	
 	it should "prefer an assignment which does not reduce the domain" in
 	{
-		val assessor = AssignmentImpact (variables, constraints);
+		val assessor = AssignmentImpact (variables, TestConstraints);
 		val noImpact = assessor (Seq (Answer ('a -> 2)), beta, 2);
 		val impactsDomain = assessor (Seq (Answer ('a -> 2)), beta, 3);
 		
@@ -95,7 +108,7 @@ class AssignmentImpactSpec
 	
 	it should "calculate the impact of a variable" in
 	{
-		val assessor = AssignmentImpact (variables, constraints);
+		val assessor = AssignmentImpact (variables, TestConstraints);
 		val impactOfAlpha = assessor.ofVariable (alpha);
 		val impactOfBeta = assessor.ofVariable (beta);
 		
@@ -114,9 +127,17 @@ class AssignmentImpactSpec
 			);
 		val x = DiscreteVariable ('x, FiniteDiscreteDomain (1 to 1000));
 		val y = DiscreteVariable ('y, FiniteDiscreteDomain (1 to 1000));
+		val provider = new TestConstraintProvider[Int] with SymbolTableProvider {
+			
+			val constraints = xIsMostImpactedProblem.equations.map (
+				canConstrain.constrains
+				).list.to[Set];
+			
+			val symbols = SymbolTable.empty addSymbol ('x) addSymbol ('y);
+			}
 		val assessor = AssignmentImpact (
 			Vector[Variable[Int, DiscreteDomain]] (x, y),
-			xIsMostImpactedProblem.equations.map (canConstrain.constrains)
+			provider
 			);
 		
 		assessor.ofVariable (x) should be > (assessor.ofVariable (y));

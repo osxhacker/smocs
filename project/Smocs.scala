@@ -47,7 +47,7 @@ object Smocs
 	lazy val buildSettings = Seq (
 		organization := "com.tubros",
 		version := "0.5-SNAPSHOT",
-		scalaVersion := "2.10.0"
+		scalaVersion := "2.10.1"
 		);
 
 	/// sbt settings applicable to any build
@@ -171,6 +171,6 @@ object Dependencies
 
 	lazy val smocs = compile;
 	lazy val api = compile ++ test;
-	lazy val core = compile ++ Graph.core ++ test;
+	lazy val core = compile ++ Graph.core ++ Scalaz.iteratee ++ test;
 }
 

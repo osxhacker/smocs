@@ -41,21 +41,20 @@ trait AbstractInterpretedConstraint[A]
 	override val variables = equation.variables;
 	
 	
-	override def apply (input : Map[VariableName, A])
-		: SolverError \/ Map[VariableName, A] =
+	override def apply (input : Map[VariableName, A]) : ConstraintResult[A] =
 		variablesUsed (input) flatMap (evaluate);
 		
 
 	override protected def interpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 		env => _ match {
-			case VariableUse (x) => Result.right (env (x).some);
-			case Constant (c) => Result.right (c.some);
+			case VariableUse (x) => InterpretedResult.right (env (x).some);
+			case Constant (c) => InterpretedResult.right (c.some);
 			}
 		
 		
 	private def variablesUsed (all : Map[VariableName, A])
-		: SolverError \/ Map[VariableName, A] =
+		: ConstraintResult[A] =
 	{
 		val missing = variables &~ all.keySet;
 		
@@ -67,7 +66,7 @@ trait AbstractInterpretedConstraint[A]
 	
 	
 	private def evaluate (vars : Map[VariableName, A])
-		: SolverError \/ Map[VariableName, A] =
+		: ConstraintResult[A] =
 		interpreter (vars) (equation.expression).run match {
 			case Some (-\/ (true)) => vars.right;
 			case Some (\/- (_)) => vars.right;

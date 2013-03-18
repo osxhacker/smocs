@@ -13,6 +13,10 @@ import com.tubros.constraints.api.solver.{
 	}
 import com.tubros.constraints.core.spi.solver.Constraint
 import com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact
+import com.tubros.constraints.core.spi.solver.runtime.{
+	ConstraintProvider,
+	SymbolTableProvider
+	}
 
 
 /**
@@ -30,9 +34,12 @@ import com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact
  */
 abstract class VariableRankingPolicy[A : Equal]
 {
-	def apply[N[_] : Foldable] : N[Constraint[A]] =>
-		List[Variable[A, DiscreteDomain]] =>
-		List[Variable[A, DiscreteDomain]];
+	/// Class Types
+	type ProviderType = ConstraintProvider[A] with SymbolTableProvider
+	
+	
+	def apply (provider : ProviderType) :
+		List[Variable[A, DiscreteDomain]] => List[Variable[A, DiscreteDomain]];
 		
 		
 	def andThen (next : VariableRankingPolicy[A]) : VariableRankingPolicy[A] =
@@ -50,10 +57,9 @@ final case class CompositeRanking[A : Equal] (
 	)
 	extends VariableRankingPolicy[A]
 {
-	override def apply[N[_] : Foldable] : N[Constraint[A]] =>
-		List[Variable[A, DiscreteDomain]] =>
-		List[Variable[A, DiscreteDomain]] =
-		c => head[N].apply (c) andThen tail[N].apply (c);
+	override def apply (provider : ProviderType) :
+		List[Variable[A, DiscreteDomain]] => List[Variable[A, DiscreteDomain]] =
+		head (provider) andThen tail (provider);
 }
 
 
@@ -63,14 +69,14 @@ sealed trait Score
 	import Scalaz._
 	
 	
-	def score[A : Equal, N[_] : Foldable] (
-		constraints : N[Constraint[A]],
+	def score[A : Equal] (
+		provider : VariableRankingPolicy[A]#ProviderType,
 		variables : List[Variable[A, DiscreteDomain]],
 		subjects : List[Variable[A, DiscreteDomain]]
 		)
 		: List[(Double, Variable[A, DiscreteDomain])] =
 	{
-		val assess = AssignmentImpact (variables, constraints).ofVariable _;
+		val assess = AssignmentImpact (variables, provider).ofVariable _;
 		val impacts = subjects.fpair.map {
 			paired =>
 			
@@ -90,11 +96,9 @@ final case class ImpactRankingPolicy[A : Equal] ()
 	import Scalaz._
 	
 	
-	override def apply[N[_] : Foldable] : N[Constraint[A]] =>
-		List[Variable[A, DiscreteDomain]] =>
-		List[Variable[A, DiscreteDomain]] =
-		constraints => available =>
-			score (constraints, available, available).map (_._2);
+	override def apply (provider : ProviderType) :
+		List[Variable[A, DiscreteDomain]] => List[Variable[A, DiscreteDomain]] =
+		available => score (provider, available, available).map (_._2);
 }
 
 
@@ -106,13 +110,12 @@ final case class PreferSmallerDomain[A : Equal] ()
 	import Scalaz._
 	
 	
-	override def apply[N[_] : Foldable] : N[Constraint[A]] =>
-		List[Variable[A, DiscreteDomain]] =>
-		List[Variable[A, DiscreteDomain]] =
-		constraints => available => {
+	override def apply (provider : ProviderType) :
+		List[Variable[A, DiscreteDomain]] => List[Variable[A, DiscreteDomain]] =
+		available => {
 			available match {
 				case (first :: second :: tail)
-					if (sameImpact (constraints, available, first, second))
+					if (sameImpact (provider, available, first, second))
 					=>
 						
 					(first :: second :: Nil).sortWith {
@@ -127,15 +130,15 @@ final case class PreferSmallerDomain[A : Equal] ()
 			}
 		
 		
-	private def sameImpact[N[_] : Foldable] (
-		constraints : N[Constraint[A]],
+	private def sameImpact (
+		provider : ProviderType,
 		available : List[Variable[A, DiscreteDomain]],
 		a : Variable[A, DiscreteDomain],
 		b : Variable[A, DiscreteDomain]
 		)
 		: Boolean =
 	{
-		val scores = score (constraints, available, a :: b :: Nil).map (_._1);
+		val scores = score (provider, available, a :: b :: Nil).map (_._1);
 		
 		return (scores (0) === scores (1));
 	}

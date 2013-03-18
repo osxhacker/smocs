@@ -11,6 +11,11 @@ import com.tubros.constraints.api._
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
 
+import runtime.{
+	ConstraintProvider,
+	SymbolTableProvider
+	}
+
 
 /**
  * The '''AssignmentImpact''' type is a heuristic which determines how much a
@@ -26,11 +31,10 @@ import com.tubros.constraints.core.spi.solver._
  */
 case class AssignmentImpact[
 	A : Equal,
-	M[_] : Foldable : Functor,
-	N[_] : Foldable
+	M[_] : Foldable : Functor
 	] (
 		val variables : M[Variable[A, DiscreteDomain]],
-		val constraints : N[Constraint[A]]
+		val provider : ConstraintProvider[A] with SymbolTableProvider
 		)
 {
 	/// Class Imports
@@ -42,7 +46,8 @@ case class AssignmentImpact[
 		EstimatedSearchSpace (variables map (_.domain))
 		) filterNot (_ === 0L);
 	val propagator = ConstraintPropagation[A, DiscreteDomain] (
-		constraints.toSet
+		provider,
+		provider.symbols
 		);
 	
 	

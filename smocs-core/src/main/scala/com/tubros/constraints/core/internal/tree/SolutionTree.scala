@@ -51,10 +51,11 @@ final case class SolutionTree[A] (
 	/// Class Types
 	override type LocationType = TreeLoc[NodeType[A]]
 	override type NodeType[T] = SolutionTreeNode[T]
-	type TreeType[T] = Tree[SolutionTreeNode[T]]
+	type TreeType[T] = Tree[NodeType[T]]
 	
 	
 	/// Instance Properties
+	lazy val isEmpty : Boolean = tree.rootLabel.isEmpty && frontier.isEmpty;
 	lazy val root : LocationType = tree.loc;
 	private implicit val frontierMonoid = frontier.monoid;
 	private val NodeType = SolutionTreeNode;
@@ -67,21 +68,18 @@ final case class SolutionTree[A] (
 		)
 		(implicit fm : Foldable[M])
 		: SolutionTree[A] =
-		{
-			val (subTree, newFrontier) = expander (
-				location,
-				frontier,
-				variables.toList,
-				valuesFor
-				);
-			
-			copy (
-				tree = subTree.fold (tree) (_.toTree),
-				focus = subTree.getOrElse (location),
-				frontier = newFrontier
-				);
-		}
-		
+		expander (location, frontier, variables.toList, valuesFor) match {
+			case Some ((subTree, newFrontier)) =>
+				copy (
+					tree = subTree.toTree,
+					focus = subTree,
+					frontier = newFrontier
+					);
+				
+			case None =>
+				this;
+			}
+	
 	
 	/**
 	 * The flatMap method gives the provided '''functor''' a
@@ -96,8 +94,16 @@ final case class SolutionTree[A] (
 		: SolutionTree[A] =
 	{
 		val subTree = functor (frontier);
+		/// A functor which returns an empty root node will not be merged
+		/// into this SolutionTree.
+		val insertionSpot =
+			Some (subTree.tree).filterNot (_.rootLabel.isEmpty).flatMap {
+				newTree =>
+					
+				findNodeUnder (root, newTree.rootLabel);
+			}
 		
-		findNodeUnder (root, subTree.tree.rootLabel).fold (this) {
+		insertionSpot.fold (this) {
 			node =>
 				
 			val merged = node.setTree (subTree.root.toTree).toTree;
@@ -162,10 +168,10 @@ final case class SolutionTree[A] (
 		vars : List[VariableType],
 		valuesFor : ValueGenerator
 		)
-		: (Option[LocationType], Frontier[NodeType[A]]) =
+		: Option[(LocationType, Frontier[NodeType[A]])] =
 		vars match {
 			case Nil =>
-				(None, frontier);
+				None;
 				
 			case last :: Nil =>
 				val allowedValues = valuesFor (
@@ -176,11 +182,11 @@ final case class SolutionTree[A] (
 				val (node, newFrontier) = allowedValues.foldLeft ((parent, frontier)) {
 					case ((parent, frontier), value) =>
 						
-					createChildNode (parent, last, value) :-> (frontier.enqueue);
+					createChildNode (parent, last, value) :-> frontier.enqueue;
 					}
 				
 				/// We only propagate changes if any were introduced
-				(node.hasChildren.option (node), newFrontier);
+				node.hasChildren.option ((node, newFrontier));
 				
 			case intermediary :: tail =>
 				val allowedValues = valuesFor (
@@ -188,10 +194,10 @@ final case class SolutionTree[A] (
 					intermediary
 					).domain;
 				
-				allowedValues.foldLeft ((parent.some, frontier)) {
-					case ((Some (prevParent), prevFrontier), value) =>
+				allowedValues.foldLeft ((parent, frontier)) {
+					case ((prevParent, prevFrontier), value) =>
 						
-					val (updatedParent, newFrontier) = expander (
+					val child = expander (
 						createChildNode (
 							prevParent,
 							intermediary,
@@ -203,13 +209,12 @@ final case class SolutionTree[A] (
 						);
 					
 					/// As with leaf generation, only propagate changes if there
-					(
-						updatedParent.flatMap (_.parent).orElse {
-							Some (prevParent)
-							},
-						newFrontier
-					);
-					}
+					child.map {
+						p =>
+							
+						((_ : LocationType).parent.get) <-: p
+						} | (prevParent, prevFrontier);
+					}.some.filter (_._1.hasChildren)
 			}
 	
 	
@@ -220,9 +225,7 @@ final case class SolutionTree[A] (
 		)
 		: (LocationType, NodeType[A]) =
 	{
-		val node = NodeType (
-			 parent.getLabel.assignments + Answer (variable.name, value)
-			);
+		val node = parent.getLabel :+ Answer (variable.name, value);
 		
 		(
 			parent.insertDownLast (node.leaf).parent.get,
@@ -266,23 +269,6 @@ object SolutionTree
 	/// Class Types
 	type NodeType[A] = SolutionTreeNode[A]
 	type TreeType[A] = Tree[NodeType[A]]
-	
-	
-	case class SolutionTreeNode[A] (
-		override val assignments : SortedSet[Answer[A]]
-		)
-		extends SolutionSpace.Node[A]
-	
-	object SolutionTreeNode
-	{
-		implicit def equalNode[A] : Equal[SolutionTreeNode[A]] = Equal.equalA;
-		
-		
-		implicit def showNode[A] : Show[SolutionTreeNode[A]] =
-			new Show[SolutionTreeNode[A]] {
-				override def shows (n : SolutionTreeNode[A]) = n.toString;
-				}
-	}
 	
 	
 	class ShowSolutionTree[A : Show]

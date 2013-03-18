@@ -40,7 +40,8 @@ trait Constraint[A]
 	
 	
 	/// Class Types
-	type Env[A] = Map[VariableName, A]
+	type ConstraintResult[+X] = SolverError \/ Env[X]
+	type Env[+A] = Map[VariableName, A]
 	
 	
 	/// Instance Properties
@@ -51,7 +52,7 @@ trait Constraint[A]
 	 * The apply method transforms a set of variables by constraining their
 	 * domains.
 	 */
-	def apply (in : Env[A]) : SolverError \/ Env[A];
+	def apply (in : Env[A]) : ConstraintResult[A];
 	
 	
 	/**
@@ -76,17 +77,36 @@ trait Constraint[A]
 
 object Constraint
 {
-	def unit[A] : Constraint[A] = new Constraint[A] {
-		override val variables = Set.empty[VariableName];
-		
-		override def apply (in : Env[A]) : SolverError \/ Env[A] = \/- (in);
-		}
+	/**
+	 * The chained method creates a [[scalaz.Kleisli]] which chains together
+	 * the invocation of each of the '''constraints''' given.
+	 */
+	def chained[A, C[_]] (constraints : C[Constraint[A]])
+		(implicit F : Foldable[C])
+		=
+		F.foldLeft (constraints, kleisliUnit[A]) {
+			case (accum, c) =>
+				
+			accum >==> c;
+			}
 	
 	
+	/**
+	 * The kleisliUnit method creates a [[scalaz.Kleisli]]
+	 * [[com.tubros.constraints.core.spi.solver.Constraint]] which
+	 * unconditionally succeeds.
+	 */
 	def kleisliUnit[A] =
 		Kleisli[
 			({ type L[+A] = SolverError \/ A})#L,
-			Map[VariableName, A],
-			Map[VariableName, A]
+			Constraint[A]#Env[A],
+			Constraint[A]#Env[A]
 			] (unit[A]);
+	
+	
+	def unit[A] : Constraint[A] = new Constraint[A] {
+		override val variables = Set.empty[VariableName];
+		
+		override def apply (in : Env[A]) : ConstraintResult[A] = \/- (in);
+		}
 }

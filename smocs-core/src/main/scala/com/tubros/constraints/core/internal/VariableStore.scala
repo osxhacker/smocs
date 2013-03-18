@@ -9,10 +9,13 @@ import scalaz.{
 	}
 
 import com.tubros.constraints.api._
+import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
 
+import error.SolverError
 import problem._
-import solver._
+import runtime._
+
 
 /**
  * The '''VariableStore''' type is an `internal` type used to manage
@@ -24,11 +27,36 @@ import solver._
  *
  */
 final case class VariableStore[A] (
-	variables : Vector[Variable[A, DiscreteDomain]],
-	constraints : Set[Constraint[A]],
-	answerFilters : Set[Constraint[A]]
+	val variables : Vector[Variable[A, DiscreteDomain]],
+	override val constraints : Set[Constraint[A]],
+	val answerFilters : Set[Constraint[A]],
+	override val symbols : SymbolTable
 	)
+	extends ConstraintProvider[A]
+		with SymbolTableProvider
 {
+	/// Class Imports
+	import std.vector._
+	
+	
+	override def constraintsFor (available : Set[VariableName])
+		: Set[Constraint[A]] =
+	{
+		val resolved = available flatMap (symbols.apply);
+		
+		constraints.filter (_.isDefinedAt (resolved));
+	}
+	
+		
+	override def globalConstraints ()
+		: Kleisli[
+			({ type L[+A] = SolverError \/ A})#L,
+			Constraint[A]#Env[A],
+			Constraint[A]#Env[A]
+			] =
+		Constraint.chained (answerFilters.to[Vector]);
+	
+	
 	def addAnswerFilter (entry : Constraint[A]) =
 		copy (answerFilters = answerFilters + entry);
 	
@@ -36,10 +64,26 @@ final case class VariableStore[A] (
 		copy (constraints = constraints + entry);
 		
 	def addVariable (entry : DiscreteVariable[A]) =
-		copy (variables = variables :+ entry);
+		copy (
+			variables = variables :+ entry,
+			symbols = symbols addSymbol (entry.name)
+			);
 	
 	def addVariables (entries : Seq[DiscreteVariable[A]]) =
-		copy (variables = variables ++ entries);
+		copy (
+			variables = variables ++ entries,
+			symbols = entries.foldLeft (symbols) {
+				case (st, entry) =>
+					
+				st addSymbol (entry.name);
+				}
+			);
+	
+	def defining (
+		derived : VariableName,
+		participants : Traversable[VariableName]
+		) =
+		copy (symbols = symbols addDerivedSymbol (derived, participants.toSet));
 }
 
 
@@ -75,6 +119,7 @@ object VariableStore
 	def empty[A] = new VariableStore[A] (
 		variables = Vector.empty,
 		constraints = Set.empty,
-		answerFilters = Set.empty
+		answerFilters = Set.empty,
+		symbols = SymbolTable.empty
 		);
 }

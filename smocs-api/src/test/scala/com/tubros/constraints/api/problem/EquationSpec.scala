@@ -30,12 +30,13 @@ class EquationSpec
 	
 	"An Equation" should "support a constant assignment" in
 	{
-		val const = new Equation[Int] {
+		val const = new Equation[Int] with DerivedValueSupport[Int] {
 			def apply = 'a := 5;
 			};
 		
 		const.arity should be === (1);
-		const.variables should be === (Set ('a));
+		const.derived should be === (Some ('a));
+		const.variables should be ('empty);
 	}
 	
 	it should "not require an assigment operator" in

@@ -15,6 +15,7 @@ import com.tubros.constraints.api.problem._
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.api.solver.error._
 
+import runtime._
 
 
 /**
@@ -30,24 +31,8 @@ import com.tubros.constraints.api.solver.error._
 @RunWith (classOf[JUnitRunner])
 class ConstraintPropagationSpec
 	extends ProjectSpec
+		with ConstraintTestingSupport
 {
-	/// Class Types
-	class TestConstraint (
-		override val variables : Set[VariableName],
-		val allow : Set[Int]
-		)
-		extends Constraint[Int]
-	{
-		/// Class Imports
-		import syntax.std.boolean._
-
-
-		override def apply (in : Env[Int]) : SolverError \/ Env[Int] =
-			in.values.forall (allow.contains).fold (
-				\/- (in),
-				-\/ (UnsolvableError)
-				);
-	}
 
 
 	/// Test Collaborators
@@ -55,12 +40,21 @@ class ConstraintPropagationSpec
 	val alpha = DiscreteVariable ('alpha, FiniteDiscreteDomain (0 to 100));
 	val beta = DiscreteVariable ('beta, FiniteDiscreteDomain (10 to 200));
 	val gamma = DiscreteVariable ('gamma, FiniteDiscreteDomain (101 to 200));
-
+	val symbolTable = names.foldLeft (SymbolTable.empty) {
+		case (st, n) =>
+			
+		st addSymbol (n);
+		}
+	val symbolTableProvider = new SymbolTableProvider {
+		override val symbols = symbolTable;
+		}
 
 	"ConstraintPropagation" should "be able to operate with no Constraints" in
 	{
+		val allowAll = new TestConstraint (names, (0 to 200).to[Set]);
 		val unconstrained = new ConstraintPropagation[Int, DiscreteDomain] (
-			Set.empty[Constraint[Int]]
+			TestConstraintProvider (allowAll),
+			symbolTable
 			);
 
 		unconstrained (
@@ -72,7 +66,8 @@ class ConstraintPropagationSpec
 	{
 		val allow10 = new TestConstraint (names - 'gamma, (0 to 10).to[Set]);
 		val constrain = new ConstraintPropagation[Int, DiscreteDomain] (
-			Set[Constraint[Int]] (allow10)
+			TestConstraintProvider (allow10),
+			symbolTable
 			);
 
 		constrain (createPriorAssignments (alpha), beta) should be === (
@@ -84,7 +79,8 @@ class ConstraintPropagationSpec
 	{
 		val allowNone = new TestConstraint (names - 'gamma, Set.empty[Int]);
 		val constrain = new ConstraintPropagation[Int, DiscreteDomain] (
-			Set[Constraint[Int]] (allowNone)
+			TestConstraintProvider (allowNone),
+			symbolTable
 			);
 
 		constrain (createPriorAssignments (alpha), beta) should be ('empty);
@@ -94,7 +90,8 @@ class ConstraintPropagationSpec
 	{
 		val allowAll = new TestConstraint (names, (0 to 200).to[Set]);
 		val constrain = new ConstraintPropagation[Int, DiscreteDomain] (
-			Set[Constraint[Int]] (allowAll)
+			TestConstraintProvider (allowAll),
+			symbolTable
 			);
 		
 		constrain (createPriorAssignments (alpha), beta).domain should be === (

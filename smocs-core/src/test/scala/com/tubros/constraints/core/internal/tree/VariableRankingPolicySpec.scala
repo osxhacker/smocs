@@ -21,6 +21,7 @@ import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
 
 import problem._
+import runtime._
 import solver._
 
 
@@ -35,6 +36,7 @@ import solver._
 @RunWith (classOf[JUnitRunner])
 class VariableRankingPolicySpec
 	extends ProjectSpec
+		with ConstraintTestingSupport
 {
 	/// Class Imports
 	import relational._
@@ -47,6 +49,20 @@ class VariableRankingPolicySpec
 		extends Equation[String]
 			with PropositionalSupport[String]
 			with RelationalSupport[String]
+	
+	case class SampleConstraintsProvider (
+		override val constraints : Set[Constraint[String]],
+		val variables : Traversable[Variable[String, DiscreteDomain]]
+		)
+		extends TestConstraintProvider[String]
+			with SymbolTableProvider
+	{
+		override val symbols = variables.map (_.name).foldLeft (SymbolTable.empty) {
+			case (st, n) =>
+				
+			st addSymbol (n);
+			}
+	}
 	
 	
 	/// Testing Collaborators
@@ -64,7 +80,7 @@ class VariableRankingPolicySpec
 			def apply = 'b <= 'c;
 			}
 		);
-	val constraints = problem.equations.list.map (canConstrain.constrains);
+	val constraints = problem.equations.list.map (canConstrain.constrains).toSet;
 		
 		
 	"The VariableRankingPolicy" should "choose the smallest domain in ties" in
@@ -74,7 +90,7 @@ class VariableRankingPolicySpec
 			PreferSmallerDomain[String] ()
 			);
 		
-		val ranked = policy[List].apply (constraints) (variables);
+		val ranked = policy (SampleConstraintsProvider (constraints, variables)) (variables);
 		
 		ranked must not be === (null);
 		ranked must have size (variables.size);
@@ -83,16 +99,20 @@ class VariableRankingPolicySpec
 	
 	it should "pick the most impacted variable" in
 	{
-		val additionalConstraints = canConstrain.constrains (
+		val additionalConstraint = canConstrain.constrains (
 			new RelationalEquation {
 				def apply = 'c < lit ("x");
-				}) :: constraints;
+				});
 		val policy = (
 			ImpactRankingPolicy[String] () andThen
 			PreferSmallerDomain[String] ()
 			);
+		val provider = SampleConstraintsProvider (
+			constraints + additionalConstraint,
+			variables
+			);
 		
-		val ranked = policy[List].apply (additionalConstraints) (variables);
+		val ranked = policy (provider) (variables);
 		
 		ranked must not be === (null);
 		ranked must have size (variables.size);

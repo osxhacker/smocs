@@ -11,6 +11,8 @@ import com.tubros.constraints.api.VariableName
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
 
+import runtime._
+
 
 /**
  * The '''ConstraintPropagation''' type is a functor which reduces the
@@ -23,7 +25,8 @@ import com.tubros.constraints.core.spi.solver._
  *
  */
 case class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
-	val constraints : Set[Constraint[A]]
+	private val provider : ConstraintProvider[A],
+	private val symbolTable : SymbolTable
 	)
 	extends ((Iterable[Answer[A]], Variable[A, DomainT]) => Variable[A, DomainT])
 {
@@ -34,9 +37,7 @@ case class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 		: Variable[A, DomainT] =
 	{
 		val available = assignments.map (_.name).to[Set] + variable.name;
-		val applicableConstraints = constraints.filter (
-			_.isDefinedAt (available)
-			);
+		val applicableConstraints = provider.constraintsFor (available);
 		val priorVariables = evaluate (
 			assignments.map (_.toTuple).toMap,
 			variable.name

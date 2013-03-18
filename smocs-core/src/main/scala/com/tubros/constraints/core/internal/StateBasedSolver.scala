@@ -56,7 +56,15 @@ trait StateBasedSolver[
 
 	override def add (equation : Equation[A]) : SolverState[Unit] =
 		MS.modify {
-			_.addConstraint (equation.constrains);
+			vs =>
+				
+			val constraintAdded = vs.addConstraint (equation.constrains);
+			
+			equation.derived.fold (constraintAdded) {
+				derived =>
+					
+				constraintAdded.defining (derived, equation.variables);
+				}
 			}
 
 

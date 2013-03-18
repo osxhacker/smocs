@@ -13,6 +13,7 @@ import scalaz._
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.api.solver.error._
 import com.tubros.constraints.core.spi.solver.Constraint
+import com.tubros.constraints.core.spi.solver.runtime._
 
 
 /**
@@ -35,38 +36,39 @@ trait ConsistencyChecks[A, DomainT[X] <: Domain[X]]
 	/// Class Types
 	type ValidationType = Validation[
 		SolverError,
-		(Seq[Variable[A, DomainT]], Seq[Constraint[A]])
+		(Seq[Variable[A, DomainT]], SymbolTable, ConstraintProvider[A])
 		]
 	
 	
 	def hasVariables (
 		variables : Seq[Variable[A, DomainT]],
-		constraints : Seq[Constraint[A]]
+		symbolTable : SymbolTable,
+		provider : ConstraintProvider[A]
 		)
 		: ValidationType =
 	{
-		variables.isEmpty.fold (
+		symbolTable.isEmpty.fold (
 			NoVariablesProvidedError.failure,
-			(variables, constraints).success
+			(variables, symbolTable, provider).success
 			);
 	}
 	
 	
 	def hasUnknownVariables (
 		variables : Seq[Variable[A, DomainT]],
-		constraints : Seq[Constraint[A]]
+		symbolTable : SymbolTable,
+		provider : ConstraintProvider[A]
 		)
 		: ValidationType =
 	{
-		val available = variables.to[Set] map (_.name);
-		val missing = constraints.flatMap (_.variables).toSet.filterNot {
+		val missing = provider.constraints.flatMap (_.variables).toSet.filterNot {
 			name =>
 				
-			available contains (name);
+			symbolTable contains (name);
 			}
 		
 		missing.isEmpty.fold (
-			(variables, constraints).success,
+			(variables, symbolTable, provider).success,
 			MissingVariables (missing).fail
 			);
 	}

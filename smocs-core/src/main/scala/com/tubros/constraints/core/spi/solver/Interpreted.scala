@@ -30,33 +30,34 @@ trait Interpreted[A]
 	
 	
 	/// Class Types
-	type Result[X] = EitherT[Option, Boolean, X]
-	final val Result = EitherT;
+	type InterpretedResult[X] = EitherT[Option, Boolean, X]
+	final val InterpretedResult = EitherT;
 	
 	protected def interpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]];
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]];
 	
 	
-	protected def maybeBinary (op : (A, A) => Result[A])
-		: ((A, A)) => Result[A] = op.tupled;
+	protected def maybeBinary (op : (A, A) => InterpretedResult[A])
+		: ((A, A)) => InterpretedResult[A] = op.tupled;
 		
 	protected def binary (op : (A, A) => Boolean \/ A)
-		: ((A, A)) => Result[A] = p => Result (op.tupled (p).some);
+		: ((A, A)) => InterpretedResult[A] =
+		p => InterpretedResult (op.tupled (p).some);
 	
 	
-	protected def maybeUnary (op : A => Result[A])
-		: A => Result[A] =
+	protected def maybeUnary (op : A => InterpretedResult[A])
+		: A => InterpretedResult[A] =
 		x => op (x);
 	
 	protected def unary (op : A => (Boolean \/ A))
-		: A => Result[A] =
-		x => Result (op (x).some);
+		: A => InterpretedResult[A] =
+		x => InterpretedResult (op (x).some);
 	
 	
 	protected def eval (env : Env[A])
 		(l : Expression[A], r : Expression[A])
-		(implicit m : Monad[Result])
-		: Result[(A, A)] =
+		(implicit m : Monad[InterpretedResult])
+		: InterpretedResult[(A, A)] =
 		(interpreter (env) (l) |@| interpreter (env) (r)) {
 			(_, _);
 			}

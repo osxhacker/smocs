@@ -28,12 +28,4 @@ package object problem
 	/// Implicit Conversions
 	implicit class EquationDefinition (val name : Symbol)
 		extends AnyVal
-	{
-		def :=[T <: AnyVal] (constant : T) : Expression[T] =
-			Assignment[T] (VariableUse (name), Constant (constant));
-		
-		
-		def :=[T] (statement : Expression[T]) : Expression[T] =
-			Assignment[T] (VariableUse (name), statement);
-	}
 }

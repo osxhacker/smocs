@@ -39,27 +39,27 @@ trait PositionalConstraint[A]
 	
 
 	abstract override protected def interpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 		env => (super.interpreter (env) orElse positionalInterpreter (env));
 			
 		
 	private def positionalInterpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 	{
 		implicit env =>
 			
 		_ match {
 			case After (VariableReferenced (name), Offset (offset)) =>
-				Result (valueAt (name, offset) (l => l));
+				InterpretedResult (valueAt (name, offset) (l => l));
 				
 			case Before (VariableReferenced (name), Offset (offset)) =>
-				Result (valueAt (name, offset) (_.reverse));
+				InterpretedResult (valueAt (name, offset) (_.reverse));
 				
 			case FirstPosition () =>
-				Result.right (sort (env.to[List]).headOption.map (_._2));
+				InterpretedResult.right (sort (env.to[List]).headOption.map (_._2));
 				
 			case LastPosition () =>
-				Result.right (sort (env.to[List]).lastOption.map (_._2));
+				InterpretedResult.right (sort (env.to[List]).lastOption.map (_._2));
 			}
 	}
 		

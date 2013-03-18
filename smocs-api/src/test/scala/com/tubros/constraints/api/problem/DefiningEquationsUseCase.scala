@@ -22,20 +22,27 @@ import com.tubros.constraints.api.UseCaseSpec
 class DefiningEquationsUseCase
 	extends UseCaseSpec
 {
+	/// Class Types
+	trait MinimalEquation[T]
+		extends Equation[T]
+			with DerivedValueSupport[T]
+	
+	
 	feature ("Defining smocs equations")
 	{
 		scenario ("Defining a constant Equation")
 		{
 			Given ("An Equation specifying a constant value");
 			
-			val e = new Equation[Int] {
+			val e = new MinimalEquation[Int] {
 				def apply = 'a := 5;
 				}
 			
 			Then ("The definition should be what was given");
 			
 			e.arity should be === (1);
-			e.variables should be === (Set ('a));
+			e.derived should be === (Some ('a));
+			e.variables should be ('empty);
 		}
 		
 		scenario ("Using a more complex Equation")

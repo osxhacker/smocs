@@ -77,12 +77,12 @@ object AlgebraicEquationConstraint
 			with RelationalConstraint[A]
 	{
 		override protected def interpreter
-			: Env[A] => PartialFunction[Expression[A], Result[A]] =
+			: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 			env => (super.interpreter (env) orElse numericOps (env));
 			
 			
 		protected def numericOps (env : Env[A])
-			: PartialFunction[Expression[A], Result[A]];
+			: PartialFunction[Expression[A], InterpretedResult[A]];
 	}
 	
 	
@@ -97,13 +97,13 @@ object AlgebraicEquationConstraint
 		extends AbstractAlgebraicConstraint[A] (equation)
 	{
 		override protected def numericOps (env : Env[A])
-			: PartialFunction[Expression[A], Result[A]] =
+			: PartialFunction[Expression[A], InterpretedResult[A]] =
 			_ match {
 				case Quotient (n, d) =>
 					eval (env) (n, d).flatMap {
 						case (num, denom) =>
 							
-						Result {
+						InterpretedResult {
 							(denom != 0).option (fn.div (num, denom).right);
 							}
 					}
@@ -121,13 +121,13 @@ object AlgebraicEquationConstraint
 		extends AbstractAlgebraicConstraint[A] (equation)
 	{
 		override protected def numericOps (env : Env[A])
-			: PartialFunction[Expression[A], Result[A]] =
+			: PartialFunction[Expression[A], InterpretedResult[A]] =
 			_ match {
 				case Quotient (n, d) =>
 					eval (env) (n, d).flatMap {
 						case (num, denom) =>
 							
-						Result {
+						InterpretedResult {
 							(denom != 0).option (in.quot (num, denom).right);
 							}
 					}

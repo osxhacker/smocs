@@ -73,8 +73,8 @@ class TreeFiniteDomainSolver[A] (
 			vs =>
 				
 			val validations = for {
-				_ <- hasVariables (vs.variables, vs.constraints.to[Seq])
-				_ <- hasUnknownVariables (vs.variables, vs.constraints.to[Seq])
+				_ <- hasVariables (vs.variables, vs.symbols, vs)
+				_ <- hasUnknownVariables (vs.variables, vs.symbols, vs)
 				} yield vs.variables.toSeq;
 				
 			validations match {
@@ -92,9 +92,7 @@ class TreeFiniteDomainSolver[A] (
 		MS.gets {
 			vs =>
 				
-			val prioritize = variableRanking[Set];
-			
-			prioritize (vs.constraints) (available.toList);
+			variableRanking (vs) (available.toList);
 			}
 			
 
@@ -130,20 +128,16 @@ class TreeFiniteDomainSolver[A] (
 			val bruteForce = tree.expand (
 				tree.root,
 				variables,
-				new ConstraintPropagation[A, DomainType] (vs.constraints)
+				new ConstraintPropagation[A, DomainType] (vs, vs.symbols)
 				);
-			val c = vs.answerFilters.foldLeft (Constraint.kleisliUnit[A]) {
-				case (accum, c) =>
-					
-				accum >==> c;
-				}
+			val globalFilters = vs.globalConstraints ();
 			
 			bruteForce.toStream (expected = variables.length).filter {
 				candidate =>
 					
 				val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
 				
-				c.run (args.toMap).isRight;
+				globalFilters.run (args.toMap).isRight;
 				}
 			}
 }

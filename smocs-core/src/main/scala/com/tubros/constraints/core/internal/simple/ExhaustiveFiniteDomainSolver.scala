@@ -45,7 +45,9 @@ class ExhaustiveFiniteDomainSolver[A]
 	/// Class Imports
 	import scalaz.std.list._
 	import scalaz.std.stream._
+	import scalaz.std.vector._
 	import scalaz.syntax.applicative._
+	import scalaz.syntax.compose._
 	import scalaz.syntax.id._
 	import scalaz.syntax.traverse._
 	
@@ -79,16 +81,13 @@ class ExhaustiveFiniteDomainSolver[A]
 			vs =>
 				
 			val streams = vars.view.to[Stream].map (_.enumerate.to[Stream]);
-			val c = filters.foldLeft (Constraint.kleisliUnit[A]) {
-				case (accum, c) =>
-					
-				accum >==> c;
-				}
+			val perAnswer = Constraint.chained (filters.to[Vector]);
+			val combinedConstraints = vs.globalConstraints ().andThen (perAnswer);
 			
 			streams.sequence.map (LinkedHashMap.apply).filter {
 				candidate =>
 					
-				c.run (candidate.toMap).isRight;
+				combinedConstraints.run (candidate.toMap).isRight;
 				}
 			}
 			
@@ -98,7 +97,7 @@ class ExhaustiveFiniteDomainSolver[A]
 		MS.gets {
 			vs =>
 				
-			vs.answerFilters.toVector ++ vs.constraints;
+			vs.constraints.to[Seq];
 			}
 			
 	

@@ -62,7 +62,7 @@ trait AlgebraicConstraint[A]
 	private val pow = maybeBinary {
 		(x : A, y : A) =>
 			
-		Result {
+		InterpretedResult {
 			(numeric.signum (y) > 0).option {
 				(1 until numeric.toInt (y)).foldLeft (x) {
 					case (r, _) =>
@@ -79,12 +79,12 @@ trait AlgebraicConstraint[A]
 	
 	
 	abstract override protected def interpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 		env => (super.interpreter (env) orElse algebraicInterpreter (env));
 			
 		
 	private def algebraicInterpreter
-		: Env[A] => PartialFunction[Expression[A], Result[A]] =
+		: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 	{
 		env =>
 			
