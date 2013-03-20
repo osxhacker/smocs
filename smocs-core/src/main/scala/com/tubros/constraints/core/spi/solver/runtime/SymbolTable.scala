@@ -27,23 +27,64 @@ import com.tubros.constraints.core.spi.solver._
  */
 trait SymbolTable
 {
+	/// Instance Properties
+	/**
+	 * The isEmpty property indicates whether or not there are any symbolic
+	 * [[com.tubros.constraints.api.VariableName]]s known in this instances.
+	 */
+	def isEmpty : Boolean;
+	
+	/**
+	 * The size property reports to the caller how many distinct
+	 * [[com.tubros.constraints.api.VariableName]]s are currently managed by
+	 * the '''SymbolTable'''.
+	 */
+	def size : Int;
+	
+	
+	/**
+	 * A '''name''' which is '''definedBy''' one or more other
+	 * [[com.tubros.constraints.api.VariableName]]s is managed by the
+	 * addDerivedSymbol method.
+	 */
 	def addDerivedSymbol (name : VariableName, definedBy : Set[VariableName])
 		: SymbolTable;
 	
 	
+	/**
+	 * The addSymbol method is available for '''name'''s which are atomic in
+	 * their definition.
+	 */
 	def addSymbol (name : VariableName) : SymbolTable;
 	
 	
+	/**
+	 * The apply method resolves all constituent
+	 * [[com.tubros.constraints.api.VariableName]]s contributing to the
+	 * definition of an arbitrary '''name''', if any.
+	 */
 	def apply (name : VariableName) : Set[VariableName];
 	
 	
+	/**
+	 * The contains method provides the expected behaviour of other like-named
+	 * methods in Scala containers, in that the '''name''' is verified to be
+	 * known to the '''SymbolTable''' or not.
+	 */
 	def contains (name : VariableName) : Boolean;
 	
 	
-	def isEmpty : Boolean;
+	/**
+	 * The derivedFrom method resolves what, if any, derived
+	 * [[com.tubros.constraints.api.VariableName]]s are ''completely'' defined
+	 * by the '''names''' given.  Note that this includes derived
+	 * [[com.tubros.constraints.api.VariableName]]s which only need a subset of
+	 * those specified.
+	 */
+	def derivedFrom (names : Set[VariableName]) : Set[VariableName];
 	
 	
-	def size : Int;
+	def isDerived (name : VariableName) : Boolean;
 }
 
 
@@ -57,11 +98,13 @@ object SymbolTable
 		extends SymbolTable
 	{
 		/// Class Imports
+		import std.anyVal._
+		import syntax.equal._
 		import syntax.std.boolean._
 		
 		
 		/// Instance Properties
-		override lazy val isEmpty : Boolean = symbolGraph isEmpty;
+		override lazy val isEmpty : Boolean = (size === 0);
 		
 		
 		override def addDerivedSymbol (
@@ -94,6 +137,42 @@ object SymbolTable
 			symbolGraph contains (name);
 		
 		
+		override def derivedFrom (names : Set[VariableName])
+			: Set[VariableName] =
+		{
+			def roots (sink : collection.mutable.Set[VariableName])
+				(cur : symbolGraph.NodeT)
+			{
+				val inbound = cur.inNeighbors;
+				
+				(inbound.isEmpty && !names.contains (cur.value)).fold (
+					sink += cur.value,
+					inbound foreach (roots (sink))
+					);
+			}
+			
+			val derived = new collection.mutable.HashSet[VariableName];
+			
+			names foreach {
+				name =>
+					
+				symbolGraph.find (name) foreach {
+					node =>
+						
+					roots (derived) (node);
+					}
+				}
+			
+
+			return (derived.filter (hasDefiningSymbols (names)).toSet);
+		}
+		
+		
+		override def isDerived (name : VariableName) : Boolean =
+			symbolGraph.find (name).filterNot (_.outgoing.isEmpty).isDefined;
+		
+		
+		@inline
 		private def findLeaves (node : symbolGraph.NodeT) : Set[VariableName] =
 		{
 			def collector (dest : collection.mutable.Set[VariableName])
@@ -112,6 +191,17 @@ object SymbolTable
 			collector (leaves) (node);
 			
 			return (leaves.toSet);
+		}
+		
+		
+		@inline
+		private def hasDefiningSymbols (available : Set[VariableName])
+			(name : VariableName)
+			: Boolean =
+		{
+			val roots = apply (name);
+			
+			return (roots.forall (available.contains));
 		}
 	}
 	

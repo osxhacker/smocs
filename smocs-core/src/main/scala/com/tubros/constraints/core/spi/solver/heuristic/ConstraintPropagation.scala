@@ -56,6 +56,7 @@ final case class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 		apply (Seq.empty[Answer[A]], variable);
 	
 	
+	@inline
 	private def evaluate (variables : Map[VariableName, A], name : VariableName)
 		(value : A)
 		(constraint : Constraint[A])
@@ -64,6 +65,14 @@ final case class ConstraintPropagation[A, DomainT[X] <: Domain[X]] (
 }
 
 
+/**
+ * The '''ConstraintPropagationEnumeratee''' type provides ''constraint
+ * propagation'' in situations where a [[scalaz.iteratee.EnumerateeT]] is
+ * desired.
+ * 
+ * @author svickers
+ *
+ */
 final case class ConstraintPropagationEnumeratee[
 	A,
 	DomainT[X] <: Domain[X],
@@ -88,18 +97,24 @@ final case class ConstraintPropagationEnumeratee[
 	type StepType[T] = StepT[ElementType, M, T]
 	
 	
+	/// Instance Properties
+	private val constraintResolver = Memo.mutableHashMapMemo {
+		(names : Set[VariableName]) =>
+			
+		provider.constraintsFor (names);
+		}
+	
+	
 	override def apply[T] : StepType[T] => OuterIterateeType[T] =
 	{
 		def step : (Input[ElementType] => InnerIterateeType[T]) =>
 			(Input[ElementType] => OuterIterateeType[T]) =
 			k => in => in (
-				el = e => {
-					evaluate[T] (e) match {
-						case Some (allowable) =>
-							k (elInput (allowable)) >>== doneOr (loop)
+				el = assignments => {
+					evaluate[T] (assignments).fold (cont (step (k))) {
+						allowable =>
 							
-						case None =>
-							cont (step (k));
+						k (elInput (allowable)) >>== doneOr (loop);
 						}
 					},
 				empty = cont (step (k)),
@@ -117,7 +132,7 @@ final case class ConstraintPropagationEnumeratee[
 		: Option[Seq[Answer[A]]] =
 	{
 		val params = assignments.map (_.toTuple).toMap;
-		val applicableConstraints = provider.constraintsFor (params.keySet);
+		val applicableConstraints = constraintResolver (params.keySet);
 		
 		applicableConstraints.foldLeft (params.some) {
 			(accum, constraint) =>

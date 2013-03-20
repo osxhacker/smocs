@@ -34,7 +34,13 @@ class FractionalAlgebraicEquationConstraint[A : Numeric : Fractional]
 	
 	
 	override def constrains (equation : Equation[A]) : Constraint[A] =
-		new FractionalConstraint (equation);
+		equation.derived.fold (new FractionalConstraint (equation)) {
+			name =>
+				
+			new FractionalConstraint (equation) with DerivedValueConstraint[A] {
+				override val derived = Some (name);
+				}
+			}
 }
 
 
@@ -45,7 +51,13 @@ class IntegralAlgebraicEquationConstraint[A : Numeric : Integral]
 	
 	
 	override def constrains (equation : Equation[A]) : Constraint[A] =
-		new IntegralConstraint (equation);
+		equation.derived.fold (new IntegralConstraint (equation)) {
+			name =>
+				
+			new IntegralConstraint (equation) with DerivedValueConstraint[A] {
+				override val derived = Some (name);
+				}
+			}
 }
 
 
@@ -75,11 +87,7 @@ object AlgebraicEquationConstraint
 		extends AbstractInterpretedConstraint[A]
 			with AlgebraicConstraint[A]
 			with RelationalConstraint[A]
-			with DerivedValueConstraint[A]
 	{
-		override val derived = equation.derived;
-		
-		
 		override protected def interpreter
 			: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 			env => (super.interpreter (env) orElse numericOps (env));

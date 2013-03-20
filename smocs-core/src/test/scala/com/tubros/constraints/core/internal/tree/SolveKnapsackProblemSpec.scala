@@ -59,7 +59,7 @@ class SolveKnapsackProblemSpec
 		{
 			import knapsack._
 			
-			Given ("constriants of 4 whiskey, 3 perfume, and 2 cigs");
+			Given ("size constriants of 4 whiskey, 3 perfume, and 2 cigs");
 			
 			val problem = Problem (
 				new PolynomialEquation[Int] {
@@ -72,7 +72,7 @@ class SolveKnapsackProblemSpec
 					def apply = 'weight := 'whiskey * 10 + 'perfume * 1 + 'cigs * 3;
 					},
 				new PolynomialEquation[Int] {
-					def apply = 'whiskey * 10 + 'perfume * 1 + 'cigs * 3 < 20;
+					def apply = 'weight < 20 && 'profit > 0;
 					}
 				);
 			
@@ -90,6 +90,7 @@ class SolveKnapsackProblemSpec
 					} yield stream;
 				}
 			
+            Then ("there should be answers");
 			answers should be ('right);
 			answers foreach {
 				result =>
@@ -97,11 +98,20 @@ class SolveKnapsackProblemSpec
 				result should not be ('empty);
 				}
 			
+            And ("the 'profit' Answer should be present");
 			val best = answers map (
-				_.sortBy (_.find (_.name == 'profit).get.value).reverse
+				_.sortBy (_.find (_.name == 'profit).get.value).reverse.take (5)
 				);
 			
-			best map (_ should not be ('empty));
+            And ("each production satisfies the weight requirement");
+			best map (
+				_.foreach {
+					result =>
+						
+					result should not be ('empty);
+					result.map (_.toTuple).toMap.apply ('weight) should be < (20);
+					}
+				);
 		}
 	}
 }

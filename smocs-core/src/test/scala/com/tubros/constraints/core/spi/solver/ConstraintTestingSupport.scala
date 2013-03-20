@@ -45,6 +45,10 @@ trait ConstraintTestingSupport
 		import syntax.std.boolean._
 
 
+		/// Instance Properties
+		override val derived = None;
+		
+		
 		override def apply (in : Env[A]) : SolverError \/ Env[A] =
 			in.values.forall (allow.contains).fold (
 				\/- (in),

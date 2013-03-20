@@ -28,7 +28,8 @@ class AnswerConstraint[A] (
 	extends Constraint[A]
 {
 	/// Instance Properties
-	val variables = Set.empty[VariableName];
+	override val derived = None;
+	override val variables = Set.empty[VariableName];
 	
 	
 	override def apply (in : Env[A]) : SolverError \/ Env[A] =
@@ -56,6 +57,7 @@ class AnswerValueConstraint[A, C[_]] (private val constraint : C[A] => Boolean)
 	extends Constraint[A]
 {
 	/// Instance Properties
+	override val derived = None;
 	val variables = Set.empty[VariableName];
 	
 	

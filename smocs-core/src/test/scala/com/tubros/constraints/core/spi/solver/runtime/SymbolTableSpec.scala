@@ -70,4 +70,57 @@ class SymbolTableSpec
 		nested ('d) should not be ('empty);
 		nested ('d) should be === (Set ('a, 'b));
 	}
+	
+	it should "be able to determine what symbols are dependants" in
+	{
+		val dependant = (
+			SymbolTable.empty
+				addSymbol ('a)
+				addSymbol ('b)
+				addDerivedSymbol ('c, Set ('a, 'b))
+				);
+		
+		dependant.isDerived ('a) should be === (false);
+		dependant.isDerived ('c) should be === (true);
+	}
+	
+	it should "be able to resolve dependants available when expected" in
+	{
+		val dependant = (
+			SymbolTable.empty
+				addSymbol ('a)
+				addSymbol ('b)
+				addDerivedSymbol ('c, Set ('a, 'b))
+				);
+		
+		dependant.derivedFrom (Set[VariableName] ('a, 'b)) should be === (
+			Set ('c)
+			);
+	}
+	
+	it should "not resolve a dependant unless all roots are available" in
+	{
+		val dependant = (
+			SymbolTable.empty
+				addSymbol ('a)
+				addSymbol ('b)
+				addDerivedSymbol ('c, Set ('a, 'b))
+				);
+		
+		dependant.derivedFrom (Set[VariableName] ('a)) should be ('empty);
+	}
+	
+	it should "not resolve a dependant unless all participants are available" in
+	{
+		val dependant = (
+			SymbolTable.empty
+				addSymbol ('a)
+				addSymbol ('b)
+				addSymbol ('d)
+				addDerivedSymbol ('c, Set ('a, 'e))
+				addDerivedSymbol ('e, Set ('d))
+				);
+		
+		dependant.derivedFrom (Set[VariableName] ('a, 'b)) should be ('empty);
+	}
 }

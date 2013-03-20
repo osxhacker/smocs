@@ -42,5 +42,6 @@ object SolverUseCaseSpec
 		extends Equation[A]
 			with ArithmeticSupport[A]
 			with DerivedValueSupport[A]
+            with PropositionalSupport[A]
 			with RelationalSupport[A]
 }

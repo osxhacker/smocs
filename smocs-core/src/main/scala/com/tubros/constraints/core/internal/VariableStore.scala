@@ -3,6 +3,8 @@
  */
 package com.tubros.constraints.core.internal
 
+import scala.collection.mutable.LinkedHashSet
+
 import scalaz.{
 	Ordering => _,
 	_
@@ -42,9 +44,16 @@ final case class VariableStore[A] (
 	override def constraintsFor (available : Set[VariableName])
 		: Set[Constraint[A]] =
 	{
-		val resolved = available flatMap (symbols.apply);
+		val atomicDefinitions = available flatMap (symbols.apply);
+		val resolved = atomicDefinitions ++ symbols.derivedFrom (
+			atomicDefinitions
+			);
+		val (producers, constrainers) =
+			constraints.filter (_.isDefinedAt (resolved)).partition {
+				_.derived.isDefined;
+				}
 		
-		constraints.filter (_.isDefinedAt (resolved));
+		return ((LinkedHashSet.empty ++ producers ++ constrainers).toSet);
 	}
 	
 		

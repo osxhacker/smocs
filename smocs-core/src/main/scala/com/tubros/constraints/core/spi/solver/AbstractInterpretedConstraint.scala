@@ -37,6 +37,7 @@ trait AbstractInterpretedConstraint[A]
 	
 	
 	/// Instance Properties
+	override val derived : Option[VariableName] = None;
 	val equation : Equation[A];
 	override val variables = equation.variables;
 	

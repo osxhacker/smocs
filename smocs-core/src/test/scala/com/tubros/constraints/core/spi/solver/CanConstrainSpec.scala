@@ -85,6 +85,7 @@ class CanConstrainSpec
 		new CanConstrain[Option, A] {
 			override def constrains (t : Option[A]) : Constraint[A] =
 				new Constraint[A] {
+					override val derived = None;
 					override val variables = names.toSet;
 					private val valueToAllow = t getOrElse (null.asInstanceOf[A]);
 
@@ -100,6 +101,7 @@ class CanConstrainSpec
 		new CanConstrain[Option, T] {
 			override def constrains (v : Option[T]) : Constraint[T] =
 				new Constraint[T] {
+					override val derived = None;
 					override val variables = names.toSet;
 					val numeric = implicitly[Numeric[T]]; 
 					

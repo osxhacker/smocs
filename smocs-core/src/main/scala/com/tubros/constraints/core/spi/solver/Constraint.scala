@@ -45,6 +45,18 @@ trait Constraint[A]
 	
 	
 	/// Instance Properties
+	/**
+	 * The derived property identifies this '''Constraint''' as either
+	 * ''producing'' a derived [[com.tubros.constraints.api.solver.Variable]]
+	 * or not.
+	 */
+	def derived : Option[VariableName];
+	
+	/**
+	 * The variables property contains all
+	 * [[com.tubros.constraints.api.solver.Variable]]s ''used'' in the
+	 * definition of the '''Constraint'''.
+	 */
 	def variables : Set[VariableName];
 	
 	
@@ -105,6 +117,7 @@ object Constraint
 	
 	
 	def unit[A] : Constraint[A] = new Constraint[A] {
+		override val derived = None;
 		override val variables = Set.empty[VariableName];
 		
 		override def apply (in : Env[A]) : ConstraintResult[A] = \/- (in);

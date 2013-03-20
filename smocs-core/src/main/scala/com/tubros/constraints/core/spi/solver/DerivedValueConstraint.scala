@@ -32,10 +32,6 @@ trait DerivedValueConstraint[A]
 	import syntax.std.option._
 	
 	
-	/// Instance Properties
-	def derived : Option[VariableName];
-	
-	
 	override protected def postProcessResult (result : A, vars : Env[A])
 		: Env[A] =
 		derived.map (derivedName => vars updated (derivedName, result)) | vars;
