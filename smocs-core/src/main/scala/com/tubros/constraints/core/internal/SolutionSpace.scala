@@ -49,7 +49,7 @@ trait SolutionSpace[A, M[_], DomainT[X] <: Domain[X]]
 	def expand[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
-		valuesFor : ValueGenerator
+		valuesFor : AssignmentGenerator
 		)
 		(implicit fm : Foldable[M])
 		: ThisType;

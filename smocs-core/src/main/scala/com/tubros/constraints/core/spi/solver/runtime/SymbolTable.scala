@@ -41,6 +41,9 @@ trait SymbolTable
 	
 	
 	def isEmpty : Boolean;
+	
+	
+	def size : Int;
 }
 
 
@@ -48,7 +51,8 @@ object SymbolTable
 {
 	/// Class Types
 	private case class DefaultSymbolTable (
-		private val symbolGraph : DAG[VariableName]
+		private val symbolGraph : DAG[VariableName],
+		override val size : Int
 		)
 		extends SymbolTable
 	{
@@ -56,16 +60,23 @@ object SymbolTable
 		import syntax.std.boolean._
 		
 		
+		/// Instance Properties
+		override lazy val isEmpty : Boolean = symbolGraph isEmpty;
+		
+		
 		override def addDerivedSymbol (
 			name : VariableName,
 			definedBy : Set[VariableName]
 			)
 			: SymbolTable =
-			copy (symbolGraph = symbolGraph ++ definedBy.map (p => name ~> p));
+			copy (
+				symbolGraph = symbolGraph ++ definedBy.map (p => name ~> p),
+				size = size + 1
+				);
 		
 		
 		override def addSymbol (name : VariableName) : SymbolTable =
-			copy (symbolGraph = symbolGraph + name);
+			copy (symbolGraph = symbolGraph + name, size = size + 1);
 		
 		
 		override def apply (name : VariableName) : Set[VariableName] =
@@ -81,9 +92,6 @@ object SymbolTable
 		
 		override def contains (name : VariableName) : Boolean =
 			symbolGraph contains (name);
-		
-		
-		override def isEmpty : Boolean = symbolGraph isEmpty;
 		
 		
 		private def findLeaves (node : symbolGraph.NodeT) : Set[VariableName] =
@@ -112,5 +120,5 @@ object SymbolTable
 	implicit private val config : Config = Acyclic;
 	
 	
-	def empty : SymbolTable = DefaultSymbolTable (DAG[VariableName] ());
+	def empty : SymbolTable = DefaultSymbolTable (DAG[VariableName] (), 0);
 }

@@ -53,6 +53,10 @@ trait AbstractInterpretedConstraint[A]
 			}
 		
 		
+	protected def postProcessResult (result : A, vars : Env[A]) : Env[A] =
+		vars;
+	
+	
 	private def variablesUsed (all : Map[VariableName, A])
 		: ConstraintResult[A] =
 	{
@@ -69,7 +73,7 @@ trait AbstractInterpretedConstraint[A]
 		: ConstraintResult[A] =
 		interpreter (vars) (equation.expression).run match {
 			case Some (-\/ (true)) => vars.right;
-			case Some (\/- (_)) => vars.right;
+			case Some (\/- (result)) => postProcessResult (result, vars).right;
 			case _ => -\/ (UnsolvableError);
 			}
 }

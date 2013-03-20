@@ -4,7 +4,7 @@
 package com.tubros.constraints.core.internal
 package simple
 
-import scala.collection.mutable.LinkedHashMap
+import scala.collection.immutable.TreeMap
 import scala.language.higherKinds
 
 import scalaz._
@@ -80,11 +80,13 @@ class ExhaustiveFiniteDomainSolver[A]
 		MS.gets {
 			vs =>
 				
+			import VariableStore._
+			
 			val streams = vars.view.to[Stream].map (_.enumerate.to[Stream]);
 			val perAnswer = Constraint.chained (filters.to[Vector]);
-			val combinedConstraints = vs.globalConstraints ().andThen (perAnswer);
+			val combinedConstraints = vs.globalConstraints () andThen (perAnswer);
 			
-			streams.sequence.map (LinkedHashMap.apply).filter {
+			streams.sequence.map (r => TreeMap[VariableName, A] (r : _*)).filter {
 				candidate =>
 					
 				combinedConstraints.run (candidate.toMap).isRight;

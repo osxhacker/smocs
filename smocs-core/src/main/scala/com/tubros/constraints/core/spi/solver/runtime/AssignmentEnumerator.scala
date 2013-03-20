@@ -13,13 +13,7 @@ import scalaz._
 import scalaz.iteratee._
 
 import com.tubros.constraints.api.VariableName
-import com.tubros.constraints.api.solver.{
-	Answer,
-	DiscreteDomain,
-	Variable
-	}
-
-import heuristic.ConstraintPropagation
+import com.tubros.constraints.api.solver._
 
 
 /**
@@ -63,10 +57,7 @@ import heuristic.ConstraintPropagation
  *
  */
 case class AssignmentEnumerator[A, C[_]] (
-	val steps : AssignmentEnumerator[A, C]#IterateeType[
-		Seq[AssignmentEnumerator[A, C]#AssignmentElementType],
-		C[Seq[AssignmentEnumerator[A, C]#AssignmentElementType]]
-		]
+	val steps : AssignmentEnumerator[A, C]#StepsType
 	)
 	(implicit
 		A : Applicative[C],
@@ -76,6 +67,7 @@ case class AssignmentEnumerator[A, C[_]] (
 {
 	/// Class Imports
 	import syntax.applicative._
+	import syntax.std.boolean._
 	import syntax.foldable._
 	import syntax.monoid._
 	import AssignmentEnumerator._
@@ -84,10 +76,14 @@ case class AssignmentEnumerator[A, C[_]] (
 	
 	
 	/// Class Types
-	type AssignmentElementType = (VariableName, A)
+	type AssignmentElementType = Answer[A]
 	type ContextType = (Seq[AssignmentElementType], VariableType)
 	type IterateeType[E, R] = IterateeT[E, StateType, R]
-	type StateType[T] = State[ContextType, T]
+	type StepsType = IterateeType[
+		Seq[AssignmentEnumerator[A, C]#AssignmentElementType],
+		C[Seq[AssignmentEnumerator[A, C]#AssignmentElementType]]
+		]
+	type StateType[+T] = State[ContextType, T]
 	type VariableType = Variable[A, DiscreteDomain]
 	
 
@@ -112,6 +108,10 @@ case class AssignmentEnumerator[A, C[_]] (
 		operations.eval (existingAssignments -> candidate);
 
 
+	def map (f : StepsType => StepsType) : AssignmentEnumerator[A, C] =
+		copy (steps = f (steps));
+	
+	
 	private def onlyNewAssignments (
 		produced : C[Seq[AssignmentElementType]]
 		)
@@ -122,7 +122,9 @@ case class AssignmentEnumerator[A, C[_]] (
 			produced.foldLeft (mzero[C[Seq[AssignmentElementType]]]) {
 				case (c, assignments) =>
 					
-				c |+| (assignments filterNot (context._1.contains)).point[C];
+				val additional = assignments filterNot (context._1.contains);
+				
+				additional.isEmpty.fold (c, c |+| (additional).point[C]);
 				}
 			}
 }
@@ -161,5 +163,8 @@ object AssignmentEnumerator
 		EnumeratorT.enumStream[
 			Seq[AssignmentEnumerator[A, C]#AssignmentElementType],
 			AssignmentEnumerator[A, C]#StateType
-			] (context._2.enumerate.map (e => context._1 :+ e).toStream);
+			] (context._2.enumerate.map (
+				e => context._1 :+ Answer.fromTuple (e)
+				).toStream
+				);
 }

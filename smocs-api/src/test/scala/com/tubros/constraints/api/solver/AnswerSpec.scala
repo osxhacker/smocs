@@ -37,9 +37,16 @@ class AnswerSpec
 		answer.value must be === (42);
 	}
 	
-	it should "support transformations to/from Tuple2" in
+	it should "support transformations to Tuple2" in
 	{
 		val answer = Answer ('y, "just for test");
+		
+		answer.toTuple should be === (('y, "just for test"));
+	}
+	
+	it should "support transformations from Tuple2" in
+	{
+		val answer = Answer.fromTuple ('y -> "just for test");
 		
 		answer.toTuple should be === (('y, "just for test"));
 	}

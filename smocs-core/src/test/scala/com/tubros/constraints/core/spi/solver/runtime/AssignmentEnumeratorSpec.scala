@@ -52,7 +52,9 @@ class AssignmentEnumeratorSpec
 	
 	/// Testing Collaborators
 	val candidate = DiscreteVariable ('z, FiniteDiscreteDomain (1, 2, 3));
-	val existingAssignments = List[VariableName] ('a, 'b, 'c) zipWithIndex;
+	val existingAssignments = List[VariableName] ('a, 'b, 'c).zipWithIndex.map (
+		Answer.fromTuple
+		);
 		
 		
 	"An AssignmentEnumerator" should "support construction with an Iteratee" in
@@ -74,8 +76,8 @@ class AssignmentEnumeratorSpec
 			assignment =>
 				
 			assignment should have size (1);
-			assignment.last._1 should be === (candidate.name);
-			candidate.domain should contain (assignment.last._2);
+			assignment.last.name should be === (candidate.name);
+			candidate.domain should contain (assignment.last.value);
 			}
 	}
 	
@@ -93,7 +95,7 @@ class AssignmentEnumeratorSpec
 	it should "be able to produce more assignments than one-per-Variable" in
 	{
 		val assignments = AssignmentEnumerator[Int, Stream] (
-			steps = emitAllAssignmentsAndAdd ((n : Int) => ('zz, n * n))
+			steps = emitAllAssignmentsAndAdd ((n : Int) => Answer ('zz, n * n))
 			).generate (existingAssignments, candidate);
 		
 		assignments should have size (candidate.domain.size);
@@ -103,7 +105,7 @@ class AssignmentEnumeratorSpec
 			/// The enumerator added 'zz to each variable assignment
 			assignment should have size (2);
 			
-			val mapping = assignment.toMap;
+			val mapping = assignment.map (_.toTuple).toMap;
 			
 			mapping.keySet should be === (Set (candidate.name, 'zz));
 			candidate.domain.contains (mapping (candidate.name)) should be === (
@@ -132,7 +134,7 @@ class AssignmentEnumeratorSpec
 	
 	
 	private def emitAllAssignmentsAndAdd (f : Int => ElementType) =
-		emitAllAssignments ().map (_.map (seq => seq :+ f (seq.last._2)));
+		emitAllAssignments ().map (_.map (seq => seq :+ f (seq.last.value)));
 
 
 	private def emitFirstAssignment () =

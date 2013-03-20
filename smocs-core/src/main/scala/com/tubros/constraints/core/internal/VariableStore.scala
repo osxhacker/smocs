@@ -93,22 +93,16 @@ object VariableStore
 	class AnswerOrdering[A] (store : VariableStore[A])
 		extends Ordering[Answer[A]]
 	{
-		/// Class Imports
-		import std.tuple._
-		import syntax.bifunctor._
-		
-		
-		/// Instance Properties
-		private val positions : Map[VariableName, Int] =
-			store.variables.zipWithIndex.map {
-				paired =>
-					
-				((_ : Variable[A, DiscreteDomain]).name) <-: paired;
-				}.toMap;
-		
-		
 		override def compare (x : Answer[A], y : Answer[A]) : Int =
-			positions (x.name) - positions (y.name);
+			VariableNameOrdering.compare (x.name, y.name);
+	}
+	
+	
+	implicit object VariableNameOrdering
+		extends Ordering[VariableName]
+	{
+		override def compare (x : VariableName, y : VariableName) : Int =
+			x.name.compareTo (y.name);
 	}
 	
 	

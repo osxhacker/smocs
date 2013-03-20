@@ -64,7 +64,7 @@ final case class SolutionTree[A] (
 	override def expand[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
-		valuesFor : ValueGenerator
+		valuesFor : AssignmentGenerator
 		)
 		(implicit fm : Foldable[M])
 		: SolutionTree[A] =
@@ -124,7 +124,7 @@ final case class SolutionTree[A] (
 	override def search[M[+_]] (
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
-		valuesFor : ValueGenerator
+		valuesFor : AssignmentGenerator
 		)
 		(implicit fm : Foldable[M])
 		: Option[SolutionTree[A]] =
@@ -162,11 +162,23 @@ final case class SolutionTree[A] (
 			}
 
 	
+	private def addToLocation (
+		node : LocationType,
+		additional : Stream[NodeType[A]]
+		)
+		: LocationType =
+		node.modifyTree {
+			t =>
+				
+			Tree.node (t.rootLabel, t.subForest #::: additional.map (_.leaf));
+			}
+		
+	
 	private def expander (
 		parent : LocationType,
 		frontier : Frontier[NodeType[A]],
 		vars : List[VariableType],
-		valuesFor : ValueGenerator
+		valuesFor : AssignmentGenerator
 		)
 		: Option[(LocationType, Frontier[NodeType[A]])] =
 		vars match {
@@ -174,63 +186,52 @@ final case class SolutionTree[A] (
 				None;
 				
 			case last :: Nil =>
-				val allowedValues = valuesFor (
-					parent.getLabel.assignments,
-					last
-					).domain;
+				val leaves = immediateChildren (parent, last, valuesFor);
 				
-				val (node, newFrontier) = allowedValues.foldLeft ((parent, frontier)) {
-					case ((parent, frontier), value) =>
-						
-					createChildNode (parent, last, value) :-> frontier.enqueue;
+				/// Only create a node if there were child nodes produced
+				(!leaves.isEmpty).option {
+					addToLocation (parent, leaves) -> leaves.foldLeft (frontier) {
+						_.enqueue (_);
+						}
 					}
 				
-				/// We only propagate changes if any were introduced
-				node.hasChildren.option ((node, newFrontier));
-				
 			case intermediary :: tail =>
-				val allowedValues = valuesFor (
-					parent.getLabel.assignments,
-					intermediary
-					).domain;
+				val created = immediateChildren (
+					parent,
+					intermediary,
+					valuesFor
+					);
 				
-				allowedValues.foldLeft ((parent, frontier)) {
-					case ((prevParent, prevFrontier), value) =>
+				created.foldLeft (parent -> frontier) {
+					case ((prevParent, prevFrontier), node) =>
 						
 					val child = expander (
-						createChildNode (
-							prevParent,
-							intermediary,
-							value
-							)._1.lastChild.get,
+						prevParent.insertDownLast (node.leaf),
 						prevFrontier,
 						tail,
 						valuesFor
-						);
+						) map (p => ((_ : LocationType).parent.get) <-: p);
 					
 					/// As with leaf generation, only propagate changes if there
-					child.map {
-						p =>
-							
-						((_ : LocationType).parent.get) <-: p
-						} | (prevParent, prevFrontier);
-					}.some.filter (_._1.hasChildren)
+					child | (prevParent, prevFrontier);
+					}.some.filter (_._1.hasChildren);
 			}
 	
 	
-	private def createChildNode (
+	private def immediateChildren (
 		parent : LocationType,
 		variable : VariableType,
-		value : A
+		valuesFor : AssignmentGenerator
 		)
-		: (LocationType, NodeType[A]) =
+		: Stream[NodeType[A]] =
 	{
-		val node = parent.getLabel :+ Answer (variable.name, value);
+		val parentNode = parent.getLabel;
 		
-		(
-			parent.insertDownLast (node.leaf).parent.get,
-			node
-		);
+		valuesFor.generate (parentNode.assignments.toSeq, variable).map {
+			additions =>
+
+			parentNode map (e => additions ++ e);
+			}
 	}
 	
 	
@@ -278,14 +279,12 @@ object SolutionTree
 		import Cord._
 		
 		
-		override def show (solution : SolutionTree[A]) : Cord =
-			Cord ("SolutionTree(\n") ++
-			stringToCord (solution.tree.drawTree) ++
-			Cord ("Focus(") ++
-			stringToCord (solution.focus.getLabel.toString) ++
-			Cord (")\n") ++
-			solution.frontier.show ++
-			Cord ("\n)");
+		override def shows (solution : SolutionTree[A]) : String =
+			"""SolutionTree(\n"%s)\nFocus(%s)\n%s\n""".format (
+				solution.tree.drawTree,
+				solution.focus.getLabel,
+				solution.frontier.shows
+				);
 	}
 	
 	
@@ -318,7 +317,7 @@ object SolutionTree
 			
 	def apply[A] (
 		variable : Variable[A, DiscreteDomain],
-		valuesFor : SolutionTree[A]#ValueGenerator
+		valuesFor : SolutionTree[A]#AssignmentGenerator
 		)
 		(implicit ao : Ordering[Answer[A]], e : Equal[A])
 		: SolutionTree[A] =
@@ -353,13 +352,7 @@ object SolutionTree
 		).tupled (frontier.dequeue);
 	
 	
-	object implicits
-	{
-		/// Class Imports
-		import syntax.tree._
-		
-		
-		implicit def solutionShow[A : Show] : Show[SolutionTree[A]] =
-			new ShowSolutionTree[A];
-	}
+	/// Implicit Conversions
+	implicit def solutionShow[A : Show] : Show[SolutionTree[A]] =
+		new ShowSolutionTree[A];
 }

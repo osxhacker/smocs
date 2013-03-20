@@ -57,18 +57,22 @@ class SolveKnapsackProblemSpec
 	{
 		scenario ("When there are 18 units available")
 		{
-			pending;
 			import knapsack._
 			
 			Given ("constriants of 4 whiskey, 3 perfume, and 2 cigs");
-			
 			
 			val problem = Problem (
 				new PolynomialEquation[Int] {
 					def apply = 'whiskey * 4 + 'perfume * 3 + 'cigs * 2 <= 18
 					},
 				new PolynomialEquation[Int] {
-					def apply = 'profit := 'whiskey * 15 + 'perfume * 10 + 'cigs * 7;
+					def apply = 'profit := 'whiskey * 15 + 'perfume * 10 + 'cigs * 5;
+					},
+				new PolynomialEquation[Int] {
+					def apply = 'weight := 'whiskey * 10 + 'perfume * 1 + 'cigs * 3;
+					},
+				new PolynomialEquation[Int] {
+					def apply = 'whiskey * 10 + 'perfume * 1 + 'cigs * 3 < 20;
 					}
 				);
 			
@@ -96,6 +100,8 @@ class SolveKnapsackProblemSpec
 			val best = answers map (
 				_.sortBy (_.find (_.name == 'profit).get.value).reverse
 				);
+			
+			best map (_ should not be ('empty));
 		}
 	}
 }

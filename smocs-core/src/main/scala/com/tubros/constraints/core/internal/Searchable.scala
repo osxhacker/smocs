@@ -8,6 +8,7 @@ import scala.language.higherKinds
 import scalaz._
 
 import com.tubros.constraints.api.solver._
+import com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator
 
 
 /**
@@ -22,7 +23,7 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	/// Class Types
 	type LocationType
 	final type VariableType = Variable[A, DomainT]
-	type ValueGenerator = (Iterable[Answer[A]], VariableType) => VariableType
+	type AssignmentGenerator = AssignmentEnumerator[A, Stream]
 	
 	
 	def prune (location : LocationType) : Repr;
@@ -31,7 +32,7 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	def search[M[+_]] (
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
-		valuesFor : ValueGenerator
+		valuesFor : AssignmentGenerator
 		)
 		(implicit fm : Foldable[M])
 		: Option[Repr];

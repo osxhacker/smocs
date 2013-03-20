@@ -25,7 +25,7 @@ package problem
  * 
  * {{{
  * 		val derived = new SomeEquation {
- *   		def apply 'derived := 'a + 'b;
+ *   		def apply = 'derived := 'a + 'b;
  *   		}
  * }}}
  *

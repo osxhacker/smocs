@@ -54,9 +54,16 @@ object Answer
 		new Answer (pair._1, pair._2);
 	
 	
+	/**
+	 * The fromTuple method is an alias for the `apply` method.
+	 */
+	def fromTuple[A] (pair : (Symbol, A)) : Answer[A] =
+		apply[A] (pair);
+	
+	
 	private def answerIso[A] : IsoSet[Answer[A], VariableNameTuple[A]] =
 		new IsoSet[Answer[A], VariableNameTuple[A]] {
-			override def from = (p : VariableNameTuple[A]) => Answer (p);
+			override def from = (p : VariableNameTuple[A]) => fromTuple (p);
 			override def to = (Answer.unapply[A] _) andThen (_.get);
 			}
 	

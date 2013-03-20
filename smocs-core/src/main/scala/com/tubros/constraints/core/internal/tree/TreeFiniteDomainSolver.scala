@@ -4,19 +4,20 @@
 package com.tubros.constraints.core.internal
 package tree
 
-import scala.collection.mutable.LinkedHashMap
+import scala.collection.immutable.TreeMap
 import scala.language.higherKinds
 
-import scalaz._
+import scalaz.{
+	Ordering => _,
+	_
+	}
 
 import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
 
-import heuristic.{
-	AssignmentImpact,
-	ConstraintPropagation
-	}
+import heuristic.ConstraintPropagationEnumeratee
 import problem._
+import runtime._
 import solver._
 import solver.error._
 
@@ -123,21 +124,32 @@ class TreeFiniteDomainSolver[A] (
 				
 			implicit val ordering = new VariableStore.AnswerOrdering[A] (vs);
 			val tree = SolutionTree[A] ();
+			val assignmentProducer = AssignmentEnumerator[A, Stream] () map {
+				steps =>
+					
+				steps %= ConstraintPropagationEnumeratee[
+					A,
+					DomainType,
+					AssignmentEnumerator[A, Stream]#StateType
+					] (vs);
+				}
 			
 			// TOOO: this is a *very* temporary approach, as it hits all nodes!
 			val bruteForce = tree.expand (
 				tree.root,
 				variables,
-				new ConstraintPropagation[A, DomainType] (vs, vs.symbols)
+				assignmentProducer
 				);
 			val globalFilters = vs.globalConstraints ();
 			
-			bruteForce.toStream (expected = variables.length).filter {
+			bruteForce.toStream (expected = vs.symbols.size).filter {
 				candidate =>
 					
-				val args = LinkedHashMap (candidate.map (_.toTuple) : _*);
+				val args = TreeMap (candidate.map (_.toTuple) : _*) (
+					VariableStore.VariableNameOrdering
+					);
 				
-				globalFilters.run (args.toMap).isRight;
+				globalFilters.run (args).isRight;
 				}
 			}
 }

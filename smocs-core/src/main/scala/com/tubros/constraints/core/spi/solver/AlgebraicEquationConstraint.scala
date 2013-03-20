@@ -75,7 +75,11 @@ object AlgebraicEquationConstraint
 		extends AbstractInterpretedConstraint[A]
 			with AlgebraicConstraint[A]
 			with RelationalConstraint[A]
+			with DerivedValueConstraint[A]
 	{
+		override val derived = equation.derived;
+		
+		
 		override protected def interpreter
 			: Env[A] => PartialFunction[Expression[A], InterpretedResult[A]] =
 			env => (super.interpreter (env) orElse numericOps (env));

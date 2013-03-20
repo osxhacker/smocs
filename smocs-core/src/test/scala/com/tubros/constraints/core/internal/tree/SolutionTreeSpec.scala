@@ -17,6 +17,8 @@ import com.tubros.constraints.api._
 import com.tubros.constraints.api.solver._
 import com.tubros.constraints.core.spi.solver._
 
+import runtime.AssignmentEnumerator
+
 
 /**
  * The '''SolutionTreeSpec''' type defines the unit tests designed to certify
@@ -34,10 +36,10 @@ class SolutionTreeSpec
 	import syntax.show._
 	import syntax.std.option._
 	import SolutionTree._
-	import SolutionTree.implicits._
 	
 	
 	/// Testing Collaborators
+	val generator = AssignmentEnumerator[Int, Stream];
 	implicit def answerOrdering[A] = new Ordering[Answer[A]] {
 		override def compare (x : Answer[A], y : Answer[A]) =
 			x.name.toString.compareTo (y.name.toString);
@@ -65,7 +67,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			variables,
-			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable
+			valuesFor = generator
 			);
 		
 		expanded.frontier should not be ('empty);
@@ -82,7 +84,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			variables,
-			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable
+			valuesFor = generator
 			);
 		
 		expanded.frontier should not be ('empty);
@@ -100,7 +102,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			preExpansionVariables,
-			valuesFor = (_, variable : Variable[Int, DiscreteDomain]) => variable
+			valuesFor = generator
 			);
 		
 		expanded.frontier should be ('empty);
@@ -115,7 +117,7 @@ class SolutionTreeSpec
 		val expanded = empty.expand (
 			empty.root,
 			preExpansionVariables,
-			valuesFor = (_, v : Variable[Int, DiscreteDomain]) => v.filter (_ => false)
+			valuesFor = generator.map (_.map (_ => Stream.empty))
 			);
 		
 		expanded.frontier should be ('empty);
@@ -123,14 +125,9 @@ class SolutionTreeSpec
 	
 	it should "support flatMap operations" in
 	{
-		val identitySelector :
-			(Iterable[Answer[Int]], Variable[Int, DiscreteDomain])
-				=> Variable[Int, DiscreteDomain] =
-			(ia, variable) => variable;
-			
 		val expanded = SolutionTree[Int] (
 			DiscreteVariable ('a, FiniteDiscreteDomain (1, 2, 3)),
-			valuesFor = identitySelector
+			valuesFor = generator
 			);
 		
 		expanded.frontier should not be ('empty);
@@ -148,11 +145,9 @@ class SolutionTreeSpec
 			DiscreteVariable ('b, FiniteDiscreteDomain (10, 20)),
 			DiscreteVariable ('c, FiniteDiscreteDomain (100, 200))
 			);
-		val selector : SolutionTree[Int]#ValueGenerator =
-			(bound, variable) => variable;
 		val expanded = SolutionTree[Int] (
 			variables.head,
-			valuesFor = selector
+			valuesFor = generator
 			);
 		
 		expanded.frontier should not be ('empty);
@@ -165,7 +160,7 @@ class SolutionTreeSpec
 			SolutionTree.fromFrontier (node).search (
 				variables,
 				(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (1)),
-				selector
+				generator
 				).getOrElse (SolutionTree.empty[Int])
 			}
 		
@@ -183,7 +178,7 @@ class SolutionTreeSpec
 			SolutionTree.fromFrontier (_).search (
 				variables,
 				(vars : List[Variable[Int, DiscreteDomain]]) => List (vars (2)),
-				selector
+				generator
 				).getOrElse (SolutionTree.empty[Int])
 			}
 		
