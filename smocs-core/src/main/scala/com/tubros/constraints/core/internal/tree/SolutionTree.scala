@@ -61,23 +61,29 @@ final case class SolutionTree[A] (
 	private val NodeType = SolutionTreeNode;
 	
 	
+	def expand[M[+_]] (
+		variables : M[VariableType],
+		valuesFor : AssignmentGenerator
+		)
+		(implicit fm : Foldable[M])
+		: Option[SolutionTree[A]] =
+		expand[M] (focus, variables, valuesFor);
+	
+	
 	override def expand[M[+_]] (
 		location : LocationType,
 		variables : M[VariableType],
 		valuesFor : AssignmentGenerator
 		)
 		(implicit fm : Foldable[M])
-		: SolutionTree[A] =
-		expander (location, frontier, variables.toList, valuesFor) match {
-			case Some ((subTree, newFrontier)) =>
+		: Option[SolutionTree[A]] =
+		expander (location, frontier, variables.toList, valuesFor).map {
+			case (subTree, newFrontier) =>
 				copy (
 					tree = subTree.toTree,
 					focus = subTree,
 					frontier = newFrontier
 					);
-				
-			case None =>
-				this;
 			}
 	
 	
@@ -94,13 +100,13 @@ final case class SolutionTree[A] (
 		: SolutionTree[A] =
 	{
 		val subTree = functor (frontier);
-		/// A functor which returns an empty root node will not be merged
+		/// A functor which returns an empty tree will not be merged
 		/// into this SolutionTree.
 		val insertionSpot =
-			Some (subTree.tree).filterNot (_.rootLabel.isEmpty).flatMap {
+			Some (subTree).filterNot (_.isEmpty).flatMap {
 				newTree =>
 					
-				findNodeUnder (root, newTree.rootLabel);
+				findNodeUnder (root, newTree.tree.rootLabel);
 			}
 		
 		insertionSpot.fold (this) {
@@ -126,10 +132,25 @@ final case class SolutionTree[A] (
 		choose : M[VariableType] => M[VariableType],
 		valuesFor : AssignmentGenerator
 		)
-		(implicit fm : Foldable[M])
+		(implicit FM : Foldable[M])
 		: Option[SolutionTree[A]] =
 	{
-		val (location, nextFrontier) = frontier.dequeue;
+		def next (unexploredFrontier : Frontier[NodeType[A]], leafSize : Int)
+			: (Option[NodeType[A]], Frontier[NodeType[A]]) =
+			unexploredFrontier.dequeue match {
+				/// Skip over frontier entries which represent the limits of
+				/// the solution space and have no way to be expanded.
+				case (Some (leaf), updated)
+					if (leaf.assignments.size === leafSize)
+					=>
+
+					next (updated, leafSize);
+					
+				case other =>
+					other;
+				}
+		
+		val (location, updatedFrontier) = next (frontier, variables.toList.size);
 		val maybeExpandFrom = location.flatMap {
 			node =>
 				
@@ -138,14 +159,16 @@ final case class SolutionTree[A] (
 			findNodeUnder (focus, node) orElse findNodeUnder (root, node);
 			}
 		
-		maybeExpandFrom.map {
+		maybeExpandFrom.flatMap {
 			from =>
 				
-			copy (frontier = nextFrontier).expand (
-				from,
-				choose (variables),
-				valuesFor
+			val available = choose (variables).toList.drop (
+				from.getLabel.assignments.size
 				);
+			val updated = copy (focus = from, frontier = updatedFrontier);
+			val expanded = updated.expand (available, valuesFor);
+			
+			expanded orElse (Some (updated)) filterNot (_.frontier.isEmpty)
 			}
 	}
 	
@@ -218,27 +241,12 @@ final case class SolutionTree[A] (
 			}
 	
 	
-	private def immediateChildren (
-		parent : LocationType,
-		variable : VariableType,
-		valuesFor : AssignmentGenerator
-		)
-		: Stream[NodeType[A]] =
-	{
-		val parentNode = parent.getLabel;
-		
-		valuesFor.generate (parentNode.assignments.toSeq, variable).map {
-			additions =>
-
-			parentNode map (e => additions ++ e);
-			}
-	}
-	
-	
 	private def findNodeUnder (startingAt : LocationType, node : NodeType[A])
 		: Option[LocationType] =
 	{
-		val delta = node.assignments &~ startingAt.getLabel.assignments;
+		val delta = node.assignments.toList.filterNot (
+			a => startingAt.getLabel.assignments.find (_ === a).isDefined
+			);
 		
 		def finder (loc : LocationType, assignments : List[Answer[A]])
 			: Option[LocationType] =
@@ -255,7 +263,24 @@ final case class SolutionTree[A] (
 					}.flatMap (finder (_, assignments.tail))
 				);
 		
-		return (finder (startingAt, delta.toList));
+		return (finder (startingAt, delta));
+	}
+	
+	
+	private def immediateChildren (
+		parent : LocationType,
+		variable : VariableType,
+		valuesFor : AssignmentGenerator
+		)
+		: Stream[NodeType[A]] =
+	{
+		val parentNode = parent.getLabel;
+		
+		valuesFor.generate (parentNode.assignments.toSeq, variable) map {
+			additions =>
+
+			parentNode map (e => additions ++ e);
+			}
 	}
 }
 	
@@ -324,7 +349,7 @@ object SolutionTree
 	{
 		val space = empty[A];
 		
-		space.expand[Option] (space.root, Option (variable), valuesFor);
+		space.expand[Option] (space.root, Option (variable), valuesFor) | space;
 	}
 	
 	

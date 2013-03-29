@@ -140,31 +140,28 @@ object SymbolTable
 		override def derivedFrom (names : Set[VariableName])
 			: Set[VariableName] =
 		{
-			def roots (sink : collection.mutable.Set[VariableName])
+			def definers (sink : collection.mutable.Set[VariableName])
 				(cur : symbolGraph.NodeT)
 			{
 				val inbound = cur.inNeighbors;
 				
-				(inbound.isEmpty && !names.contains (cur.value)).fold (
-					sink += cur.value,
-					inbound foreach (roots (sink))
-					);
+				names.contains (cur.value).unless {
+					sink += cur.value;
+					}
+				
+				inbound foreach (definers (sink));
 			}
 			
 			val derived = new collection.mutable.HashSet[VariableName];
 			
-			names foreach {
-				name =>
+			names flatMap (name => symbolGraph.find (name)) foreach {
+				node =>
 					
-				symbolGraph.find (name) foreach {
-					node =>
-						
-					roots (derived) (node);
-					}
+				definers (derived) (node);
 				}
 			
 
-			return (derived.filter (hasDefiningSymbols (names)).toSet);
+			return (derived.filter (hasAllDefiningSymbols (names)).toSet);
 		}
 		
 		
@@ -195,7 +192,7 @@ object SymbolTable
 		
 		
 		@inline
-		private def hasDefiningSymbols (available : Set[VariableName])
+		private def hasAllDefiningSymbols (available : Set[VariableName])
 			(name : VariableName)
 			: Boolean =
 		{

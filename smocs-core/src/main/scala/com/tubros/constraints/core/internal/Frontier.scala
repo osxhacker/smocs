@@ -174,7 +174,7 @@ final case class FifoFrontier[A] (private[internal] val queue : Queue[A])
 }
 
 
-private case class GenericFrontier[A, C[+_]] (
+private[internal] case class GenericFrontier[A, C[+_]] (
 	override val size : Int,
 	private val container : C[A],
 	private val add : C[A] @> Option[A],
@@ -269,6 +269,41 @@ object Frontier
 	}
 	
 	
+	class ShowFrontier[A, T[X] <: Frontier[X]]
+		extends Show[T[A]]
+	{
+		/// Class Imports
+		import syntax.std.boolean._
+		import Cord._
+		
+		
+		/// Instance Properties
+		private val maxToPrint = 3;
+
+
+		override def show (frontier : T[A]) : Cord =
+			Cord ("Frontier(") ++
+			mkCord (Cord (", "), nodes (frontier, 0) : _ *) ++
+			Cord (")");
+		
+		private def nodes (frontier : Frontier[A], count : Int)
+			: List[Cord] =
+		{
+			val (cur, next) = frontier.dequeue;
+			lazy val emptyCord = next.isEmpty.fold (
+				List.empty[Cord],
+				List (Cord ("... %d more".format (frontier.size)))
+				)
+			
+			cur.filter (_ => count < maxToPrint).fold (emptyCord) {
+				node =>
+					
+				stringToCord (node.toString) :: nodes (next, count + 1);
+				}
+			}
+	}
+	
+	
 	/**
 	 * The apply method allows clients to create a '''Frontier''' instance
 	 * which will use the '''add'' [[scalaz.Lens]] when an element needs to
@@ -299,36 +334,11 @@ object Frontier
 	
 	/// Implicit Conversions
 	implicit def frontierShow[A] : Show[Frontier[A]] =
-		new Show[Frontier[A]]
-		{
-			/// Class Imports
-			import syntax.std.boolean._
-			import Cord._
-			
-			
-			/// Instance Properties
-			private val maxToPrint = 3;
-
-
-			override def show (frontier : Frontier[A]) : Cord =
-				Cord ("Frontier(") ++
-				mkCord (Cord (", "), nodes (frontier, 0) : _ *) ++
-				Cord (")");
-			
-			private def nodes (frontier : Frontier[A], count : Int)
-				: List[Cord] =
-			{
-				val (cur, next) = frontier.dequeue;
-				lazy val emptyCord = next.isEmpty.fold (
-					List.empty[Cord],
-					List (Cord ("... %d more".format (frontier.size)))
-					)
-				
-				cur.filter (_ => count < maxToPrint).fold (emptyCord) {
-					node =>
-						
-					stringToCord (node.toString) :: nodes (next, count + 1);
-					}
-				}
-			}
+		new ShowFrontier[A, Frontier];
+	
+	implicit def fifoFrontierShow[A] : Show[FifoFrontier[A]] =
+		new ShowFrontier[A, FifoFrontier];
+	
+	implicit def lifoFrontierShow[A] : Show[LifoFrontier[A]] =
+		new ShowFrontier[A, LifoFrontier];
 }

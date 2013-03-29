@@ -52,7 +52,7 @@ trait SolutionSpace[A, M[_], DomainT[X] <: Domain[X]]
 		valuesFor : AssignmentGenerator
 		)
 		(implicit fm : Foldable[M])
-		: ThisType;
+		: Option[ThisType];
 }
 
 object SolutionSpace

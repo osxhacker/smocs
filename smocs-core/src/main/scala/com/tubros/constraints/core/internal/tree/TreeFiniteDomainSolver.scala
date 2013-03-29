@@ -5,7 +5,10 @@ package com.tubros.constraints.core.internal
 package tree
 
 import scala.collection.immutable.TreeMap
-import scala.language.higherKinds
+import scala.language.{
+	higherKinds,
+	postfixOps
+	}
 
 import scalaz.{
 	Ordering => _,
@@ -15,7 +18,7 @@ import scalaz.{
 import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
 
-import heuristic.ConstraintPropagationEnumeratee
+import heuristic._
 import problem._
 import runtime._
 import solver._
@@ -36,7 +39,8 @@ class TreeFiniteDomainSolver[A] (
 	(implicit
 		override val canConstrain : CanConstrain[Equation, A],
 		override val MS : MonadState[StateBasedSolver.SolverStateT, VariableStore[A]],
-		e : Equal[A]
+		e : Equal[A],
+		s : Show[A]
 	)
 	extends Solver[
 		A,
@@ -122,8 +126,7 @@ class TreeFiniteDomainSolver[A] (
 		MS.gets {
 			vs =>
 				
-			implicit val ordering = new VariableStore.AnswerOrdering[A] (vs);
-			val tree = SolutionTree[A] ();
+			lazy val globalFilters = vs.globalConstraints ();
 			val assignmentProducer = AssignmentEnumerator[A, Stream] () map {
 				steps =>
 					
@@ -133,24 +136,57 @@ class TreeFiniteDomainSolver[A] (
 					AssignmentEnumerator[A, Stream]#StateType
 					] (vs);
 				}
+			val spaceToExplore = variables.headOption map {
+				root =>
+					
+				implicit val ordering = new VariableStore.AnswerOrdering[A] (vs);
+				
+				SolutionTree[A] (root, assignmentProducer);
+				} toStream;
 			
-			// TOOO: this is a *very* temporary approach, as it hits all nodes!
-			val bruteForce = tree.expand (
-				tree.root,
-				variables,
-				assignmentProducer
-				);
-			val globalFilters = vs.globalConstraints ();
-			
-			bruteForce.toStream (expected = vs.symbols.size).filter {
-				candidate =>
+			spaceToExplore >>=
+				(t => Stream (explore (t, variables, assignmentProducer))) >>=
+				{
+				(tree : SolutionTree[A]) =>
+					
+				tree.toStream (expected = vs.symbols.size);
+				} >>=
+				{
+				(candidate : Seq[Answer[A]]) =>
 					
 				val args = TreeMap (candidate.map (_.toTuple) : _*) (
 					VariableStore.VariableNameOrdering
 					);
 				
-				globalFilters.run (args).isRight;
+				globalFilters.run (args).isRight.fold (
+					Stream (candidate),
+					Stream.empty
+					);
 				}
 			}
+	
+	
+	private def explore (
+		tree : SolutionTree[A],
+		variables : List[Variable[A, DomainType]],
+		assigner : AssignmentEnumerator[A, Stream]
+		)
+		: SolutionTree[A] =
+	{
+		val choser = MinimumDomainSize[A] ();
+		
+		def loop (t : SolutionTree[A]) : SolutionTree[A] =
+			t.search (
+				variables,
+				(vs : List[Variable[A, DomainType]]) => choser (vs),
+				assigner
+				).fold (t) {
+				answer =>
+					
+				loop (answer);
+				}
+		
+		loop (tree);
+	}
 }
 

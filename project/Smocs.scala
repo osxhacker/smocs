@@ -110,7 +110,7 @@ object Dependencies
 
 	object Scalaz
 	{
-		private val version = "7.0.0-M8";
+		private val version = "7.0.0-M9";
 
 		lazy val core = Seq (
 			"org.scalaz" % "scalaz-core_2.10" % version,

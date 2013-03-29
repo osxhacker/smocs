@@ -33,7 +33,7 @@ trait TreeSolverUsage[A]
 		]
 		=>
 
-
+implicit object ShowA extends Show[A] { override def shows (a : A) = a.toString}
 	/// Class Types
 	type MonadType[T] = SolverType#SolverState[T]
 	type SolverType = TreeFiniteDomainSolver[A]
