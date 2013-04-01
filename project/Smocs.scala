@@ -151,7 +151,7 @@ object Dependencies
 
 	/// Compile Dependencies
 	lazy val compile = Scalaz.core ++ OSGi.all ++ Seq (
-		"org.scala-lang" % "scala-reflect" % "2.10.0"
+		"org.scala-lang" % "scala-reflect" % "2.10.1"
 		);
 
 	/// Test Dependencies
