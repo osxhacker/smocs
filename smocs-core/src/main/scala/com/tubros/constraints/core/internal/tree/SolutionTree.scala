@@ -162,13 +162,13 @@ final case class SolutionTree[A] (
 		maybeExpandFrom.flatMap {
 			from =>
 				
-			val available = choose (variables).toList.drop (
-				from.getLabel.assignments.size
+			val available = choose (variables).toList.filterNot (
+				v => from.getLabel.assignments.exists (_.name == v.name)
 				);
 			val updated = copy (focus = from, frontier = updatedFrontier);
 			val expanded = updated.expand (available, valuesFor);
 			
-			expanded orElse (Some (updated)) filterNot (_.frontier.isEmpty)
+			expanded orElse (Some (updated)) filterNot (_.frontier.isEmpty);
 			}
 	}
 	

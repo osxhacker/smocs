@@ -99,19 +99,25 @@ trait StateBasedSolver[
 		domain : DomainType[A]
 		)
 		: SolverState[List[Variable[A, DomainType]]] =
+		newArrayVar (name, size) (_ => domain);
+
+
+	override def newArrayVar (name : VariableName, size : Int)
+		(functor : Int => DomainType[A])
+		: SolverState[List[Variable[A, DomainType]]] =
 		StateT {
 			vs =>
-
-			val array = List.tabulate (size) {
+				
+			val jaggedArray = (0 until size).map {
 				index =>
+					
+				DiscreteVariable[A] (compose (name, index), functor (index));
+				}.to[List];
 
-				DiscreteVariable[A] (compose (name, index), domain);
-				}
-
-			\/- (vs.addVariables (array), array);
+			\/- (vs.addVariables (jaggedArray), jaggedArray);
 			}
-
-
+	
+	
 	override def newVar (name : VariableName, domain : DomainType[A])
 		: SolverState[Variable[A, DomainType]] =
 		StateT {

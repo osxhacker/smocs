@@ -5,12 +5,13 @@ package com.tubros.constraints.core.spi.solver.runtime
 
 import scala.language.postfixOps
 
+import scalaz._
+
 import scalax.collection.GraphPredef._
-import scalax.collection.GraphTraversal.VisitorReturn._
+import scalax.collection.GraphEdge._
+import scalax.collection.config.GraphConfig
 import scalax.collection.constrained._
 import scalax.collection.constrained.constraints.Acyclic
-
-import scalaz._
 
 import com.tubros.constraints.api._
 import com.tubros.constraints.core.spi.solver._
@@ -84,6 +85,12 @@ trait SymbolTable
 	def derivedFrom (names : Set[VariableName]) : Set[VariableName];
 	
 	
+	/**
+	 * The isDerived method indicates whether or not the given '''name'''
+	 * references a [[com.tubros.constraints.api.solver.Variable]] which is
+	 * defined in terms of one or more ''other'' 
+	 * [[com.tubros.constraints.api.solver.Variable]]s.
+	 */
 	def isDerived (name : VariableName) : Boolean;
 }
 
@@ -112,10 +119,19 @@ object SymbolTable
 			definedBy : Set[VariableName]
 			)
 			: SymbolTable =
+		{
+			require (
+				!definedBy.isEmpty,
+				"Derived symbol %s' must have symbols which define it".format (
+					name
+					)
+				);
+			
 			copy (
 				symbolGraph = symbolGraph ++ definedBy.map (p => name ~> p),
 				size = size + 1
 				);
+		}
 		
 		
 		override def addSymbol (name : VariableName) : SymbolTable =
@@ -204,8 +220,9 @@ object SymbolTable
 	
 	
 	/// Instance Properties
-	implicit private val config : Config = Acyclic;
+	implicit private val config : GraphConfig = Acyclic;
 	
 	
-	def empty : SymbolTable = DefaultSymbolTable (DAG[VariableName] (), 0);
+	val empty : SymbolTable = DefaultSymbolTable (Graph.empty[VariableName, DiEdge], 0);
 }
+

@@ -21,9 +21,9 @@ import runtime._
 
 /**
  * The '''VariableStore''' type is an `internal` type used to manage
- * [[com.tubros.contraints.api.solver.Variable]]s and the
+ * [[com.tubros.constraints.api.solver.Variable]]s and the
  * [[com.tubros.constraints.core.spi.solver.Constraint]]s placed on them for
- * various [[com.tubros.contraints.api.solver.Solver]]s.
+ * various [[com.tubros.constraints.api.solver.Solver]]s.
  *
  * @author svickers
  *

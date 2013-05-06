@@ -38,7 +38,7 @@ import com.tubros.constraints.api.solver._
  * like:
  * 
  * {{{
- * 		val produced = Seq (('xyz -> N));
+ * 		val produced = Seq ('xyz -> N);
  * }}}
  * 
  * For some value ''N'' within the `domain` of `xyz`.  This is assuming that
@@ -48,7 +48,7 @@ import com.tubros.constraints.api.solver._
  * would look like (note that ordering is not guaranteed):
  * 
  * {{{
- * 		val producedWithExtra = Seq (('xyz -> N), ('derived -> M));
+ * 		val producedWithExtra = Seq ('xyz -> N, 'derived -> M);
  * }}}
  * 
  * Where ''M'' is the value produced by the definition of `derived`.

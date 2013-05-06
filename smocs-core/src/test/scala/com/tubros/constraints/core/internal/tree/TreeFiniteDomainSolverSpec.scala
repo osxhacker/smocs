@@ -153,6 +153,57 @@ class TreeFiniteDomainSolverSpec
 		
 		solution should be ('left);
 	}
+	
+	it should "produce a list of Variables when newArrayVar is called" in
+	{
+		val solver = new TreeFiniteDomainSolver[Int] (rankingPolicy);
+		val domain = FiniteDiscreteDomain (1 to 1000);
+		val array = solver.newArrayVar ('a, 10, domain).eval (
+			VariableStore.empty[Int]
+			);
+		
+		array should be ('right);
+		array foreach {
+			definitions =>
+				
+			definitions should have size (10);
+			}
+	}
+	
+	it should "allow for Variables having a single value in their domain" in
+	{
+		val problem = Problem (
+			new PolynomialEquation[Int] {
+				def apply = 'x > 0
+				},
+			new PolynomialEquation[Int] {
+				def apply = 'x < 'y
+				}
+			);
+		val solver = new TreeFiniteDomainSolver[Int] (
+			ImpactRankingPolicy[Int] ()
+			);
+		val singleValue = FiniteDiscreteDomain (Seq (1));
+		val tenValues = FiniteDiscreteDomain (1 to 10);
+		val solution = solver {
+			s =>
+				
+			for {
+				_ <- s.newVar ('x, singleValue)
+				_ <- s.newVar ('y, tenValues)
+				_ <- s.add (problem)
+				stream <- s.run[Vector]
+				} yield stream;
+			}
+		
+		solution should be ('right);
+		solution foreach {
+			answer =>
+				
+			answer should not be ('empty);
+			answer.toList should have size (9);
+			}
+	}
 }
 
 

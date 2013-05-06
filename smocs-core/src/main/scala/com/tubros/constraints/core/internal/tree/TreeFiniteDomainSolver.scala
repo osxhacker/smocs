@@ -4,6 +4,7 @@
 package com.tubros.constraints.core.internal
 package tree
 
+import scala.annotation._
 import scala.collection.immutable.TreeMap
 import scala.language.{
 	higherKinds,
@@ -39,8 +40,8 @@ class TreeFiniteDomainSolver[A] (
 	(implicit
 		override val canConstrain : CanConstrain[Equation, A],
 		override val MS : MonadState[StateBasedSolver.SolverStateT, VariableStore[A]],
-		e : Equal[A],
-		s : Show[A]
+		E : Equal[A],
+		S : Show[A]
 	)
 	extends Solver[
 		A,
@@ -67,8 +68,8 @@ class TreeFiniteDomainSolver[A] (
 		for {
 			available <- variables ()
 			chosen <- chooseRootFrom (available)
-			satisfactory <- search (chosen)
-			answers <- label[C] (satisfactory)
+			satisfactoryAnswers <- search (chosen)
+			answers <- label[C] (satisfactoryAnswers)
 			} yield answers;
 
 	
@@ -173,20 +174,31 @@ class TreeFiniteDomainSolver[A] (
 		)
 		: SolutionTree[A] =
 	{
-		val choser = MinimumDomainSize[A] ();
+		val minimalSize = MinimumDomainSize[A] ();
+		val chooser
+			: List[Variable[A, DomainType]] => List[Variable[A, DomainType]] =
+			choices => {
+				val foo = minimalSize (choices);
+				
+				foo;
+			}
 		
+		@tailrec
 		def loop (t : SolutionTree[A]) : SolutionTree[A] =
-			t.search (
-				variables,
-				(vs : List[Variable[A, DomainType]]) => choser (vs),
-				assigner
-				).fold (t) {
-				answer =>
+			t.search (variables, chooser, assigner) match {
+				case None =>
+					t;
 					
-				loop (answer);
+				case Some (updated) =>
+					loop (updated);
 				}
 		
 		loop (tree);
 	}
 }
 
+
+object TreeFiniteDomainSolver
+{
+	def solverMonad[A] = StateBasedSolver.solverMonad[A];
+}

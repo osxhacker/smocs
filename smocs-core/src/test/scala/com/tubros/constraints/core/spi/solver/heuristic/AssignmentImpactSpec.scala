@@ -142,4 +142,35 @@ class AssignmentImpactSpec
 		
 		assessor.ofVariable (x) should be > (assessor.ofVariable (y));
 	}
+	
+	it should "support domains having a single value" in
+	{
+		val problem = Problem (
+			new PolyEquation {
+				def apply = 'x > 0;
+				},
+			new PolyEquation {
+				def apply = 'x < 'y;
+				},
+			new PolyEquation {
+				def apply = 'y < 5;
+				}
+			);
+		val x = DiscreteVariable ('x, FiniteDiscreteDomain (Seq (1)));
+		val y = DiscreteVariable ('y, FiniteDiscreteDomain (1 to 10));
+		val provider =
+			new TestConstraintProvider[Int] with SymbolTableProvider {
+				val constraints = problem.equations.map (
+					canConstrain.constrains
+					).list.to[Set];
+				
+				val symbols = SymbolTable.empty addSymbol ('x) addSymbol ('y);
+				}
+		val assessor = AssignmentImpact (
+			Vector[Variable[Int, DiscreteDomain]] (x, y),
+			provider
+			);
+		
+		assessor.ofVariable (x) should be < (assessor.ofVariable (y));
+	}
 }
