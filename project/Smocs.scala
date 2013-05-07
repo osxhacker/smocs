@@ -66,7 +66,7 @@ object Smocs
 	lazy val root = Project (
 		id = "smocs",
 		base = file ("."),
-		aggregate = Seq (api, core),
+		aggregate = Seq (api, core, examples),
 		settings = defaultSettings ++ Seq (
 			libraryDependencies ++= Dependencies.smocs
 			)
@@ -90,6 +90,15 @@ object Smocs
 			)
 		);
 
+	lazy val examples = Project (
+		id = "smocs-examples",
+		base = file ("smocs-examples"),
+		dependencies = Seq (api % "compile->compile;test->test", core),
+		settings = defaultSettings ++ Seq (
+			libraryDependencies ++= Dependencies.examples
+			)
+		);
+
 
 		/// Constructor Body
 }
@@ -110,7 +119,7 @@ object Dependencies
 
 	object Scalaz
 	{
-		private val version = "7.0.0-M9";
+		private val version = "7.0.0";
 
 		lazy val core = Seq (
 			"org.scalaz" % "scalaz-core_2.10" % version,
@@ -172,5 +181,6 @@ object Dependencies
 	lazy val smocs = compile;
 	lazy val api = compile ++ test;
 	lazy val core = compile ++ Graph.core ++ Scalaz.iteratee ++ test;
+	lazy val examples = compile ++ Graph.core ++ Scalaz.iteratee ++ test;
 }
 
