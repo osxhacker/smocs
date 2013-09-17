@@ -4,6 +4,7 @@
 package com.tubros.constraints.core.internal
 package tree
 
+import scala.annotation._
 import scala.language.{
 	higherKinds,
 	postfixOps
@@ -14,6 +15,7 @@ import scalaz.{
 	_
 	}
 
+import com.tubros.constraints.api._
 import com.tubros.constraints.api.solver._
 
 
@@ -61,7 +63,7 @@ final case class SolutionTree[A] (
 	private val NodeType = SolutionTreeNode;
 	
 	
-	def expand[M[+_]] (
+	def expand[M[_]] (
 		variables : M[VariableType],
 		valuesFor : AssignmentGenerator
 		)
@@ -70,7 +72,7 @@ final case class SolutionTree[A] (
 		expand[M] (focus, variables, valuesFor);
 	
 	
-	override def expand[M[+_]] (
+	override def expand[M[_]] (
 		location : LocationType,
 		variables : M[VariableType],
 		valuesFor : AssignmentGenerator
@@ -124,17 +126,26 @@ final case class SolutionTree[A] (
 	
 	
 	override def prune (location : LocationType) : SolutionTree[A] =
-		copy (tree = location.delete.map (_.toTree) getOrElse (tree));
+	{
+		val pruned = location.delete.map (_.toTree);
+		
+		pruned.fold (this) {
+			t =>
+				
+			copy (tree = t);
+			}
+	}
 	
 	
-	override def search[M[+_]] (
+	override def search[M[_]] (
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
 		valuesFor : AssignmentGenerator
 		)
-		(implicit FM : Foldable[M])
+		(implicit F : Foldable[M])
 		: Option[SolutionTree[A]] =
 	{
+		@tailrec
 		def next (unexploredFrontier : Frontier[NodeType[A]], leafSize : Int)
 			: (Option[NodeType[A]], Frontier[NodeType[A]]) =
 			unexploredFrontier.dequeue match {
@@ -151,7 +162,7 @@ final case class SolutionTree[A] (
 				}
 		
 		val (location, updatedFrontier) = next (frontier, variables.toList.size);
-		val maybeExpandFrom = location.flatMap {
+		val maybeExpandFrom = location >>= {
 			node =>
 				
 			/// Try finding it under the current focus first, dropping back
@@ -159,12 +170,10 @@ final case class SolutionTree[A] (
 			findNodeUnder (focus, node) orElse findNodeUnder (root, node);
 			}
 		
-		maybeExpandFrom.flatMap {
+		maybeExpandFrom >>= {
 			from =>
 				
-			val available = choose (variables).toList.filterNot (
-				v => from.getLabel.assignments.exists (_.name == v.name)
-				);
+			val available = from.getLabel.unassigned (choose (variables).toSet);
 			val updated = copy (focus = from, frontier = updatedFrontier);
 			val expanded = updated.expand (available, valuesFor);
 			

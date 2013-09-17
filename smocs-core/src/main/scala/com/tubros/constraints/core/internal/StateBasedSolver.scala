@@ -147,6 +147,9 @@ trait StateBasedSolver[
 }
 
 object StateBasedSolver
+	extends StateBasedFunctions
+	
+trait StateBasedFunctions
 {
 	/// Class Types
 	type ErrorOr[+T] = \/[SolverError, T]

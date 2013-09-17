@@ -108,17 +108,13 @@ class TreeFiniteDomainSolver[A] (
 		MS.gets {
 			vs =>
 				
-			val convertedStream = answers.map {
-				cur =>
-					
-				cur.foldLeft (MO.zero) {
+			answers.map {
+				_.foldLeft (MO.zero) {
 					case (accum, answer) =>
 						
 					accum |+| answer.point[C];
 					}
 				}
-			
-			convertedStream;
 			}
 	
 	
@@ -140,17 +136,15 @@ class TreeFiniteDomainSolver[A] (
 			val spaceToExplore = variables.headOption map {
 				root =>
 					
-				implicit val ordering = new VariableStore.AnswerOrdering[A] (vs);
+				implicit val ordering = vs.ordering;
 				
 				SolutionTree[A] (root, assignmentProducer);
 				} toStream;
 			
-			spaceToExplore >>=
-				(t => Stream (explore (t, variables, assignmentProducer))) >>=
-				{
-				(tree : SolutionTree[A]) =>
-					
-				tree.toStream (expected = vs.symbols.size);
+			spaceToExplore >>= {
+				explore (_, variables, assignmentProducer).toStream (
+					expected = vs.symbols.size
+					);
 				} >>=
 				{
 				(candidate : Seq[Answer[A]]) =>
@@ -159,9 +153,9 @@ class TreeFiniteDomainSolver[A] (
 					VariableStore.VariableNameOrdering
 					);
 				
-				globalFilters.run (args).isRight.fold (
-					Stream (candidate),
-					Stream.empty
+				globalFilters.run (args).fold (
+					_ => Stream.empty,
+					_ => Stream (candidate)
 					);
 				}
 			}
@@ -177,11 +171,7 @@ class TreeFiniteDomainSolver[A] (
 		val minimalSize = MinimumDomainSize[A] ();
 		val chooser
 			: List[Variable[A, DomainType]] => List[Variable[A, DomainType]] =
-			choices => {
-				val foo = minimalSize (choices);
-				
-				foo;
-			}
+			choices => minimalSize (choices);
 		
 		@tailrec
 		def loop (t : SolutionTree[A]) : SolutionTree[A] =
@@ -199,6 +189,5 @@ class TreeFiniteDomainSolver[A] (
 
 
 object TreeFiniteDomainSolver
-{
-	def solverMonad[A] = StateBasedSolver.solverMonad[A];
-}
+	extends StateBasedFunctions
+	

@@ -40,7 +40,7 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	/**
 	 * The search method uses the given '''variables''' to expand 
 	 */
-	def search[M[+_]] (
+	def search[M[_]] (
 		variables : M[VariableType],
 		choose : M[VariableType] => M[VariableType],
 		valuesFor : AssignmentGenerator

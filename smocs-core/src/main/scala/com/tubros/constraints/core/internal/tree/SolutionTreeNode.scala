@@ -13,7 +13,12 @@ import scalaz.{
 	_
 	}
 
-import com.tubros.constraints.api.solver.Answer
+import com.tubros.constraints.api._
+import com.tubros.constraints.api.solver.{
+	Answer,
+	Domain,
+	Variable
+	}
 
 
 /**
@@ -38,6 +43,7 @@ final case class SolutionTreeNode[A] (
 	
 	
 	/// Instance Properties
+	private lazy val bound = assignments map (_.name);
 	lazy val isEmpty : Boolean = assignments.isEmpty;
 	
 	
@@ -53,6 +59,11 @@ final case class SolutionTreeNode[A] (
 	def map (f : GenTraversableOnce[Answer[A]] => GenTraversableOnce[Answer[A]])
 		: SolutionTreeNode[A] =
 		SolutionTreeNode[A] (SortedSet.empty[Answer[A]] ++ f (assignments));
+	
+	
+	def unassigned[DT[X] <: Domain[X]] (variables : Set[Variable[A, DT]])
+		: Set[Variable[A, DT]] =
+		variables.filterNot (v => bound.exists (_ === v.name));
 }
 
 

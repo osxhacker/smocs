@@ -109,7 +109,7 @@ object Answer
 							
 						"%s(%s)".format (root.name, index);
 						},
-					a.shows
+					a.value.shows
 					);
 			}
 }

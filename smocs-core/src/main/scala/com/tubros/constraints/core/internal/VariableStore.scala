@@ -69,14 +69,17 @@ final case class VariableStore[A] (
 	def addAnswerFilter (entry : Constraint[A]) =
 		copy (answerFilters = answerFilters + entry);
 	
+	
 	def addConstraint (entry : Constraint[A]) =
 		copy (constraints = constraints + entry);
 		
+	
 	def addVariable (entry : DiscreteVariable[A]) =
 		copy (
 			variables = variables :+ entry,
 			symbols = symbols addSymbol (entry.name)
 			);
+	
 	
 	def addVariables (entries : Seq[DiscreteVariable[A]]) =
 		copy (
@@ -88,11 +91,16 @@ final case class VariableStore[A] (
 				}
 			);
 	
+
 	def defining (
 		derived : VariableName,
 		participants : Traversable[VariableName]
 		) =
 		copy (symbols = symbols addDerivedSymbol (derived, participants.toSet));
+	
+	
+	def ordering : Ordering[Answer[A]] = 
+		new VariableStore.AnswerOrdering[A] (this);
 }
 
 
