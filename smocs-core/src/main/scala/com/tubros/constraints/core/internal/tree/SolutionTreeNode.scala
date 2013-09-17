@@ -59,15 +59,11 @@ final case class SolutionTreeNode[A] (
 object SolutionTreeNode
 {
 	/// Class Imports
+	import syntax.show._
 	import syntax.std.boolean._
 	
 	
 	/// Implicit Conversions
-	implicit def nodeApplicative[A] (implicit o : Ordering[Answer[A]])
-		: Applicative[({ type L[X] = SolutionTreeNode[A] })#L] =
-		nodeMonoid[A].applicative;
-	
-	
 	implicit def nodeEqual[A] : Equal[SolutionTreeNode[A]] = Equal.equal {
 		(a, b) =>
 			
@@ -92,9 +88,18 @@ object SolutionTreeNode
 			}
 	
 	
-	implicit def nodeShow[A] : Show[SolutionTreeNode[A]] =
+	implicit def nodeShow[A : Show] : Show[SolutionTreeNode[A]] =
 		new Show[SolutionTreeNode[A]] {
-			override def shows (n : SolutionTreeNode[A]) = n.toString;
+			/// Class Imports
+			import Cord._
+			
+			
+			override def show (n : SolutionTreeNode[A]) =
+				Cord (
+					"Node(",
+					mkCord (",", n.assignments.map (_.show).toSeq : _*),
+					")"
+					);
 			}
 }
 	

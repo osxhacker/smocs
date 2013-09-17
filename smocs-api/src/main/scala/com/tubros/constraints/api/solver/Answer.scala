@@ -27,6 +27,13 @@ final case class Answer[A] (
 	val value : A
 	)
 {
+	/**
+	 * The canonical map method allows the application of an '''f'''unctor to
+	 * the contained `value`, producing an `Answer[B]` having the same `name`.
+	 */
+	def map[B] (f : A => B) : Answer[B] = copy (value = f (value));
+	
+	
 	def toTuple = Answer.AnswerIsoFunctor.to (this);
 }
 	
@@ -34,6 +41,7 @@ final case class Answer[A] (
 object Answer
 {
 	/// Class Imports
+	import scalaz.syntax.show._
 	import scalaz.std.tuple._
 	import Isomorphism._
 	
@@ -95,13 +103,13 @@ object Answer
 			with ArrayNamingPolicy
 			{
 			override def shows (a : Answer[A]) =
-				"Answer(%s,%s)".format (
+				"(%s -> %s)".format (
 					decompose (a.name).fold (a.name.toString) {
 						case (root, index) =>
 							
 						"%s(%s)".format (root.name, index);
 						},
-					a.value
+					a.shows
 					);
 			}
 }
