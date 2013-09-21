@@ -126,6 +126,9 @@ object Answer
  *				doSomethingWith (value);
  *     		}
  * }}}
+ *
+ * @author svickers
+ *
  */
 object ScalarNamed
 	extends ArrayNamingPolicy
@@ -144,12 +147,12 @@ object ScalarNamed
 }
 
 
-object ArrayVariables
+sealed trait ArraysToMap
 	extends ArrayNamingPolicy
 {
-	def unapplySeq[A] (answers : Seq[Answer[A]]) : Option[Seq[Map[Int, A]]] =
+	protected def arrays[A] (answers : Seq[Answer[A]]) =
 	{
-		val arrays = answers.view.filter (a => isArrayName (a.name)).flatMap {
+		answers.view.filter (a => isArrayName (a.name)).flatMap {
 			answer =>
 				
 			decompose (answer.name) map (parts => (parts._1, parts._2, answer));
@@ -157,11 +160,51 @@ object ArrayVariables
 				case (name, index, answer) =>
 				
 				name;
-			}.mapValues (triplets => triplets.map(t => (t._2, t._3.value)));
-			
-		if (arrays.isEmpty)
-			None
-		else
-			Some (arrays.values.view.toSeq.map (_.toMap));
+			}.mapValues (triplets => triplets.map (t => (t._2, t._3.value)));
 	}
+}
+
+
+/**
+ * The '''ArrayVariables''' extractor produces a `Seq[Map[Int, A]]` representing
+ * all array variables and their values, in ascending
+ * [[com.tubros.constraints.api.VariableName]] order.  Each `Map[Int, A]` has
+ * the array subscript as its key and the value for the variable as the map's
+ * value.
+ *
+ * @author svickers
+ *
+ */
+object ArrayVariables
+	extends ArraysToMap
+{
+	/// Class Imports
+	import Scalaz._
+	
+	
+	def unapplySeq[A] (answers : Seq[Answer[A]]) : Option[Seq[Map[Int, A]]] =
+		arrays (answers).point[Option] filterNot (_.isEmpty) map {
+			_.values.view.toSeq.map (_.toMap);
+			}
+}
+
+
+/**
+ * The '''AllArrays''' extractor is similar in spirit to the
+ * [[com.tubros.constraints.api.solver.ArrayVariables]] extractor, differing
+ * in that the result produced (if possible) is a
+ * `Map[VariableName, Map[Int, A]]`.
+ */
+object AllArrays
+	extends ArraysToMap
+{
+	/// Class Imports
+	import Scalaz._
+	
+	
+	def unapply[A] (all : Seq[Answer[A]])
+		: Option[Map[VariableName, Map[Int, A]]] =
+		arrays (all).point[Option] filterNot (_.isEmpty) map {
+			_.mapValues (_.toMap);
+			}
 }

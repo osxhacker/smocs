@@ -58,4 +58,15 @@ class AnswerExtractorsSpec
 				a1 should not contain key (99);
 			}
 	}
+	
+	it should "produce a sequence of arrays when wanted" in
+	{
+		answers match {
+			case AllArrays (all) =>
+				all.size should be === (2);
+				
+			case other =>
+				fail ("unexpected match: %s".format (other));
+			}
+	}
 }
