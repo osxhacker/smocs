@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>model - com.tubros.constraints.examples.cargo.model</title>
+          <meta name="description" content="model - com.tubros.constraints.examples.cargo.model" />
+          <meta name="keywords" content="model com.tubros.constraints.examples.cargo.model" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.tubros.constraints.examples.cargo.model.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints.examples">examples</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.examples.cargo">cargo</a></p>
+        <h1>model</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">model</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.tubros.constraints.examples.cargo.model.Cargo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CargoextendsProductwithSerializable"></a>
+      <a id="Cargo:Cargo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Cargo.html"><span class="name">Cargo</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Symbol">Symbol</span></span>, <span name="value">value: <span class="extype" name="scala.BigDecimal">BigDecimal</span></span>, <span name="weight">weight: <span class="extype" name="scala.Int">Int</span></span>, <span name="volume">volume: <a href="Volume.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Volume">Volume</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Cargo</b> type defines the model used to represent a piece of cargo
+being shipped in the example application.</p>
+    </li><li name="com.tubros.constraints.examples.cargo.model.CargoVessel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CargoVesselextendsProductwithSerializable"></a>
+      <a id="CargoVessel:CargoVessel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CargoVessel.html"><span class="name">CargoVessel</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tonnage">tonnage: <span class="extype" name="scala.Int">Int</span></span>, <span name="capacity">capacity: <a href="Volume.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Volume">Volume</a></span>, <span name="items">items: <span class="extype" name="scala.Seq">Seq</span>[<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">Cargo</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>CargoVessel</b> type embodies the concept of a transport which is
+capable of moving some amount <span class="extype" name="com.tubros.constraints.examples.cargo.Cargo">com.tubros.constraints.examples.cargo.Cargo</span>
+from one place to another.</p>
+    </li><li name="com.tubros.constraints.examples.cargo.model.Schedule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScheduleextendsProductwithSerializable"></a>
+      <a id="Schedule:Schedule"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Schedule.html"><span class="name">Schedule</span></a><span class="params">(<span name="vessel">vessel: <a href="CargoVessel.html" class="extype" name="com.tubros.constraints.examples.cargo.model.CargoVessel">CargoVessel</a></span>, <span name="anchors">anchors: <span class="extype" name="scala.Seq">Seq</span>[<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">Cargo</a>]</span>, <span name="guitars">guitars: <span class="extype" name="scala.Seq">Seq</span>[<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">Cargo</a>]</span>, <span name="pianos">pianos: <span class="extype" name="scala.Seq">Seq</span>[<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">Cargo</a>]</span>, <span name="plates">plates: <span class="extype" name="scala.Seq">Seq</span>[<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">Cargo</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Schedule</b> type is a <code>model</code> type which describes the
+<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">com.tubros.constraints.examples.cargo.model.Cargo</a> destined for a
+particular <b>vessel</b>.</p>
+    </li><li name="com.tubros.constraints.examples.cargo.model.ShippingContainers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ShippingContainersextendsProductwithSerializable"></a>
+      <a id="ShippingContainers:ShippingContainers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ShippingContainers.html"><span class="name">ShippingContainers</span></a><span class="params">(<span name="planes">planes: <span class="extype" name="scala.Int">Int</span></span>, <span name="ships">ships: <span class="extype" name="scala.Int">Int</span></span>, <span name="trucks">trucks: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ShippingContainers</b> type models the supported
+<a href="CargoVessel.html" class="extype" name="com.tubros.constraints.examples.cargo.model.CargoVessel">com.tubros.constraints.examples.cargo.model.CargoVessel</a>s available to
+the program for solving the constraint problem.</p>
+    </li><li name="com.tubros.constraints.examples.cargo.model.ShippingManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ShippingManifestextendsProductwithSerializable"></a>
+      <a id="ShippingManifest:ShippingManifest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ShippingManifest.html"><span class="name">ShippingManifest</span></a><span class="params">(<span name="anchors">anchors: <span class="extype" name="scala.Int">Int</span></span>, <span name="guitars">guitars: <span class="extype" name="scala.Int">Int</span></span>, <span name="pianos">pianos: <span class="extype" name="scala.Int">Int</span></span>, <span name="plates">plates: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ShippingManifest</b> type represents the various
+<a href="Cargo.html" class="extype" name="com.tubros.constraints.examples.cargo.model.Cargo">com.tubros.constraints.examples.cargo.model.Cargo</a> being shipped in a
+particular run.</p>
+    </li><li name="com.tubros.constraints.examples.cargo.model.Volume" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VolumeextendsProductwithSerializable"></a>
+      <a id="Volume:Volume"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Volume.html"><span class="name">Volume</span></a><span class="params">(<span name="height">height: <span class="extype" name="scala.Int">Int</span></span>, <span name="width">width: <span class="extype" name="scala.Int">Int</span></span>, <span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Volume</b> type objectifies the concept of how much space a unit of
+<span class="extype" name="com.tubros.constraints.examples.cargo.Cargo">com.tubros.constraints.examples.cargo.Cargo</span> occupies in the physical
+world.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.tubros.constraints.examples.cargo.model.Cargo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cargo"></a>
+      <a id="Cargo:Cargo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Cargo$.html"><span class="name">Cargo</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.examples.cargo.model.CargoVessel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CargoVessel"></a>
+      <a id="CargoVessel:CargoVessel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CargoVessel$.html"><span class="name">CargoVessel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.examples.cargo.model.Schedule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Schedule"></a>
+      <a id="Schedule:Schedule"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Schedule$.html"><span class="name">Schedule</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.examples.cargo.model.ShippingContainers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ShippingContainers"></a>
+      <a id="ShippingContainers:ShippingContainers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ShippingContainers$.html"><span class="name">ShippingContainers</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.examples.cargo.model.ShippingManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ShippingManifest"></a>
+      <a id="ShippingManifest:ShippingManifest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ShippingManifest$.html"><span class="name">ShippingManifest</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>

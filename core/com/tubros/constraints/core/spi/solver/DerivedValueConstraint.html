@@ -1,0 +1,778 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>DerivedValueConstraint - com.tubros.constraints.core.spi.solver.DerivedValueConstraint</title>
+          <meta name="description" content="DerivedValueConstraint - com.tubros.constraints.core.spi.solver.DerivedValueConstraint" />
+          <meta name="keywords" content="DerivedValueConstraint com.tubros.constraints.core.spi.solver.DerivedValueConstraint" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.tubros.constraints.core.spi.solver.DerivedValueConstraint';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints.core">core</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.core.spi">spi</a>.<a href="package.html" class="extype" name="com.tubros.constraints.core.spi.solver">solver</a></p>
+        <h1>DerivedValueConstraint</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DerivedValueConstraint</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <b>DerivedValueConstraint</b> type provides
+<a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">com.tubros.constraints.core.spi.solver.Interpreted</a> execution for
+producing an <span class="extype" name="com.tubros.constraints.api.problem.Answer">com.tubros.constraints.api.problem.Answer</span> based on the
+value produced from the <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">com.tubros.constraints.core.spi.solver.Constraint</a>
+definition.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>] with <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], <a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]], (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]) ⇒ <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint"><span>DerivedValueConstraint</span></li><li class="in" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint"><span>AbstractInterpretedConstraint</span></li><li class="in" name="com.tubros.constraints.core.spi.solver.Interpreted"><span>Interpreted</span></li><li class="in" name="com.tubros.constraints.core.spi.solver.Constraint"><span>Constraint</span></li><li class="in" name="scala.PartialFunction"><span>PartialFunction</span></li><li class="in" name="scala.Function1"><span>Function1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.tubros.constraints.core.spi.solver.Constraint.ConstraintResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ConstraintResult[+X]=scalaz.\/[com.tubros.constraints.api.solver.error.SolverError,Constraint.this.Env[X]]"></a>
+      <a id="ConstraintResult[+X]:(DerivedValueConstraint.this)#ConstraintResult[X]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConstraintResult</span><span class="tparams">[<span name="X">+X</span>]</span><span class="result"> = <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env">Env</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.ConstraintResult.X">X</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Constraint.Env" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Env[+A]=Map[com.tubros.constraints.api.VariableName,A]"></a>
+      <a id="Env[+A]:(DerivedValueConstraint.this)#Env[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Env</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> = <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InterpretedResult[X]=scalaz.EitherT[Option,Boolean,X]"></a>
+      <a id="InterpretedResult[X]:(DerivedValueConstraint.this)#InterpretedResult[X]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">InterpretedResult</span><span class="tparams">[<span name="X">X</span>]</span><span class="result"> = <span class="extype" name="scalaz.EitherT">EitherT</span>[<span class="extype" name="scala.Option">Option</span>, <span class="extype" name="scala.Boolean">Boolean</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult.X">X</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint#equation" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="equation:com.tubros.constraints.api.problem.Equation[A]"></a>
+      <a id="equation:Equation[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equation</span><span class="result">: <span class="extype" name="com.tubros.constraints.api.problem.Equation">Equation</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted#InterpretedResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InterpretedResult:scalaz.EitherT.type"></a>
+      <a id="InterpretedResult:EitherT.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">InterpretedResult</span><span class="result">: <span class="extype" name="scalaz.EitherT">EitherT</span>.type</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="scala.PartialFunction#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[C](k:B=&gt;C):PartialFunction[A,C]"></a>
+      <a id="andThen[C]((\/[SolverError,Map[VariableName,A]])⇒C):PartialFunction[Map[VariableName,A],C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="k">k: (<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]) ⇒ <span class="extype" name="scala.PartialFunction.andThen.C">C</span></span>)</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], <span class="extype" name="scala.PartialFunction.andThen.C">C</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction → Function1</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(input:Map[com.tubros.constraints.api.VariableName,A]):AbstractInterpretedConstraint.this.ConstraintResult[A]"></a>
+      <a id="apply(Map[VariableName,A]):(DerivedValueConstraint.this)#ConstraintResult[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.ConstraintResult">ConstraintResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The apply method transforms a set of variables by constraining their
+domains.</p><div class="fullcomment"><div class="comment cmt"><p>The apply method transforms a set of variables by constraining their
+domains.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a> → <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a> → Function1</dd></dl></div>
+    </li><li name="scala.PartialFunction#applyOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applyOrElse[A1&lt;:A,B1&gt;:B](x:A1,default:A1=&gt;B1):B1"></a>
+      <a id="applyOrElse[A1&lt;:Map[VariableName,A],B1&gt;:\/[SolverError,Map[VariableName,A]]](A1,(A1)⇒B1):B1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applyOrElse</span><span class="tparams">[<span name="A1">A1 &lt;: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>, <span name="B1">B1 &gt;: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="scala.PartialFunction.applyOrElse.A1">A1</span></span>, <span name="default">default: (<span class="extype" name="scala.PartialFunction.applyOrElse.A1">A1</span>) ⇒ <span class="extype" name="scala.PartialFunction.applyOrElse.B1">B1</span></span>)</span><span class="result">: <span class="extype" name="scala.PartialFunction.applyOrElse.B1">B1</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted#binary" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="binary(op:(A,A)=&gt;scalaz.\/[Boolean,A]):((A,A))=&gt;Interpreted.this.InterpretedResult[A]"></a>
+      <a id="binary((A,A)⇒\/[Boolean,A]):((A,A))⇒(DerivedValueConstraint.this)#InterpretedResult[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">binary</span><span class="params">(<span name="op">op: (<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>) ⇒ <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Boolean">Boolean</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: ((<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>)) ⇒ (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Function1#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[A](g:A=&gt;T1):A=&gt;R"></a>
+      <a id="compose[A]((A)⇒Map[VariableName,A]):(A)⇒\/[SolverError,Map[VariableName,A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint#derived" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="derived:Option[com.tubros.constraints.api.VariableName]"></a>
+      <a id="derived:Option[VariableName]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">derived</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The derived property identifies this <b>Constraint</b> as either
+<i>producing</i> a derived <span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span>
+or not.</p><div class="fullcomment"><div class="comment cmt"><p>The derived property identifies this <b>Constraint</b> as either
+<i>producing</i> a derived <span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span>
+or not.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a> → <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted#eval" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eval(env:Interpreted.this.Env[A])(l:com.tubros.constraints.api.problem.Expression[A],r:com.tubros.constraints.api.problem.Expression[A])(implicitm:scalaz.Monad[Interpreted.this.InterpretedResult]):Interpreted.this.InterpretedResult[(A,A)]"></a>
+      <a id="eval((DerivedValueConstraint.this)#Env[A])(Expression[A],Expression[A])(Monad[(DerivedValueConstraint.this)#InterpretedResult]):(DerivedValueConstraint.this)#InterpretedResult[(A,A)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eval</span><span class="params">(<span name="env">env: (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env">Env</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="params">(<span name="l">l: <span class="extype" name="com.tubros.constraints.api.problem.Expression">Expression</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>, <span name="r">r: <span class="extype" name="com.tubros.constraints.api.problem.Expression">Expression</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scalaz.Monad">Monad</span>[(<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>]</span>)</span><span class="result">: (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[(<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>)]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Constraint#exactMatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exactMatch(names:Set[com.tubros.constraints.api.VariableName]):Boolean"></a>
+      <a id="exactMatch(Set[VariableName]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exactMatch</span><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The exactMatch method determines whether or not this <b>Constraint</b>
+requires precisely all of the
+<span class="extype" name="com.tubros.constraints.api.VariableName">com.tubros.constraints.api.VariableName</span>s present in the <b>names</b>
+<span class="extype" name="scala.collection.Set">scala.collection.Set</span>.</p><div class="fullcomment"><div class="comment cmt"><p>The exactMatch method determines whether or not this <b>Constraint</b>
+requires precisely all of the
+<span class="extype" name="com.tubros.constraints.api.VariableName">com.tubros.constraints.api.VariableName</span>s present in the <b>names</b>
+<span class="extype" name="scala.collection.Set">scala.collection.Set</span>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint#interpreter" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="interpreter:DerivedValueConstraint.this.Env[A]=&gt;PartialFunction[com.tubros.constraints.api.problem.Expression[A],DerivedValueConstraint.this.InterpretedResult[A]]"></a>
+      <a id="interpreter:((DerivedValueConstraint.this)#Env[A])⇒PartialFunction[Expression[A],(DerivedValueConstraint.this)#InterpretedResult[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">interpreter</span><span class="result">: ((<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env">Env</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]) ⇒ <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="com.tubros.constraints.api.problem.Expression">Expression</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a> → <a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a> → <a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Constraint#isDefinedAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDefinedAt(names:Set[com.tubros.constraints.api.VariableName]):Boolean"></a>
+      <a id="isDefinedAt(Set[VariableName]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDefinedAt</span><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Constraint#isDefinedAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDefinedAt(values:Constraint.this.Env[A]):Boolean"></a>
+      <a id="isDefinedAt((DerivedValueConstraint.this)#Env[A]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDefinedAt</span><span class="params">(<span name="values">values: (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env">Env</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a> → PartialFunction</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.PartialFunction#lift" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lift:A=&gt;Option[B]"></a>
+      <a id="lift:(Map[VariableName,A])⇒Option[\/[SolverError,Map[VariableName,A]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lift</span><span class="result">: (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted#maybeBinary" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="maybeBinary(op:(A,A)=&gt;Interpreted.this.InterpretedResult[A]):((A,A))=&gt;Interpreted.this.InterpretedResult[A]"></a>
+      <a id="maybeBinary((A,A)⇒(DerivedValueConstraint.this)#InterpretedResult[A]):((A,A))⇒(DerivedValueConstraint.this)#InterpretedResult[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeBinary</span><span class="params">(<span name="op">op: (<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>) ⇒ (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: ((<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>)) ⇒ (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted#maybeUnary" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="maybeUnary(op:A=&gt;Interpreted.this.InterpretedResult[A]):A=&gt;Interpreted.this.InterpretedResult[A]"></a>
+      <a id="maybeUnary((A)⇒(DerivedValueConstraint.this)#InterpretedResult[A]):(A)⇒(DerivedValueConstraint.this)#InterpretedResult[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maybeUnary</span><span class="params">(<span name="op">op: (<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>) ⇒ (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>) ⇒ (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.PartialFunction#orElse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orElse[A1&lt;:A,B1&gt;:B](that:PartialFunction[A1,B1]):PartialFunction[A1,B1]"></a>
+      <a id="orElse[A1&lt;:Map[VariableName,A],B1&gt;:\/[SolverError,Map[VariableName,A]]](PartialFunction[A1,B1]):PartialFunction[A1,B1]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orElse</span><span class="tparams">[<span name="A1">A1 &lt;: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>, <span name="B1">B1 &gt;: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.PartialFunction.orElse.A1">A1</span>, <span class="extype" name="scala.PartialFunction.orElse.B1">B1</span>]</span>)</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.PartialFunction.orElse.A1">A1</span>, <span class="extype" name="scala.PartialFunction.orElse.B1">B1</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint#postProcessResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="postProcessResult(result:A,vars:DerivedValueConstraint.this.Env[A]):DerivedValueConstraint.this.Env[A]"></a>
+      <a id="postProcessResult(A,(DerivedValueConstraint.this)#Env[A]):(DerivedValueConstraint.this)#Env[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">postProcessResult</span><span class="params">(<span name="result">result: <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span></span>, <span name="vars">vars: (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env">Env</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Constraint.Env">Env</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a> → <a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a></dd></dl></div>
+    </li><li name="scala.PartialFunction#runWith" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="runWith[U](action:B=&gt;U):A=&gt;Boolean"></a>
+      <a id="runWith[U]((\/[SolverError,Map[VariableName,A]])⇒U):(Map[VariableName,A])⇒Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">runWith</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="action">action: (<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]) ⇒ <span class="extype" name="scala.PartialFunction.runWith.U">U</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Function1#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.Interpreted#unary" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unary(op:A=&gt;scalaz.\/[Boolean,A]):A=&gt;Interpreted.this.InterpretedResult[A]"></a>
+      <a id="unary((A)⇒\/[Boolean,A]):(A)⇒(DerivedValueConstraint.this)#InterpretedResult[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unary</span><span class="params">(<span name="op">op: (<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>) ⇒ <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Boolean">Boolean</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>) ⇒ (<a href="" class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint">DerivedValueConstraint</a>.this)#<span class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted.InterpretedResult">InterpretedResult</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a></dd></dl></div>
+    </li><li name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint#variables" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="variables:Set[com.tubros.constraints.api.VariableName]"></a>
+      <a id="variables:Set[VariableName]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">variables</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The variables property contains all
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span>s <i>used</i> in the
+definition of the <b>Constraint</b>.</p><div class="fullcomment"><div class="comment cmt"><p>The variables property contains all
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span>s <i>used</i> in the
+definition of the <b>Constraint</b>.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a> → <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">
+              <h3>Inherited from <a href="AbstractInterpretedConstraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.AbstractInterpretedConstraint">AbstractInterpretedConstraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</h3>
+            </div><div class="parent" name="com.tubros.constraints.core.spi.solver.Interpreted">
+              <h3>Inherited from <a href="Interpreted.html" class="extype" name="com.tubros.constraints.core.spi.solver.Interpreted">Interpreted</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</h3>
+            </div><div class="parent" name="com.tubros.constraints.core.spi.solver.Constraint">
+              <h3>Inherited from <a href="Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]</h3>
+            </div><div class="parent" name="scala.PartialFunction">
+              <h3>Inherited from <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>], <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]]</h3>
+            </div><div class="parent" name="scala.Function1">
+              <h3>Inherited from (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]) ⇒ <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.tubros.constraints.api.VariableName">VariableName</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.DerivedValueConstraint.A">A</span>]]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>

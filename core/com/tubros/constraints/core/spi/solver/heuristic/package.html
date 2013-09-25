@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>heuristic - com.tubros.constraints.core.spi.solver.heuristic</title>
+          <meta name="description" content="heuristic - com.tubros.constraints.core.spi.solver.heuristic" />
+          <meta name="keywords" content="heuristic com.tubros.constraints.core.spi.solver.heuristic" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../../index.html';
+            var hash = 'com.tubros.constraints.core.spi.solver.heuristic.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../../../package.html" class="extype" name="com.tubros.constraints.core">core</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints.core.spi">spi</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.core.spi.solver">solver</a></p>
+        <h1>heuristic</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">heuristic</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AssignmentImpact[A,M[_]]extendsProductwithSerializable"></a>
+      <a id="AssignmentImpact[A,M[_]]:AssignmentImpact[A,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AssignmentImpact.html"><span class="name">AssignmentImpact</span></a><span class="tparams">[<span name="A">A</span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="variables">variables: <span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact.M">M</span>[<span class="extype" name="com.tubros.constraints.api.solver.Variable">Variable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact.A">A</span>, <span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</span>]]</span>, <span name="provider">provider: <a href="../runtime/ConstraintProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.ConstraintProvider">ConstraintProvider</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact.A">A</span>] with <a href="../runtime/SymbolTableProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.SymbolTableProvider">SymbolTableProvider</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$1">evidence$1: <span class="extype" name="scalaz.Equal">Equal</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact.A">A</span>]</span>, <span name="evidence$2">evidence$2: <span class="extype" name="scalaz.Foldable">Foldable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact.M">M</span>]</span>, <span name="evidence$3">evidence$3: <span class="extype" name="scalaz.Functor">Functor</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.AssignmentImpact.M">M</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>AssignmentImpact</b> type is a heuristic which determines how much a
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span> impacts the estimated
+solution space size given an assignment to one of its
+<span class="extype" name="com.tubros.constraints.api.solver.Domain">com.tubros.constraints.api.solver.Domain</span> values.</p>
+    </li><li name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstraintPropagation[A,DomainT[X]&lt;:com.tubros.constraints.api.solver.Domain[X]]extends(Iterable[com.tubros.constraints.api.solver.Answer[A]],com.tubros.constraints.api.solver.Variable[A,DomainT])=&gt;com.tubros.constraints.api.solver.Variable[A,DomainT]withProductwithSerializable"></a>
+      <a id="ConstraintPropagation[A,DomainT[X]&lt;:Domain[X]]:ConstraintPropagation[A,DomainT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstraintPropagation.html"><span class="name">ConstraintPropagation</span></a><span class="tparams">[<span name="A">A</span>, <span name="DomainT">DomainT<span class="tparams">[<span name="X">X</span>]</span> &lt;: <span class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.DomainT.X">X</span>]</span>]</span><span class="params">(<span name="provider">provider: <a href="../runtime/ConstraintProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.ConstraintProvider">ConstraintProvider</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.A">A</span>]</span>, <span name="symbolTable">symbolTable: <a href="../runtime/SymbolTable.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.SymbolTable">SymbolTable</a></span>)</span><span class="result"> extends (<span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.A">A</span>]], <span class="extype" name="com.tubros.constraints.api.solver.Variable">Variable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.DomainT">DomainT</span>]) ⇒ <span class="extype" name="com.tubros.constraints.api.solver.Variable">Variable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.A">A</span>, <span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagation.DomainT">DomainT</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ConstraintPropagation</b> type is a functor which reduces the
+<span class="extype" name="com.tubros.constraints.api.solver.Domain">com.tubros.constraints.api.solver.Domain</span> of a candidate
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span> based on the
+<a href="../Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">com.tubros.constraints.core.spi.solver.Constraint</a>s <i>applicable</i> to
+the available (known) variables.</p>
+    </li><li name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstraintPropagationEnumeratee[A,DomainT[X]&lt;:com.tubros.constraints.api.solver.Domain[X],M[+_]]extendsEnumerateeT[Seq[com.tubros.constraints.api.solver.Answer[A]],Seq[com.tubros.constraints.api.solver.Answer[A]],M]withProductwithSerializable"></a>
+      <a id="ConstraintPropagationEnumeratee[A,DomainT[X]&lt;:Domain[X],M[+_]]:ConstraintPropagationEnumeratee[A,DomainT,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstraintPropagationEnumeratee.html"><span class="name">ConstraintPropagationEnumeratee</span></a><span class="tparams">[<span name="A">A</span>, <span name="DomainT">DomainT<span class="tparams">[<span name="X">X</span>]</span> &lt;: <span class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee.DomainT.X">X</span>]</span>, <span name="M">M<span class="tparams">[<span name="_">+_</span>]</span></span>]</span><span class="params">(<span name="provider">provider: <a href="../runtime/ConstraintProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.ConstraintProvider">ConstraintProvider</a>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee.A">A</span>] with <a href="../runtime/SymbolTableProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.SymbolTableProvider">SymbolTableProvider</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$1">evidence$1: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee.M">M</span>]</span>)</span><span class="result"> extends <span class="extype" name="scalaz.iteratee.EnumerateeT">EnumerateeT</span>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee.A">A</span>]], <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee.A">A</span>]], <span class="extype" name="com.tubros.constraints.core.spi.solver.heuristic.ConstraintPropagationEnumeratee.M">M</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ConstraintPropagationEnumeratee</b> type provides <i>constraint
+propagation</i> in situations where a <span class="extype" name="scalaz.iteratee.EnumerateeT">scalaz.iteratee.EnumerateeT</span> is
+desired.</p>
+    </li><li name="com.tubros.constraints.core.spi.solver.heuristic.MinimumDomainSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MinimumDomainSize[A]extendsProductwithSerializable"></a>
+      <a id="MinimumDomainSize[A]:MinimumDomainSize[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MinimumDomainSize.html"><span class="name">MinimumDomainSize</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">()</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>MinimumDomainSize</b> type <code>heuristic</code> determines which
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span> in a collection has the
+smallest <span class="extype" name="com.tubros.constraints.api.solver.Domain">com.tubros.constraints.api.solver.Domain</span> size
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.tubros.constraints.core.spi.solver.heuristic.EstimatedSearchSpace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EstimatedSearchSpace"></a>
+      <a id="EstimatedSearchSpace:EstimatedSearchSpace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EstimatedSearchSpace$.html"><span class="name">EstimatedSearchSpace</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>EstimatedSearchSpace</b> type is a heuristic for approximating how
+large an exhaustive search of a solution space would be.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../../lib/template.js"></script>
+    </body>
+      </html>

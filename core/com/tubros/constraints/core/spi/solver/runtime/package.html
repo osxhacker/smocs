@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>runtime - com.tubros.constraints.core.spi.solver.runtime</title>
+          <meta name="description" content="runtime - com.tubros.constraints.core.spi.solver.runtime" />
+          <meta name="keywords" content="runtime com.tubros.constraints.core.spi.solver.runtime" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../../index.html';
+            var hash = 'com.tubros.constraints.core.spi.solver.runtime.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../../../package.html" class="extype" name="com.tubros.constraints.core">core</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints.core.spi">spi</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.core.spi.solver">solver</a></p>
+        <h1>runtime</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">runtime</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AssignmentEnumerator[A,C[_]]extendsProductwithSerializable"></a>
+      <a id="AssignmentEnumerator[A,C[_]]:AssignmentEnumerator[A,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AssignmentEnumerator.html"><span class="name">AssignmentEnumerator</span></a><span class="tparams">[<span name="A">A</span>, <span name="C">C<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="steps">steps: <span class="extype" name="scalaz.iteratee.IterateeT">IterateeT</span>[<span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>]], [+T]<span class="extype" name="scalaz.IndexedStateT">IndexedStateT</span>[[+X]<span class="extype" name="scalaz.IdInstances.Id.X">X</span>, (<span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>]], <span class="extype" name="com.tubros.constraints.api.solver.Variable">Variable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>, <span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</span>]), (<span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>]], <span class="extype" name="com.tubros.constraints.api.solver.Variable">Variable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>, <span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</span>]), <span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.StateType.T">T</span>], <span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.C">C</span>[<span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>]]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="scalaz.Applicative">Applicative</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.C">C</span>]</span>, <span name="F">F: <span class="extype" name="scalaz.Foldable">Foldable</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.C">C</span>]</span>, <span name="MO">MO: <span class="extype" name="scalaz.Monoid">Monoid</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.C">C</span>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</span>[<span class="extype" name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator.A">A</span>]]]]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>AssignmentEnumerator</b> type is responsible for creating
+<span class="extype" name="com.tubros.constraints.api.VariableName">com.tubros.constraints.api.VariableName</span> assignments based on both an
+existing collection of <i>AssignmentElementType</i> instances and a
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span> for which new assignments
+are to be created.</p>
+    </li><li name="com.tubros.constraints.core.spi.solver.runtime.ConstraintProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ConstraintProvider[A]extendsAnyRef"></a>
+      <a id="ConstraintProvider[A]:ConstraintProvider[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstraintProvider.html"><span class="name">ConstraintProvider</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ConstraintProvider</b> type defines the contract for types to be able
+to provider <a href="../Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">com.tubros.constraints.core.spi.solver.Constraint</a>s which
+are in the proper invocation <span class="extype" name="scalaz.Kleisli">scalaz.Kleisli</span> composition.</p>
+    </li><li name="com.tubros.constraints.core.spi.solver.runtime.SymbolTable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SymbolTableextendsAnyRef"></a>
+      <a id="SymbolTable:SymbolTable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolTable.html"><span class="name">SymbolTable</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>SymbolTable</b> type defines the contract for resolving
+<span class="extype" name="com.tubros.constraints.api.VariableName">com.tubros.constraints.api.VariableName</span>s and the
+<span class="extype" name="com.tubros.constraints.core.internal.runtime.VariableDescriptor">com.tubros.constraints.core.internal.runtime.VariableDescriptor</span>s which
+capture their meta-data.</p>
+    </li><li name="com.tubros.constraints.core.spi.solver.runtime.SymbolTableProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SymbolTableProviderextendsAnyRef"></a>
+      <a id="SymbolTableProvider:SymbolTableProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolTableProvider.html"><span class="name">SymbolTableProvider</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>SymbolTableProvider</b> type defines the ability to provide a
+<a href="SymbolTable.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.SymbolTable">com.tubros.constraints.core.spi.solver.runtime.SymbolTable</a> in a manner
+which fully insulates clients from <i>how</i> this is achieved.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.tubros.constraints.core.spi.solver.runtime.AssignmentEnumerator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AssignmentEnumerator"></a>
+      <a id="AssignmentEnumerator:AssignmentEnumerator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AssignmentEnumerator$.html"><span class="name">AssignmentEnumerator</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.spi.solver.runtime.SymbolTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SymbolTable"></a>
+      <a id="SymbolTable:SymbolTable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolTable$.html"><span class="name">SymbolTable</span></a>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../../lib/template.js"></script>
+    </body>
+      </html>

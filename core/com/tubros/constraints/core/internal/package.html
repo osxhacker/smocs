@@ -1,0 +1,391 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>internal - com.tubros.constraints.core.internal</title>
+          <meta name="description" content="internal - com.tubros.constraints.core.internal" />
+          <meta name="keywords" content="internal com.tubros.constraints.core.internal" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.tubros.constraints.core.internal.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.core">core</a></p>
+        <h1>internal</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">internal</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <b>internal</b> <code>package</code> contains
+<span class="extype" name="com.tubros.constraints.core.spi.solver.Solver">com.tubros.constraints.core.spi.solver.Solver</span> implementations which, by
+their very nature and location, are implementation specific.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.tubros.constraints.core.internal"><span>internal</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.tubros.constraints.core.internal.BuiltinEquationConstraintCategories" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="BuiltinEquationConstraintCategoriesextendsAnyRef"></a>
+      <a id="BuiltinEquationConstraintCategories:BuiltinEquationConstraintCategories"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BuiltinEquationConstraintCategories.html"><span class="name">BuiltinEquationConstraintCategories</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>BuiltinEquationConstraintCategories</b> type provides <code>package</code> objects
+with a one-stop-shopping place to support the builtin
+<span class="extype" name="com.tubros.constraints.api.problem.Equation">com.tubros.constraints.api.problem.Equation</span>
+<a href="../spi/solver/CanConstrain.html" class="extype" name="com.tubros.constraints.core.spi.solver.CanConstrain">com.tubros.constraints.core.spi.solver.CanConstrain</a> objects without
+having to duplicate their definition throughout <code>internal</code>.</p>
+    </li><li name="com.tubros.constraints.core.internal.ConsistencyChecks" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ConsistencyChecks[A,DomainT[X]&lt;:com.tubros.constraints.api.solver.Domain[X]]extendsAnyRef"></a>
+      <a id="ConsistencyChecks[A,DomainT[X]&lt;:Domain[X]]:ConsistencyChecks[A,DomainT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ConsistencyChecks.html"><span class="name">ConsistencyChecks</span></a><span class="tparams">[<span name="A">A</span>, <span name="DomainT">DomainT<span class="tparams">[<span name="X">X</span>]</span> &lt;: <span class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</span>[<span class="extype" name="com.tubros.constraints.core.internal.ConsistencyChecks.DomainT.X">X</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ConsistencyChecks</b> type provides
+<span class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</span> types with common error
+checking functionality regarding the <i>definition</i> of the CSP.</p>
+    </li><li name="com.tubros.constraints.core.internal.FifoFrontier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FifoFrontier[A]extendsFrontier[A]withFrontierLike[A,com.tubros.constraints.core.internal.FifoFrontier[A]]withProductwithSerializable"></a>
+      <a id="FifoFrontier[A]:FifoFrontier[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FifoFrontier.html"><span class="name">FifoFrontier</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="queue">queue: <span class="extype" name="scala.collection.immutable.Queue">Queue</span>[<span class="extype" name="com.tubros.constraints.core.internal.FifoFrontier.A">A</span>]</span>)</span><span class="result"> extends <a href="Frontier.html" class="extype" name="com.tubros.constraints.core.internal.Frontier">Frontier</a>[<span class="extype" name="com.tubros.constraints.core.internal.FifoFrontier.A">A</span>] with <a href="FrontierLike.html" class="extype" name="com.tubros.constraints.core.internal.FrontierLike">FrontierLike</a>[<span class="extype" name="com.tubros.constraints.core.internal.FifoFrontier.A">A</span>, <a href="FifoFrontier.html" class="extype" name="com.tubros.constraints.core.internal.FifoFrontier">FifoFrontier</a>[<span class="extype" name="com.tubros.constraints.core.internal.FifoFrontier.A">A</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.Frontier" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Frontier[A]extendsFrontierLike[A,com.tubros.constraints.core.internal.Frontier[A]]"></a>
+      <a id="Frontier[A]:Frontier[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Frontier.html"><span class="name">Frontier</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="FrontierLike.html" class="extype" name="com.tubros.constraints.core.internal.FrontierLike">FrontierLike</a>[<span class="extype" name="com.tubros.constraints.core.internal.Frontier.A">A</span>, <a href="Frontier.html" class="extype" name="com.tubros.constraints.core.internal.Frontier">Frontier</a>[<span class="extype" name="com.tubros.constraints.core.internal.Frontier.A">A</span>]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Frontier</b> type formalizes the concept of managing solution nodes
+at the fringe of the <a href="SolutionSpace.html" class="extype" name="com.tubros.constraints.core.internal.SolutionSpace">com.tubros.constraints.core.internal.SolutionSpace</a>.</p>
+    </li><li name="com.tubros.constraints.core.internal.FrontierLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FrontierLike[A,+This&lt;:com.tubros.constraints.core.internal.FrontierLike[A,This]withcom.tubros.constraints.core.internal.Frontier[A]]extendsAnyRef"></a>
+      <a id="FrontierLike[A,+This&lt;:FrontierLike[A,This]withFrontier[A]]:FrontierLike[A,This]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FrontierLike.html"><span class="name">FrontierLike</span></a><span class="tparams">[<span name="A">A</span>, <span name="This">+This &lt;: <a href="FrontierLike.html" class="extype" name="com.tubros.constraints.core.internal.FrontierLike">FrontierLike</a>[<span class="extype" name="com.tubros.constraints.core.internal.FrontierLike.A">A</span>, <span class="extype" name="com.tubros.constraints.core.internal.FrontierLike.This">This</span>] with <a href="Frontier.html" class="extype" name="com.tubros.constraints.core.internal.Frontier">Frontier</a>[<span class="extype" name="com.tubros.constraints.core.internal.FrontierLike.A">A</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.LifoFrontier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LifoFrontier[A]extendsFrontier[A]withFrontierLike[A,com.tubros.constraints.core.internal.LifoFrontier[A]]withProductwithSerializable"></a>
+      <a id="LifoFrontier[A]:LifoFrontier[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LifoFrontier.html"><span class="name">LifoFrontier</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="stack">stack: <span class="extype" name="scala.collection.immutable.Stack">Stack</span>[<span class="extype" name="com.tubros.constraints.core.internal.LifoFrontier.A">A</span>]</span>)</span><span class="result"> extends <a href="Frontier.html" class="extype" name="com.tubros.constraints.core.internal.Frontier">Frontier</a>[<span class="extype" name="com.tubros.constraints.core.internal.LifoFrontier.A">A</span>] with <a href="FrontierLike.html" class="extype" name="com.tubros.constraints.core.internal.FrontierLike">FrontierLike</a>[<span class="extype" name="com.tubros.constraints.core.internal.LifoFrontier.A">A</span>, <a href="LifoFrontier.html" class="extype" name="com.tubros.constraints.core.internal.LifoFrontier">LifoFrontier</a>[<span class="extype" name="com.tubros.constraints.core.internal.LifoFrontier.A">A</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.Searchable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Searchable[A,+Repr,DomainT[X]&lt;:com.tubros.constraints.api.solver.Domain[X]]extendsAnyRef"></a>
+      <a id="Searchable[A,+Repr,DomainT[X]&lt;:Domain[X]]:Searchable[A,Repr,DomainT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Searchable.html"><span class="name">Searchable</span></a><span class="tparams">[<span name="A">A</span>, <span name="Repr">+Repr</span>, <span name="DomainT">DomainT<span class="tparams">[<span name="X">X</span>]</span> &lt;: <span class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</span>[<span class="extype" name="com.tubros.constraints.core.internal.Searchable.DomainT.X">X</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Searchable</b> type defines a concrete type's ability to perform
+the fundamental CSP solution operations needed to find answers.</p>
+    </li><li name="com.tubros.constraints.core.internal.SolutionSpace" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SolutionSpace[A,M[_],DomainT[X]&lt;:com.tubros.constraints.api.solver.Domain[X]]extendsSearchable[A,com.tubros.constraints.core.internal.SolutionSpace[A,M,DomainT],DomainT]"></a>
+      <a id="SolutionSpace[A,M[_],DomainT[X]&lt;:Domain[X]]:SolutionSpace[A,M,DomainT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SolutionSpace.html"><span class="name">SolutionSpace</span></a><span class="tparams">[<span name="A">A</span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="DomainT">DomainT<span class="tparams">[<span name="X">X</span>]</span> &lt;: <span class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</span>[<span class="extype" name="com.tubros.constraints.core.internal.SolutionSpace.DomainT.X">X</span>]</span>]</span><span class="result"> extends <a href="Searchable.html" class="extype" name="com.tubros.constraints.core.internal.Searchable">Searchable</a>[<span class="extype" name="com.tubros.constraints.core.internal.SolutionSpace.A">A</span>, <a href="SolutionSpace.html" class="extype" name="com.tubros.constraints.core.internal.SolutionSpace">SolutionSpace</a>[<span class="extype" name="com.tubros.constraints.core.internal.SolutionSpace.A">A</span>, <span class="extype" name="com.tubros.constraints.core.internal.SolutionSpace.M">M</span>, <span class="extype" name="com.tubros.constraints.core.internal.SolutionSpace.DomainT">DomainT</span>], <span class="extype" name="com.tubros.constraints.core.internal.SolutionSpace.DomainT">DomainT</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>SolutionSpace</b> type codifies the concept of a CSP's possible
+solutions, with the universe of values not necessarily known at the outset
+of searching.</p>
+    </li><li name="com.tubros.constraints.core.internal.StateBasedFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StateBasedFunctionsextendsAnyRef"></a>
+      <a id="StateBasedFunctions:StateBasedFunctions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StateBasedFunctions.html"><span class="name">StateBasedFunctions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.StateBasedSolver" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StateBasedSolver[A,+SolverT&lt;:com.tubros.constraints.api.solver.Solver[A,[+X]scalaz.IndexedStateT[[+T]scalaz.\/[com.tubros.constraints.api.solver.error.SolverError,T],com.tubros.constraints.core.internal.VariableStore[A],com.tubros.constraints.core.internal.VariableStore[A],X],SolverT]]extendsArrayNamingPolicy"></a>
+      <a id="StateBasedSolver[A,+SolverT&lt;:Solver[A,[+X]IndexedStateT[[+T]\/[SolverError,T],VariableStore[A],VariableStore[A],X],SolverT]]:StateBasedSolver[A,SolverT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StateBasedSolver.html"><span class="name">StateBasedSolver</span></a><span class="tparams">[<span name="A">A</span>, <span name="SolverT">+SolverT &lt;: <span class="extype" name="com.tubros.constraints.api.solver.Solver">Solver</span>[<span class="extype" name="com.tubros.constraints.core.internal.StateBasedSolver.A">A</span>, [+X]<span class="extype" name="scalaz.IndexedStateT">IndexedStateT</span>[[+T]<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="com.tubros.constraints.api.solver.error.SolverError">SolverError</span>, <span class="extype" name="com.tubros.constraints.core.internal.StateBasedFunctions.ErrorOr.T">T</span>], <a href="VariableStore.html" class="extype" name="com.tubros.constraints.core.internal.VariableStore">VariableStore</a>[<span class="extype" name="com.tubros.constraints.core.internal.StateBasedSolver.A">A</span>], <a href="VariableStore.html" class="extype" name="com.tubros.constraints.core.internal.VariableStore">VariableStore</a>[<span class="extype" name="com.tubros.constraints.core.internal.StateBasedSolver.A">A</span>], <span class="extype" name="com.tubros.constraints.core.internal.&lt;refinement&gt;.L.X">X</span>], <span class="extype" name="com.tubros.constraints.core.internal.StateBasedSolver.SolverT">SolverT</span>]</span>]</span><span class="result"> extends <span class="extype" name="com.tubros.constraints.api.problem.ArrayNamingPolicy">ArrayNamingPolicy</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>StateBasedSolver</b> type captures behavior common to all
+<span class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</span>s which use <a href="../../../../../scalaz/package.html#StateT[F[+_],S,+A]=scalaz.IndexedStateT[F,S,S,A]" class="extmbr" name="scalaz.StateT">scalaz.StateT</a>
+as their implementation <span class="extype" name="scalaz.Monad">scalaz.Monad</span>.</p>
+    </li><li name="com.tubros.constraints.core.internal.VariableStore" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VariableStore[A]extendsConstraintProvider[A]withSymbolTableProviderwithProductwithSerializable"></a>
+      <a id="VariableStore[A]:VariableStore[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="VariableStore.html"><span class="name">VariableStore</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="variables">variables: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="com.tubros.constraints.api.solver.Variable">Variable</span>[<span class="extype" name="com.tubros.constraints.core.internal.VariableStore.A">A</span>, <span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</span>]]</span>, <span name="constraints">constraints: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="../spi/solver/Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a>[<span class="extype" name="com.tubros.constraints.core.internal.VariableStore.A">A</span>]]</span>, <span name="answerFilters">answerFilters: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="../spi/solver/Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">Constraint</a>[<span class="extype" name="com.tubros.constraints.core.internal.VariableStore.A">A</span>]]</span>, <span name="symbols">symbols: <a href="../spi/solver/runtime/SymbolTable.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.SymbolTable">SymbolTable</a></span>)</span><span class="result"> extends <a href="../spi/solver/runtime/ConstraintProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.ConstraintProvider">ConstraintProvider</a>[<span class="extype" name="com.tubros.constraints.core.internal.VariableStore.A">A</span>] with <a href="../spi/solver/runtime/SymbolTableProvider.html" class="extype" name="com.tubros.constraints.core.spi.solver.runtime.SymbolTableProvider">SymbolTableProvider</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>VariableStore</b> type is an <code>internal</code> type used to manage
+<span class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</span>s and the
+<a href="../spi/solver/Constraint.html" class="extype" name="com.tubros.constraints.core.spi.solver.Constraint">com.tubros.constraints.core.spi.solver.Constraint</a>s placed on them for
+various <span class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</span>s.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.tubros.constraints.core.internal.Frontier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Frontier"></a>
+      <a id="Frontier:Frontier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Frontier$.html"><span class="name">Frontier</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.SolutionSpace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SolutionSpace"></a>
+      <a id="SolutionSpace:SolutionSpace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SolutionSpace$.html"><span class="name">SolutionSpace</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.StateBasedSolver" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StateBasedSolver"></a>
+      <a id="StateBasedSolver:StateBasedSolver"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StateBasedSolver$.html"><span class="name">StateBasedSolver</span></a><span class="result"> extends <a href="StateBasedFunctions.html" class="extype" name="com.tubros.constraints.core.internal.StateBasedFunctions">StateBasedFunctions</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.VariableStore" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VariableStore"></a>
+      <a id="VariableStore:VariableStore"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="VariableStore$.html"><span class="name">VariableStore</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.package#constraints" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="constraints:com.tubros.constraints.core.spi.solver.ToCanConstrainOps.type"></a>
+      <a id="constraints:ToCanConstrainOps.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">constraints</span><span class="result">: <a href="../spi/solver/ToCanConstrainOps$.html" class="extype" name="com.tubros.constraints.core.spi.solver.ToCanConstrainOps">ToCanConstrainOps</a>.type</span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.core.internal.graph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="graph"></a>
+      <a id="graph:graph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="graph/package.html"><span class="name">graph</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>graph</b> <code>package</code> defines
+<span class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</span> types related to graph-based
+implementations.</p>
+    </li><li name="com.tubros.constraints.core.internal.simple" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="simple"></a>
+      <a id="simple:simple"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="simple/package.html"><span class="name">simple</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>simple</b> <code>package</code> provides types/instances relevant when using the
+<span class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</span>s defined herein.</p>
+    </li><li name="com.tubros.constraints.core.internal.tree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tree"></a>
+      <a id="tree:tree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="tree/package.html"><span class="name">tree</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>tree</b> <code>package</code> object defines types, <code>object</code>s, and implicit
+conversions used in the classes defined in this <code>package</code>.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+    </body>
+      </html>

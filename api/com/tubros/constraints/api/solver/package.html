@@ -1,0 +1,389 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>solver - com.tubros.constraints.api.solver</title>
+          <meta name="description" content="solver - com.tubros.constraints.api.solver" />
+          <meta name="keywords" content="solver com.tubros.constraints.api.solver" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.tubros.constraints.api.solver.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.api">api</a></p>
+        <h1>solver</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">solver</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <b>solver</b> <code>package</code> defines CSP types which reify abstractions
+involved in providing CSP solver functionality to Smocs.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.tubros.constraints.api.solver"><span>solver</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.tubros.constraints.api.solver.Answer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Answer[A]extendsProductwithSerializable"></a>
+      <a id="Answer[A]:Answer[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Answer.html"><span class="name">Answer</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: <a href="../package.html#VariableName=scalaz.@@[Symbol,com.tubros.constraints.api.VariableNameTag]" class="extmbr" name="com.tubros.constraints.api.VariableName">VariableName</a></span>, <span name="value">value: <span class="extype" name="com.tubros.constraints.api.solver.Answer.A">A</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Answer</b> type embodies the results of running a
+<a href="Solver.html" class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</a> which satisfies the CSP given
+to it.</p>
+    </li><li name="com.tubros.constraints.api.solver.ArraysToMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ArraysToMapextendsArrayNamingPolicy"></a>
+      <a id="ArraysToMap:ArraysToMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ArraysToMap.html"><span class="name">ArraysToMap</span></a><span class="result"> extends <a href="../problem/ArrayNamingPolicy.html" class="extype" name="com.tubros.constraints.api.problem.ArrayNamingPolicy">ArrayNamingPolicy</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.DiscreteDomain" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DiscreteDomain[T]extendsDomain[T]withSet[T]withSetLike[T,com.tubros.constraints.api.solver.DiscreteDomain[T]]withSerializable"></a>
+      <a id="DiscreteDomain[T]:DiscreteDomain[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DiscreteDomain.html"><span class="name">DiscreteDomain</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Domain.html" class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</a>[<span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain.T">T</span>] with <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain.T">T</span>] with <span class="extype" name="scala.collection.SetLike">SetLike</span>[<span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain.T">T</span>, <a href="DiscreteDomain.html" class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</a>[<span class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain.T">T</span>]] with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>DiscreteDomain</b> type represents
+<a href="Domain.html" class="extype" name="com.tubros.constraints.api.solver.Domain">com.tubros.constraints.api.solver.Domain</a>s in which their values are
+separate and distinct.</p>
+    </li><li name="com.tubros.constraints.api.solver.DiscreteDomainInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DiscreteDomainInstancesextendsAnyRef"></a>
+      <a id="DiscreteDomainInstances:DiscreteDomainInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DiscreteDomainInstances.html"><span class="name">DiscreteDomainInstances</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.Domain" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Domain[T]extendsIterable[T]"></a>
+      <a id="Domain[T]:Domain[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Domain.html"><span class="name">Domain</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.collection.Iterable">Iterable</span>[<span class="extype" name="com.tubros.constraints.api.solver.Domain.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Domain</b> type represents the complete legal values an arbitrary
+object (of type <i>T</i>) can take.</p>
+    </li><li name="com.tubros.constraints.api.solver.DomainInstances" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DomainInstancesextendsAnyRef"></a>
+      <a id="DomainInstances:DomainInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DomainInstances.html"><span class="name">DomainInstances</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.FiniteDiscreteDomain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FiniteDiscreteDomain[T]extendsDiscreteDomain[T]withProductwithSerializable"></a>
+      <a id="FiniteDiscreteDomain[T]:FiniteDiscreteDomain[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FiniteDiscreteDomain.html"><span class="name">FiniteDiscreteDomain</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="self">self: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="com.tubros.constraints.api.solver.FiniteDiscreteDomain.T">T</span>]</span>)</span><span class="result"> extends <a href="DiscreteDomain.html" class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</a>[<span class="extype" name="com.tubros.constraints.api.solver.FiniteDiscreteDomain.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>FiniteDiscreteDomain</b> type is a
+<a href="DiscreteDomain.html" class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">com.tubros.constraints.api.solver.DiscreteDomain</a> which has a
+quantifiable <code>size</code>.</p>
+    </li><li name="com.tubros.constraints.api.solver.GlobalConstraint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GlobalConstraint[A]=PartialFunction[Seq[com.tubros.constraints.api.solver.Answer[A]],Boolean]"></a>
+      <a id="GlobalConstraint[A]:GlobalConstraint[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GlobalConstraint</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Seq">Seq</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="com.tubros.constraints.api.solver.GlobalConstraint.A">A</span>]], <span class="extype" name="scala.Boolean">Boolean</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.Solver" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Solver[A,M[+_],+SolverT&lt;:com.tubros.constraints.api.solver.Solver[A,M,SolverT]]extendsAnyRef"></a>
+      <a id="Solver[A,M[+_],+SolverT&lt;:Solver[A,M,SolverT]]:Solver[A,M,SolverT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Solver.html"><span class="name">Solver</span></a><span class="tparams">[<span name="A">A</span>, <span name="M">M<span class="tparams">[<span name="_">+_</span>]</span></span>, <span name="SolverT">+SolverT &lt;: <a href="Solver.html" class="extype" name="com.tubros.constraints.api.solver.Solver">Solver</a>[<span class="extype" name="com.tubros.constraints.api.solver.Solver.A">A</span>, <span class="extype" name="com.tubros.constraints.api.solver.Solver.M">M</span>, <span class="extype" name="com.tubros.constraints.api.solver.Solver.SolverT">SolverT</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Solver</b> type defines a generic interface for running a CPS solution
+algorithm.</p>
+    </li><li name="com.tubros.constraints.api.solver.Variable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Variable[A,DomainT[A]&lt;:com.tubros.constraints.api.solver.Domain[A]]extendsAnyRef"></a>
+      <a id="Variable[A,DomainT[A]&lt;:Domain[A]]:Variable[A,DomainT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Variable.html"><span class="name">Variable</span></a><span class="tparams">[<span name="A">A</span>, <span name="DomainT">DomainT<span class="tparams">[<span name="A">A</span>]</span> &lt;: <a href="Domain.html" class="extype" name="com.tubros.constraints.api.solver.Domain">Domain</a>[<span class="extype" name="com.tubros.constraints.api.solver.Variable.DomainT.A">A</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>Variable</b> type defines the API contract all types representing a
+<a href="Domain.html" class="extype" name="com.tubros.constraints.api.solver.Domain">com.tubros.constraints.api.solver.Domain</a>-constrained symbolic variable
+must satisfy in order to be able to minimally participate in the evaluation
+of a <a href="Solver.html" class="extype" name="com.tubros.constraints.api.solver.Solver">com.tubros.constraints.api.solver.Solver</a>.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.tubros.constraints.api.solver.AllArrays" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AllArrays"></a>
+      <a id="AllArrays:AllArrays"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AllArrays$.html"><span class="name">AllArrays</span></a><span class="result"> extends <a href="ArraysToMap.html" class="extype" name="com.tubros.constraints.api.solver.ArraysToMap">ArraysToMap</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>AllArrays</b> extractor is similar in spirit to the
+<a href="ArrayVariables$.html" class="extype" name="com.tubros.constraints.api.solver.ArrayVariables">com.tubros.constraints.api.solver.ArrayVariables</a> extractor, differing
+in that the result produced (if possible) is a
+<code>Map[VariableName, Map[Int, A]]</code>.</p>
+    </li><li name="com.tubros.constraints.api.solver.Answer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Answer"></a>
+      <a id="Answer:Answer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Answer$.html"><span class="name">Answer</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.ArrayVariables" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ArrayVariables"></a>
+      <a id="ArrayVariables:ArrayVariables"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ArrayVariables$.html"><span class="name">ArrayVariables</span></a><span class="result"> extends <a href="ArraysToMap.html" class="extype" name="com.tubros.constraints.api.solver.ArraysToMap">ArraysToMap</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ArrayVariables</b> extractor produces a <code>Seq[Map[Int, A]]</code> representing
+all array variables and their values, in ascending
+<a href="../package.html#VariableName=scalaz.@@[Symbol,com.tubros.constraints.api.VariableNameTag]" class="extmbr" name="com.tubros.constraints.api.VariableName">com.tubros.constraints.api.VariableName</a> order.</p>
+    </li><li name="com.tubros.constraints.api.solver.DiscreteDomain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DiscreteDomain"></a>
+      <a id="DiscreteDomain:DiscreteDomain"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DiscreteDomain$.html"><span class="name">DiscreteDomain</span></a><span class="result"> extends <span class="extype" name="scala.collection.generic.ImmutableSetFactory">ImmutableSetFactory</span>[<a href="DiscreteDomain.html" class="extype" name="com.tubros.constraints.api.solver.DiscreteDomain">DiscreteDomain</a>] with <a href="DiscreteDomainInstances.html" class="extype" name="com.tubros.constraints.api.solver.DiscreteDomainInstances">DiscreteDomainInstances</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.Domain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Domain"></a>
+      <a id="Domain:Domain"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Domain$.html"><span class="name">Domain</span></a><span class="result"> extends <a href="DomainInstances.html" class="extype" name="com.tubros.constraints.api.solver.DomainInstances">DomainInstances</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.FiniteDiscreteDomain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FiniteDiscreteDomain"></a>
+      <a id="FiniteDiscreteDomain:FiniteDiscreteDomain"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FiniteDiscreteDomain$.html"><span class="name">FiniteDiscreteDomain</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.ScalarNamed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScalarNamed"></a>
+      <a id="ScalarNamed:ScalarNamed"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalarNamed$.html"><span class="name">ScalarNamed</span></a><span class="result"> extends <a href="../problem/ArrayNamingPolicy.html" class="extype" name="com.tubros.constraints.api.problem.ArrayNamingPolicy">ArrayNamingPolicy</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The <b>ScalarNamed</b> extractor can be used with <span class="extype" name="scala.PartialFunction">scala.PartialFunction</span>s
+to <code>match</code> an individual <a href="Variable.html" class="extype" name="com.tubros.constraints.api.solver.Variable">com.tubros.constraints.api.solver.Variable</a>
+when performing global constraints, such as:</p>
+    </li><li name="com.tubros.constraints.api.solver.Variable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Variable"></a>
+      <a id="Variable:Variable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Variable$.html"><span class="name">Variable</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="com.tubros.constraints.api.solver.error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="error"></a>
+      <a id="error:error"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="error/package.html"><span class="name">error</span></a>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+    </body>
+      </html>

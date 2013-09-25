@@ -1,0 +1,790 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>AnswerComonad - com.tubros.constraints.api.solver.Answer.AnswerComonad</title>
+          <meta name="description" content="AnswerComonad - com.tubros.constraints.api.solver.Answer.AnswerComonad" />
+          <meta name="keywords" content="AnswerComonad com.tubros.constraints.api.solver.Answer.AnswerComonad" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.tubros.constraints.api.solver.Answer$$AnswerComonad$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.tubros">tubros</a>.<a href="../../package.html" class="extype" name="com.tubros.constraints">constraints</a>.<a href="../package.html" class="extype" name="com.tubros.constraints.api">api</a>.<a href="package.html" class="extype" name="com.tubros.constraints.api.solver">solver</a>.<a href="Answer$.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a></p>
+        <h1>AnswerComonad</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AnswerComonad</span><span class="result"> extends <span class="extype" name="scalaz.IsomorphismComonad">IsomorphismComonad</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>] with <span class="extype" name="scalaz.IsomorphismFunctor">IsomorphismFunctor</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scalaz.IsomorphismComonad">IsomorphismComonad</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>], <span class="extype" name="scalaz.IsomorphismCojoin">IsomorphismCojoin</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>], <span class="extype" name="scalaz.IsomorphismFunctor">IsomorphismFunctor</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>], <span class="extype" name="scalaz.Comonad">Comonad</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>], <span class="extype" name="scalaz.Cobind">Cobind</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>], <span class="extype" name="scalaz.Cojoin">Cojoin</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>], <span class="extype" name="scalaz.Functor">Functor</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.tubros.constraints.api.solver.Answer.AnswerComonad"><span>AnswerComonad</span></li><li class="in" name="scalaz.IsomorphismComonad"><span>IsomorphismComonad</span></li><li class="in" name="scalaz.IsomorphismCojoin"><span>IsomorphismCojoin</span></li><li class="in" name="scalaz.IsomorphismFunctor"><span>IsomorphismFunctor</span></li><li class="in" name="scalaz.Comonad"><span>Comonad</span></li><li class="in" name="scalaz.Cobind"><span>Cobind</span></li><li class="in" name="scalaz.Cojoin"><span>Cojoin</span></li><li class="in" name="scalaz.Functor"><span>Functor</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="scalaz.Comonad.ComonadLaws" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ComonadLawsextendsAnyRef"></a>
+      <a id="ComonadLaws:ComonadLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ComonadLaws</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Comonad</dd></dl></div>
+    </li><li name="scalaz.Functor.FunctorLaw" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="FunctorLawextendsAnyRef"></a>
+      <a id="FunctorLaw:FunctorLaw"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FunctorLaw</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.api.solver.Answer.AnswerComonad#G" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="G:scalaz.Comonad[com.tubros.constraints.api.solver.Answer.VariableNameTuple]"></a>
+      <a id="G:Comonad[VariableNameTuple]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">G</span><span class="result">: <span class="extype" name="scalaz.Comonad">Comonad</span>[<a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad">AnswerComonad</a> → IsomorphismComonad → IsomorphismCojoin → IsomorphismFunctor</dd></dl></div>
+    </li><li name="scalaz.Functor#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A,B](fa:F[A])(f:A=&gt;B):F[B]"></a>
+      <a id="apply[A,B](Answer[A])((A)⇒B):Answer[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.apply.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="scalaz.Functor.apply.A">A</span>) ⇒ <span class="extype" name="scalaz.Functor.apply.B">B</span></span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.apply.B">B</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.tubros.constraints.api.solver.Answer.AnswerComonad#cobind" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cobind[A,B](fa:com.tubros.constraints.api.solver.Answer[A])(f:com.tubros.constraints.api.solver.Answer[A]=&gt;B):com.tubros.constraints.api.solver.Answer[B]"></a>
+      <a id="cobind[A,B](Answer[A])((Answer[A])⇒B):Answer[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cobind</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad.cobind.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad.cobind.A">A</span>]) ⇒ <span class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad.cobind.B">B</span></span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad.cobind.B">B</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad">AnswerComonad</a> → Cobind</dd></dl></div>
+    </li><li name="scalaz.Cobind#cobindSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cobindSyntax:scalaz.syntax.CobindSyntax[F]"></a>
+      <a id="cobindSyntax:CobindSyntax[Answer]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cobindSyntax</span><span class="result">: <span class="extype" name="scalaz.syntax.CobindSyntax">CobindSyntax</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Cobind</dd></dl></div>
+    </li><li name="scalaz.IsomorphismCojoin#cojoin" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cojoin[A](a:F[A]):F[F[A]]"></a>
+      <a id="cojoin[A](Answer[A]):Answer[Answer[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cojoin</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.IsomorphismCojoin.cojoin.A">A</span>]</span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.IsomorphismCojoin.cojoin.A">A</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IsomorphismCojoin → Cojoin</dd></dl></div>
+    </li><li name="scalaz.Cojoin#cojoinSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cojoinSyntax:scalaz.syntax.CojoinSyntax[F]"></a>
+      <a id="cojoinSyntax:CojoinSyntax[Answer]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cojoinSyntax</span><span class="result">: <span class="extype" name="scalaz.syntax.CojoinSyntax">CojoinSyntax</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Cojoin</dd></dl></div>
+    </li><li name="scalaz.Comonad#comonadLaw" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="comonadLaw:Comonad.this.ComonadLaws"></a>
+      <a id="comonadLaw:ComonadLaws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">comonadLaw</span><span class="result">: <a href="#ComonadLawsextendsAnyRef" class="extmbr" name="com.tubros.constraints.api.solver.Answer.AnswerComonad.ComonadLaws">ComonadLaws</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Comonad</dd></dl></div>
+    </li><li name="scalaz.Comonad#comonadSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="comonadSyntax:scalaz.syntax.ComonadSyntax[F]"></a>
+      <a id="comonadSyntax:ComonadSyntax[Answer]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">comonadSyntax</span><span class="result">: <span class="extype" name="scalaz.syntax.ComonadSyntax">ComonadSyntax</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Comonad</dd></dl></div>
+    </li><li name="scalaz.Functor#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[G[_]](implicitG0:scalaz.Functor[G]):scalaz.Functor[[α]F[G[α]]]"></a>
+      <a id="compose[G[_]](Functor[G]):Functor[[α]Answer[G[α]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G0">G0: <span class="extype" name="scalaz.Functor">Functor</span>[<span class="extype" name="scalaz.Functor.compose.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Functor">Functor</span>[[α]<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.compose.G">G</span>[<span class="extype" name="scalaz.Functor.&lt;refinement&gt;.λ.α">α</span>]]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.IsomorphismComonad#copoint" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copoint[A](p:F[A]):A"></a>
+      <a id="copoint[A](Answer[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copoint</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="p">p: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.IsomorphismComonad.copoint.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.IsomorphismComonad.copoint.A">A</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IsomorphismComonad → Comonad</dd></dl></div>
+    </li><li name="scalaz.Comonad#copure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copure[A&lt;:&lt;?&gt;](p:&lt;?&gt;):A"></a>
+      <a id="copure[A](Answer[A]):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copure</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="p">p: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Comonad.copure.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Comonad.copure.A">A</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Comonad</dd></dl></div>
+    </li><li name="scalaz.Functor#counzip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="counzip[A,B](a:scalaz.\/[F[A],F[B]]):F[scalaz.\/[A,B]]"></a>
+      <a id="counzip[A,B](\/[Answer[A],Answer[B]]):Answer[\/[A,B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">counzip</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="scalaz.\/">\/</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.counzip.A">A</span>], <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.counzip.B">B</span>]]</span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scalaz.Functor.counzip.A">A</span>, <span class="extype" name="scalaz.Functor.counzip.B">B</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scalaz.Cojoin#extend" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="extend[A&lt;:&lt;?&gt;,B&lt;:&lt;?&gt;](a:&lt;?&gt;)(f:&lt;?&gt;):F[B]"></a>
+      <a id="extend[A,B](Answer[A])((Answer[A])⇒B):Answer[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">extend</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Cojoin.extend.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Cojoin.extend.A">A</span>]) ⇒ <span class="extype" name="scalaz.Cojoin.extend.B">B</span></span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Cojoin.extend.B">B</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Cojoin</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scalaz.Functor#fpair" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fpair[A](fa:F[A]):F[(A,A)]"></a>
+      <a id="fpair[A](Answer[A]):Answer[(A,A)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fpair</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.fpair.A">A</span>]</span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[(<span class="extype" name="scalaz.Functor.fpair.A">A</span>, <span class="extype" name="scalaz.Functor.fpair.A">A</span>)]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.Functor#fproduct" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fproduct[A,B](fa:F[A])(f:A=&gt;B):F[(A,B)]"></a>
+      <a id="fproduct[A,B](Answer[A])((A)⇒B):Answer[(A,B)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fproduct</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.fproduct.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="scalaz.Functor.fproduct.A">A</span>) ⇒ <span class="extype" name="scalaz.Functor.fproduct.B">B</span></span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[(<span class="extype" name="scalaz.Functor.fproduct.A">A</span>, <span class="extype" name="scalaz.Functor.fproduct.B">B</span>)]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.Functor#functorLaw" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="functorLaw:Functor.this.FunctorLaw"></a>
+      <a id="functorLaw:FunctorLaw"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">functorLaw</span><span class="result">: <a href="#FunctorLawextendsAnyRef" class="extmbr" name="com.tubros.constraints.api.solver.Answer.AnswerComonad.FunctorLaw">FunctorLaw</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.Functor#functorSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="functorSyntax:scalaz.syntax.FunctorSyntax[F]"></a>
+      <a id="functorSyntax:FunctorSyntax[Answer]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">functorSyntax</span><span class="result">: <span class="extype" name="scalaz.syntax.FunctorSyntax">FunctorSyntax</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.tubros.constraints.api.solver.Answer.AnswerComonad#iso" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iso:scalaz.Isomorphism.&lt;~&gt;[com.tubros.constraints.api.solver.Answer,com.tubros.constraints.api.solver.Answer.VariableNameTuple]"></a>
+      <a id="iso:scalaz.Isomorphism.&lt;~&gt;[Answer,VariableNameTuple]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iso</span><span class="result">: <span class="extype" name="scalaz.Isomorphisms.&lt;~&gt;">scalaz.Isomorphism.&lt;~&gt;</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.tubros.constraints.api.solver.Answer.AnswerComonad">AnswerComonad</a> → IsomorphismCojoin → IsomorphismFunctor</dd></dl></div>
+    </li><li name="scalaz.Functor#lift" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lift[A,B](f:A=&gt;B):F[A]=&gt;F[B]"></a>
+      <a id="lift[A,B]((A)⇒B):(Answer[A])⇒Answer[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lift</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scalaz.Functor.lift.A">A</span>) ⇒ <span class="extype" name="scalaz.Functor.lift.B">B</span></span>)</span><span class="result">: (<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.lift.A">A</span>]) ⇒ <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.lift.B">B</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.IsomorphismFunctor#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map[A,B](fa:F[A])(f:A=&gt;B):F[B]"></a>
+      <a id="map[A,B](Answer[A])((A)⇒B):Answer[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.IsomorphismFunctor.map.A">A</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="scalaz.IsomorphismFunctor.map.A">A</span>) ⇒ <span class="extype" name="scalaz.IsomorphismFunctor.map.B">B</span></span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.IsomorphismFunctor.map.B">B</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IsomorphismFunctor → Functor</dd></dl></div>
+    </li><li name="scalaz.Functor#mapply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mapply[A,B](a:A)(f:F[A=&gt;B]):F[B]"></a>
+      <a id="mapply[A,B](A)(Answer[(A)⇒B]):Answer[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapply</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="scalaz.Functor.mapply.A">A</span></span>)</span><span class="params">(<span name="f">f: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[(<span class="extype" name="scalaz.Functor.mapply.A">A</span>) ⇒ <span class="extype" name="scalaz.Functor.mapply.B">B</span>]</span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.mapply.B">B</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scalaz.Functor#product" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="product[G[_]](implicitG0:scalaz.Functor[G]):scalaz.Functor[[α](F[α],G[α])]"></a>
+      <a id="product[G[_]](Functor[G]):Functor[[α](Answer[α],G[α])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">product</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="G0">G0: <span class="extype" name="scalaz.Functor">Functor</span>[<span class="extype" name="scalaz.Functor.product.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Functor">Functor</span>[[α](<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.&lt;refinement&gt;.λ.α">α</span>], <span class="extype" name="scalaz.Functor.product.G">G</span>[<span class="extype" name="scalaz.Functor.&lt;refinement&gt;.λ.α">α</span>])]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.Functor#strengthL" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="strengthL[A,B](a:A,f:F[B]):F[(A,B)]"></a>
+      <a id="strengthL[A,B](A,Answer[B]):Answer[(A,B)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">strengthL</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="scalaz.Functor.strengthL.A">A</span></span>, <span name="f">f: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.strengthL.B">B</span>]</span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[(<span class="extype" name="scalaz.Functor.strengthL.A">A</span>, <span class="extype" name="scalaz.Functor.strengthL.B">B</span>)]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scalaz.Functor#strengthR" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="strengthR[A,B](f:F[A],b:B):F[(A,B)]"></a>
+      <a id="strengthR[A,B](Answer[A],B):Answer[(A,B)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">strengthR</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.strengthR.A">A</span>]</span>, <span name="b">b: <span class="extype" name="scalaz.Functor.strengthR.B">B</span></span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[(<span class="extype" name="scalaz.Functor.strengthR.A">A</span>, <span class="extype" name="scalaz.Functor.strengthR.B">B</span>)]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scalaz.Functor#void" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="void[A](fa:F[A]):F[Unit]"></a>
+      <a id="void[A](Answer[A]):Answer[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">void</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scalaz.Functor.void.A">A</span>]</span>)</span><span class="result">: <a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Functor</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scalaz.IsomorphismComonad">
+              <h3>Inherited from <span class="extype" name="scalaz.IsomorphismComonad">IsomorphismComonad</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>]</h3>
+            </div><div class="parent" name="scalaz.IsomorphismCojoin">
+              <h3>Inherited from <span class="extype" name="scalaz.IsomorphismCojoin">IsomorphismCojoin</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>]</h3>
+            </div><div class="parent" name="scalaz.IsomorphismFunctor">
+              <h3>Inherited from <span class="extype" name="scalaz.IsomorphismFunctor">IsomorphismFunctor</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>, <a href="Answer$.html#VariableNameTuple[A]=(com.tubros.constraints.api.VariableName,A)" class="extmbr" name="com.tubros.constraints.api.solver.Answer.VariableNameTuple">VariableNameTuple</a>]</h3>
+            </div><div class="parent" name="scalaz.Comonad">
+              <h3>Inherited from <span class="extype" name="scalaz.Comonad">Comonad</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</h3>
+            </div><div class="parent" name="scalaz.Cobind">
+              <h3>Inherited from <span class="extype" name="scalaz.Cobind">Cobind</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</h3>
+            </div><div class="parent" name="scalaz.Cojoin">
+              <h3>Inherited from <span class="extype" name="scalaz.Cojoin">Cojoin</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</h3>
+            </div><div class="parent" name="scalaz.Functor">
+              <h3>Inherited from <span class="extype" name="scalaz.Functor">Functor</span>[<a href="Answer.html" class="extype" name="com.tubros.constraints.api.solver.Answer">Answer</a>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+    </body>
+      </html>
