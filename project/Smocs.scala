@@ -126,7 +126,7 @@ object Dependencies
 {
 	object Graph
 	{
-		private val version = "1.6.0";
+		private val version = "1.7.0";
 
 		lazy val core = Seq (
 			"com.assembla.scala-incubator" % "graph-core_2.10" % version,
