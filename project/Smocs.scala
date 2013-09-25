@@ -1,8 +1,14 @@
 import sbt._
 import sbt.Keys._
 
+import com.typesafe.sbteclipse.plugin.EclipsePlugin.{
+	EclipseCreateSrc,
+	EclipseKeys
+	}
+import com.typesafe.sbt.SbtStartScript
 import com.typesafe.sbt.osgi.OsgiKeys
 import com.typesafe.sbt.osgi.SbtOsgi.osgiSettings
+import net.virtualvoid.sbt.graph
 
 
 /**
@@ -58,8 +64,20 @@ object Smocs
 			"-deprecation",
 			"-feature",
 			"-unchecked"
-			)
-		);
+			),
+	
+		Keys.`package` <<= (Keys.`package` in Compile) dependsOn (test in Test),
+
+		// Global sbt-eclipse settings
+		EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource,
+
+		// Remove Java from the source directories so that sbt-eclipse does
+		// not create src/(main|test)/java.
+		unmanagedSourceDirectories in Compile <<= (scalaSource in Compile) (Seq (_)),
+		unmanagedSourceDirectories in Test <<= (scalaSource in Test) (Seq (_))
+		) ++
+		graph.Plugin.graphSettings ++
+		SbtStartScript.startScriptForClassesSettings;
 
 	override lazy val settings = super.settings ++ buildSettings;
 
@@ -119,7 +137,7 @@ object Dependencies
 
 	object Scalaz
 	{
-		private val version = "7.0.2";
+		private val version = "7.0.3";
 
 		lazy val core = Seq (
 			"org.scalaz" % "scalaz-core_2.10" % version,

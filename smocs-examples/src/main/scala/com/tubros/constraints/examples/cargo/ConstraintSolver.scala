@@ -87,9 +87,6 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 		import syntax.std.option._
 		
 		
-		/// Instance Properties
-		
-		
 		def apply (vessel : CargoVessel, cargo : Seq[Cargo])
 			: SolverError \/ Schedule =
 		{

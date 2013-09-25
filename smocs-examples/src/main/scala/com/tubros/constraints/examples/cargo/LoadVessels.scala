@@ -1,10 +1,8 @@
 /**
  * Created on: Apr 2, 2013
  */
-package com.tubros.constraints.examples.cargo
-
-import scala.compat.Platform.currentTime
-import scala.util.control.Exception._
+package com.tubros.constraints.examples
+package cargo
 
 import scalaz._
 
@@ -27,6 +25,7 @@ import model._
  */
 object LoadVessels
 	extends App
+		with Timer
 {
 	/// Class Imports
 	import syntax.show._
@@ -101,55 +100,4 @@ object LoadVessels
 		
 		println ("\n\n");
 	}
-	
-	
-	private def time (block : => Unit) : Unit =
-	{
-		val start = currentTime;
-		
-		block;
-		
-		val duration = currentTime - start;
-		
-		println ("Execution time: %d milliseconds".format (duration));
-	}
-}
-
-
-object CommandLineArguments
-{
-	/// Class Types
-	type Options = Map[String, Int]
-	val Options = Map;
-	
-	private object NaturalNumber
-	{
-		def unapply (s : String) : Option[Int] =
-			catching (classOf[NumberFormatException]) opt s.toInt filter (_ > 0);
-	}
-	
-	
-	def apply (args : Array[String]) : Options =
-		nextOption (Options.empty, args.toList);
-	
-	
-	private def nextOption (options : Options, args : List[String])
-		: Options =
-		args match {
-			case Nil =>
-				options;
-				
-			case param :: tail =>
-				nextOption (add (options, param), tail);
-			}
-	
-	
-	private def add (options : Options, param : String) : Options =
-		param split ('=') match {
-			case Array (name, NaturalNumber (value)) =>
-				options + (name -> value);
-				
-			case _ =>
-				options;
-			}
 }
