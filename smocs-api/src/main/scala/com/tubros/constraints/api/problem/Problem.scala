@@ -3,7 +3,7 @@
  */
 package com.tubros.constraints.api.problem
 
-import scalaz.NonEmptyList
+import scalaz._
 
 
 /**
@@ -29,4 +29,13 @@ object Problem
 	 */
 	def apply[T] (head : Equation[T], tail : Equation[T] *) : Problem[T] =
 		new Problem (NonEmptyList (head, tail : _ *));
+	
+	
+	/// Implicit Conversions
+	implicit class SemigroupProblem[A] (val problem : Problem[A])
+		extends Semigroup[Problem[A]]
+	{
+		override def append (a : Problem[A], b : => Problem[A]) : Problem[A] =
+			Problem (a.equations.append (b.equations));
+	}
 }
