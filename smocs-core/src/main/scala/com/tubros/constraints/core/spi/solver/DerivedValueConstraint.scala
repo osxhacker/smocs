@@ -17,6 +17,9 @@ import ast._
  * producing an [[com.tubros.constraints.api.problem.Answer]] based on the
  * value produced from the [[com.tubros.constraints.core.spi.solver.Constraint]]
  * definition.
+ * 
+ * It is a "stackable trait" and is conditionally used when an
+ * [[com.tubros.constraints.api.problem.Equation]] provides a definition.
  *
  * @author svickers
  *
