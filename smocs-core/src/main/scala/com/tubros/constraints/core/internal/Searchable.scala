@@ -38,7 +38,10 @@ trait Searchable[A, +Repr, DomainT[X] <: Domain[X]]
 	
 	
 	/**
-	 * The search method uses the given '''variables''' to expand 
+	 * The search method uses the given '''variables''' to expand the ''Repr''
+	 * based on the '''choose''' functor, in conjunction with the provided
+	 * `AssignmentGenerator`.  Of particular note, the '''choose''' functor
+	 * does _not_ have to produce the same arity as what is given to it.
 	 */
 	def search[M[_]] (
 		variables : M[VariableType],
