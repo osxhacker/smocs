@@ -33,8 +33,6 @@ class ConstraintPropagationSpec
 	extends ProjectSpec
 		with ConstraintTestingSupport
 {
-
-
 	/// Test Collaborators
 	val names = Set[VariableName] ('alpha, 'beta, 'gamma);
 	val alpha = DiscreteVariable ('alpha, FiniteDiscreteDomain (0 to 100));
@@ -48,6 +46,7 @@ class ConstraintPropagationSpec
 	val symbolTableProvider = new SymbolTableProvider {
 		override val symbols = symbolTable;
 		}
+
 
 	"ConstraintPropagation" should "be able to operate with no Constraints" in
 	{
@@ -104,6 +103,6 @@ class ConstraintPropagationSpec
 		variables : Variable[Int, DiscreteDomain] *
 		)
 		: Seq[Answer[Int]] =
-		variables.to[Seq].map (v => Answer (v.name, v.domain.head));
+		variables.to[Seq].map (v => Answer (v.name, v.domain.min));
 }
 

@@ -9,7 +9,10 @@ import Predef.{
 	}
 import scala.language.higherKinds
 
-import scalaz._
+import scalaz.{
+	Ordering => _,
+	_
+	}
 
 import com.tubros.constraints._
 
@@ -77,8 +80,15 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 	}
 	
 	
+	/**
+	 * The '''OptimalVesselSchedule''' type defines the `public` API for
+	 * driving the example ''CSP'' solver.  The `M` monad is required by the
+	 * [[com.tubros.constraints.api.solver.Solver]] (documented there) and
+	 * the `Ordering[Vector[Answer[Int]]]` is used to encapsulate how the
+	 * "optimal" [[com.tubros.constraints.api.solver.Answer]] is determined.
+	 */
 	class OptimalVesselSchedule ()
-		(implicit m : Monad[M])
+		(implicit M : Monad[M], O : Ordering[Vector[Answer[Int]]])
 	{
 		/// Class Imports
 		import NonEmptyList._
@@ -114,9 +124,7 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 					plates <- cargoVariable ('plates)
 					_ <- solver.add (problem)
 					solutions <- solver.run[Vector]
-					} yield solutions.sortBy (
-						_.map (_.toTuple).toMap.apply ('cargoLoaded)
-						).reverse;
+					} yield solutions.sorted;
 				}
 			
 			answers.map (_.head.map (_.toTuple).toMap).map {

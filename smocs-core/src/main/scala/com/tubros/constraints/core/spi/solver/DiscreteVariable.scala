@@ -30,7 +30,7 @@ final case class DiscreteVariable[A] (
 	extends Variable[A, DiscreteDomain]
 {
 	override def filter (predicate : A => Boolean) : DiscreteVariable[A] =
-		new DiscreteVariable (name, domain.filter (predicate));
+		copy (domain = domain.filter (predicate));
 	
 	
 	override def flatMap[B] (
@@ -50,7 +50,7 @@ final case class DiscreteVariable[A] (
 	
 	
 	override def map[B] (f : A => B) : DiscreteVariable[B] =
-		new DiscreteVariable[B] (name = this.name, domain = domain.map (f));
+		copy (domain = domain.map (f));
 }
 
 

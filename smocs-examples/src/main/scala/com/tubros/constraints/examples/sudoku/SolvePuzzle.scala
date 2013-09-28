@@ -33,34 +33,39 @@ object SolvePuzzle
 	import std.anyVal._
 	import syntax.show._
 	import syntax.std.option._
-	
-	
+
+
 	/// Class Types
 	type SolverType = TreeFiniteDomainSolver[Int]
-	
-	
+
+
 	/// Instance Properties
 	val options = CommandLineArguments (args);
 	private implicit val monad = TreeFiniteDomainSolver.solverMonad[Int];
-	
+
 	lazy val usage = """
 		usage: SolvePuzzle
 		""";
 
-	
+
 	/// Constructor Body
 	run ();
-	
-	
+
+
+	/**
+	 * For a Sudoku CSP, there's no need to use variable impact analysis
+	 * when determining the tree root.  The domain sizes for all variables are
+	 * either 1 (assigned at board creation) or 9.
+	 */
 	override def createSolver () : TreeFiniteDomainSolver[Int] =
 		new TreeFiniteDomainSolver[Int] (PreferSmallerDomain[Int] ());
-	
-	
+
+
 	override def domainOf (solver : SolverType, values : Seq[Int])
 		: solver.DomainType[Int] =
 		FiniteDiscreteDomain (values);
-	
-	
+
+
 	private def run () : Unit =
 	{
 		// TODO: populate puzzle with CLI Square values
@@ -109,11 +114,11 @@ object SolvePuzzle
 				)
 			);
 		val solvePuzzle = new SolveSudokuPuzzle ();
-		
+
 		time {
 			val answer = solvePuzzle (puzzle);
-			
-			println ("### answer is: %s".format (answer));
+
+			println ("Sudoku puzzle answer is: %s".format (answer));
 			}
 	}
 }

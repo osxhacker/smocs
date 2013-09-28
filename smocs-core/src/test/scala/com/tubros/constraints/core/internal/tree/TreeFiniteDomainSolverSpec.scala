@@ -62,19 +62,27 @@ class TreeFiniteDomainSolverSpec
 			for {
 				_ <- s.newVar ('a, domain)
 				_ <- s.newVar ('b, domain)
+				_ <- s.newVar ('c, domain)
 				stream <- s.run[Vector]
 				} yield stream;
 			}.valueOr (_ => Stream.empty);
 		val expected = for {
 			a <- domain
 			b <- domain
-			} yield (a, b);
+			c <- domain
+			} yield (a, b, c);
 			
-		answer should have size (domain.size * domain.size);
+		answer should have size (domain.size * domain.size * domain.size);
 		expected foreach {
-			case (a, b) =>
+			case (a, b, c) =>
 				
-			answer.contains (List (Answer ('a, a), Answer ('b, b))) should be === (true);
+			answer.contains (
+				List (
+					Answer ('a, a),
+					Answer ('b, b),
+					Answer ('c, c)
+					)
+				) should be === (true);
 			}
 	}
 	
@@ -201,7 +209,7 @@ class TreeFiniteDomainSolverSpec
 			answer =>
 				
 			answer should not be ('empty);
-			answer.toList should have size (9);
+			answer.force should have size (9);
 			}
 	}
 }

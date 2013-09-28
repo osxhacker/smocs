@@ -45,7 +45,6 @@ trait StateBasedSolver[
 
 	/// Class Types
 	override type DomainType[T] = DiscreteDomain[T]
-	type Map[K, +V] = scala.collection.Map[K, V]
 	type SolverState[+T] = SolverStateT[VariableStore[A], T]
 
 
@@ -146,9 +145,11 @@ trait StateBasedSolver[
 			}
 }
 
+
 object StateBasedSolver
 	extends StateBasedFunctions
 	
+
 trait StateBasedFunctions
 {
 	/// Class Types
@@ -164,4 +165,3 @@ trait StateBasedFunctions
 	def solverMonad[A] : MonadState[SolverStateT, VariableStore[A]] =
 		implicitly[MonadState[SolverStateT, VariableStore[A]]];
 }
-

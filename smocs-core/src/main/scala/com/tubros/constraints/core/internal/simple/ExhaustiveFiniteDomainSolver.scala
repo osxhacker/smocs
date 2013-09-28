@@ -82,15 +82,15 @@ class ExhaustiveFiniteDomainSolver[A]
 				
 			import VariableStore._
 			
-			val streams = vars.view.to[Stream].map (_.enumerate.to[Stream]);
+			val streams = vars.view.to[Vector].map (_.enumerate.to[Stream]);
 			val perAnswer = Constraint.chained (filters.to[Vector]);
 			val combinedConstraints = vs.globalConstraints () andThen (perAnswer);
 			
-			streams.sequence.map (r => TreeMap[VariableName, A] (r : _*)).filter {
+			streams.sequence.view.map (r => TreeMap.empty[VariableName, A] ++ r).filter {
 				candidate =>
 					
 				combinedConstraints.run (candidate.toMap).isRight;
-				}
+				}.to[Stream];
 			}
 			
 	
@@ -128,3 +128,6 @@ class ExhaustiveFiniteDomainSolver[A]
 			}
 }
 
+
+object ExhaustiveFiniteDomainSolver
+	extends StateBasedFunctions

@@ -10,7 +10,6 @@ import scalaz.{
 	}
 
 import org.junit.runner.RunWith
-import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
 import com.tubros.constraints.api._
@@ -171,7 +170,7 @@ class SolutionTreeSpec
 				variables,
 				(vars : List[Variable[Int, DiscreteDomain]]) => vars,
 				generator
-				).getOrElse (SolutionTree.empty[Int])
+				) | SolutionTree.empty[Int];
 			}
 		
 		secondLevel should not be === (null);
@@ -189,7 +188,7 @@ class SolutionTreeSpec
 				variables,
 				(vars : List[Variable[Int, DiscreteDomain]]) => vars,
 				generator
-				).getOrElse (SolutionTree.empty[Int])
+				) | SolutionTree.empty[Int];
 			}
 		
 		thirdLevel.focus must not be === (null);

@@ -3,7 +3,7 @@
  */
 package com.tubros.constraints.core.internal
 
-import scalax.collection.GraphEdge.UnDiEdge
+import scalax.collection.GraphEdge.DiEdge
 import scalax.collection.constrained.Graph
 
 
@@ -18,4 +18,7 @@ import scalax.collection.constrained.Graph
 package object graph
 	extends BuiltinEquationConstraintCategories
 {
+	/// Class Types
+	type ConstraintGraph = Graph[Int, DiEdge]
+	type GraphEdge = DiEdge[String]
 }

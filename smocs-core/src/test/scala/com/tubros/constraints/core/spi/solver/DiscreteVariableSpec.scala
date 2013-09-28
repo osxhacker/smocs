@@ -32,6 +32,14 @@ class DiscreteVariableSpec
 		empty.name must be === (myName);
 	}
 	
+	it should "be able to 'enumerate' its domain" in
+	{
+		val expected = Stream ('a -> 1, 'a -> 2, 'a -> 3);
+		val a = DiscreteVariable[Int] ('a, FiniteDiscreteDomain (1 to 3));
+		
+		a.enumerate.to[List] should be === (expected.to[List]);
+	}
+	
 	it should "be able to 'map' its domain" in
 	{
 		val expected = FiniteDiscreteDomain (1 to 5);

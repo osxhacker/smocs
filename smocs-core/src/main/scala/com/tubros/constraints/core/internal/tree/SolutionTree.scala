@@ -173,7 +173,7 @@ final case class SolutionTree[A] (
 		maybeExpandFrom >>= {
 			from =>
 				
-			val available = from.getLabel.unassigned (choose (variables).toSet);
+			val available = from.getLabel.unassigned (choose (variables));
 			val updated = copy (focus = from, frontier = updatedFrontier);
 			val expanded = updated.expand (available, valuesFor);
 			
@@ -253,26 +253,14 @@ final case class SolutionTree[A] (
 	private def findNodeUnder (startingAt : LocationType, node : NodeType[A])
 		: Option[LocationType] =
 	{
-		val delta = node.assignments.toList.filterNot (
-			a => startingAt.getLabel.assignments.find (_ === a).isDefined
-			);
-		
-		def finder (loc : LocationType, assignments : List[Answer[A]])
-			: Option[LocationType] =
-			assignments.isEmpty.fold (
-				Some (loc),
-				loc.findChild {
-					node =>
-						
-					/// The find method is used on the NodeType, instead of
-					/// "contains", so that the implicit Ordering instance is
-					/// not used to determine equality.  This reduces the
-					/// assumptions as to its operation.
-					node.rootLabel.assignments.find (_ === assignments.head).isDefined;
-					}.flatMap (finder (_, assignments.tail))
-				);
-		
-		return (finder (startingAt, delta));
+		startingAt.findChild (_.rootLabel.isSubsetOf (node)) >>= {
+			child =>
+				
+			if (child.getLabel.size >= node.size) 
+				Some (child);
+			else
+				findNodeUnder (child, node);
+			}
 	}
 	
 	
@@ -313,12 +301,20 @@ object SolutionTree
 		import Cord._
 		
 		
-		override def shows (solution : SolutionTree[A]) : String =
-			"""SolutionTree(\n"%s)\nFocus(%s)\n%s\n""".format (
-				solution.tree.drawTree,
-				solution.focus.getLabel,
-				solution.frontier.shows
-				);
+		override def show (solution : SolutionTree[A]) : Cord =
+			Cord (
+				"SolutionTree(\n",
+				mkCord (
+					"\n",
+					solution.tree.drawTree,
+					Cord (
+						"focus=",
+						solution.focus.getLabel.show
+						),
+					solution.frontier.show
+					),
+				")\n"
+				)
 	}
 	
 	
@@ -327,7 +323,7 @@ object SolutionTree
 	 * is defined in terms of the `empty` method.
 	 */
 	def apply[A] ()
-		(implicit ao : Ordering[Answer[A]], e : Equal[A])
+		(implicit AO : Ordering[Answer[A]], E : Equal[A])
 		: SolutionTree[A] =
 		empty[A];
 	
@@ -338,7 +334,7 @@ object SolutionTree
 	 * [[com.tubros.constraints.core.internal.Frontier]] `dequeue` operation.
 	 */
 	def apply[A] (root : Option[NodeType[A]], frontier : Frontier[NodeType[A]])
-		(implicit ao : Ordering[Answer[A]], e : Equal[A])
+		(implicit AO : Ordering[Answer[A]], E : Equal[A])
 		: SolutionTree[A] =
 		root.fold (empty[A]) {
 			node =>
@@ -353,7 +349,7 @@ object SolutionTree
 		variable : Variable[A, DiscreteDomain],
 		valuesFor : SolutionTree[A]#AssignmentGenerator
 		)
-		(implicit ao : Ordering[Answer[A]], e : Equal[A])
+		(implicit AO : Ordering[Answer[A]], E : Equal[A])
 		: SolutionTree[A] =
 	{
 		val space = empty[A];
@@ -362,7 +358,7 @@ object SolutionTree
 	}
 	
 	
-	def empty[A] (implicit ao : Ordering[Answer[A]], e : Equal[A])
+	def empty[A] (implicit AO : Ordering[Answer[A]], E : Equal[A])
 		: SolutionTree[A] =
 	{
 		val tree = Tree (SolutionTreeNode[A] (SortedSet.empty[Answer[A]]));
@@ -376,7 +372,7 @@ object SolutionTree
 	 * next '''NodeType''' provided by the '''frontier'''.
 	 */
 	def fromFrontier[A] (frontier : Frontier[NodeType[A]])
-		(implicit ao : Ordering[Answer[A]], e : Equal[A])
+		(implicit AO : Ordering[Answer[A]], E : Equal[A])
 		: SolutionTree[A] =
 		(
 			SolutionTree (
@@ -387,6 +383,6 @@ object SolutionTree
 	
 	
 	/// Implicit Conversions
-	implicit def solutionShow[A : Show] : Show[SolutionTree[A]] =
+	implicit def showSolution[A : Show] : Show[SolutionTree[A]] =
 		new ShowSolutionTree[A];
 }

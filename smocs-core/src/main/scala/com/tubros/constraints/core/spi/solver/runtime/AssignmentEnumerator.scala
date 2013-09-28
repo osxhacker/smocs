@@ -163,8 +163,9 @@ object AssignmentEnumerator
 		EnumeratorT.enumStream[
 			Seq[AssignmentEnumerator[A, C]#AssignmentElementType],
 			AssignmentEnumerator[A, C]#StateType
-			] (context._2.enumerate.map (
-				e => context._1 :+ Answer.fromTuple (e)
-				).toStream
-				);
+			] (context._2.enumerate.map {
+				e =>
+
+				context._1 :+ Answer.fromTuple (e);
+				});
 }

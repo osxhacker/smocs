@@ -141,21 +141,22 @@ class TreeFiniteDomainSolver[A] (
 				SolutionTree[A] (root, assignmentProducer);
 				} toStream;
 			
-			spaceToExplore >>= {
-				explore (_, variables, assignmentProducer).toStream (
+			spaceToExplore >>=
+				{
+				explore (_, variables, assignmentProducer, vs.symbols).toStream (
 					expected = vs.symbols.size
 					);
 				} >>=
 				{
 				(candidate : Seq[Answer[A]]) =>
 					
-				val args = TreeMap (candidate.map (_.toTuple) : _*) (
+				val args = TreeMap.empty[VariableName, A] (
 					VariableStore.VariableNameOrdering
-					);
+					) ++ candidate.map (_.toTuple);
 				
 				globalFilters.run (args).fold (
 					_ => Stream.empty,
-					_ => Stream (candidate)
+					_.to[Seq].map (Answer.fromTuple).point[Stream]
 					);
 				}
 			}
@@ -164,17 +165,25 @@ class TreeFiniteDomainSolver[A] (
 	private def explore (
 		tree : SolutionTree[A],
 		variables : List[Variable[A, DomainType]],
-		assigner : AssignmentEnumerator[A, Stream]
+		assigner : AssignmentEnumerator[A, Stream],
+		symbolTable : SymbolTable
 		)
 		: SolutionTree[A] =
 	{
 		val minimalSize = MinimumDomainSize[A] ();
 		val chooser
 			: List[Variable[A, DomainType]] => List[Variable[A, DomainType]] =
-			choices => minimalSize (choices);
+			{
+			choices =>
+				
+			minimalSize (
+				choices filterNot (v => symbolTable.isDerived (v.name))
+				);
+			}
 		
 		@tailrec
-		def loop (t : SolutionTree[A]) : SolutionTree[A] =
+		def loop (t : SolutionTree[A])
+			: SolutionTree[A] =
 			t.search (variables, chooser, assigner) match {
 				case None =>
 					t;

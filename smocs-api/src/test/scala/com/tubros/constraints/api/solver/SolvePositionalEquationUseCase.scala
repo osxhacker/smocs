@@ -40,12 +40,12 @@ trait SolvePositionalEquationUseCase[
 	extends SolverUseCaseSpec[Symbol, M, SolverT]
 {
 	/// Class Imports
-	//import Scalaz._
 	import scalaz.std.AllInstances._
 	import scalaz.syntax.std.list._
 	import scalaz.syntax.monad._
 	import scalaz.syntax.monoid._
 	
+
 	/// Class Types
 	trait PositionalEquation
 		extends Equation[Symbol]
@@ -53,6 +53,7 @@ trait SolvePositionalEquationUseCase[
 			with PropositionalSupport[Symbol]
 			with RelationalSupport[Symbol]
 	
+
 	implicit object SymbolOrdering
 		extends Ordering[Symbol]
 	{
@@ -76,6 +77,7 @@ trait SolvePositionalEquationUseCase[
 				}
 		}
 	}
+
 
 	/// Test Collaborators
 	implicit val solvable : SolverUsage;
@@ -119,7 +121,7 @@ trait SolvePositionalEquationUseCase[
 					_ <- solver.impose (allDiff)
 					resultSet <- solver.run[Vector]
 					} yield resultSet;
-				}.valueOr (_ => Stream.empty);
+				}.valueOr (e => throw new RuntimeException (e.message));
 			
 			Then ("there should be an answer");
 			answers should not be ('empty);

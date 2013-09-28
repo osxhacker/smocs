@@ -17,7 +17,10 @@ import scalaz.{
 
 import com.tubros.constraints._
 
-import api.solver.FiniteDiscreteDomain
+import api.solver.{
+	Answer,
+	FiniteDiscreteDomain
+	}
 import api.solver.error.SolverError
 import core.internal.tree._
 
@@ -44,6 +47,7 @@ object ProduceShippingSchedules
 	import algebraic._
 	import std.anyVal._
 	import syntax.bifunctor._
+	import syntax.std.option._
 	
 	
 	/// Class Types
@@ -52,6 +56,26 @@ object ProduceShippingSchedules
 	
 	/// Instance Properties
 	private implicit val monad = TreeFiniteDomainSolver.solverMonad[Int];
+
+	/// We are interested in the answers having the most cargo
+	/// loaded, so those with higher items being shipped are
+	/// preferred over answers having less.
+	implicit val descendingCargoLoadedOrdering =
+		Ordering.by {
+			(answers : Vector[Answer[Int]]) =>
+
+			/// Depending on the solver used, "derived values" may or may not
+			/// be supported.  If so, we use `cargoLoaded` and, if not, we
+			/// compute a reasonable ordering based on what the derived value
+			/// would have had.  Note that this is not normally needed in "real"
+			/// uses, as varying the solver really only makes sense for an
+			/// example program such as this one.
+			answers.find (_.name == 'cargoLoaded).map (_.value) | answers.collect {
+				case Answer (_, amount) =>
+					amount;
+				}.sum;
+			}.reverse;
+
 	private val errorMessage : SolverError => String = _.message;
 	
 	

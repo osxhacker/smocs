@@ -6,10 +6,7 @@ package com.tubros.constraints.core.internal
 import scala.annotation._
 import scala.collection.generic.CanBuildFrom
 
-import scala.collection.immutable.{
-	Stack,
-	Queue
-	}
+import scala.collection.immutable.Queue
 import scala.language.{
 	higherKinds,
 	postfixOps
@@ -85,7 +82,10 @@ sealed trait FrontierLike[A, +This <: FrontierLike[A, This] with Frontier[A]]
 }
 
 
-final case class LifoFrontier[A] (private[internal] val stack : Stack[A])
+final case class LifoFrontier[A] (
+	private[internal] val stack : List[A],
+	override val size : Int
+	)
 	extends Frontier[A]
 		with FrontierLike[A, LifoFrontier[A]]
 {
@@ -100,11 +100,8 @@ final case class LifoFrontier[A] (private[internal] val stack : Stack[A])
 			lazy val zero : Frontier[A] = Frontier.lifo[A];
 			}
 	
-	override val size : Int = stack.size;
-	
-	
 	override def enqueue (element : A) : LifoFrontier[A] =
-		copy (stack = stack.push (element));
+		copy (stack = element :: stack, size = size + 1);
 	
 	
 	/**
@@ -115,13 +112,15 @@ final case class LifoFrontier[A] (private[internal] val stack : Stack[A])
 	 * top of the [[scala.collection.immutable.Stack]].
 	 */
 	override def enqueue (elements : Traversable[A]) : LifoFrontier[A] =
-		copy (stack = elements ++: stack);
+	{
+		copy (stack = elements ++: stack, size = size + elements.size);
+	}
 	
 	
 	override def dequeue : (Option[A], LifoFrontier[A]) =
 		stack.isEmpty.fold (
 			(None, this),
-			(stack.headOption, copy (stack = stack.pop))
+			(stack.headOption, copy (stack = stack.tail, size = size - 1))
 			);
 	
 	
@@ -329,7 +328,7 @@ object Frontier
 	 * The lifo method creates a '''Frontier''' where an `enqueue` invocation
 	 * results in the element being the last available for `dequeue`.
 	 */
-	def lifo[A] : Frontier[A] = LifoFrontier[A] (Stack.empty[A]);
+	def lifo[A] : Frontier[A] = LifoFrontier[A] (List.empty[A], 0);
 
 	
 	/// Implicit Conversions

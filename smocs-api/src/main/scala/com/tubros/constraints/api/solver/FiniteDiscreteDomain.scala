@@ -23,22 +23,27 @@ final case class FiniteDiscreteDomain[T] (private val self : Set[T])
 	
 	/// Instance Properties
 	override val hasDefiniteSize : Boolean = true;
-	override lazy val iterator : Iterator[T] = self.iterator;
+	override def iterator : Iterator[T] = self.iterator;
 	override lazy val size : Int = self.size;
 	
 	def this () = this (Set.empty[T]);
 	def this (elem : T) = this (Set (elem));
 	
+
 	override def + (elem : T) : DiscreteDomain[T] =
 		FiniteDiscreteDomain (self + elem);
 	
+
 	override def - (elem : T) : DiscreteDomain[T] =
 		FiniteDiscreteDomain (self - elem);
 	
+
 	override def contains (elem : T) : Boolean = self.contains (elem);
 	
+
 	override def foreach[R] (f : T => R) : Unit = self.foreach (f);
 	
+
 	override def bounds (implicit ev : Ordering[T]) : Option[(T, T)] =
 		(!isEmpty).option ((self.min, self.max));
 }

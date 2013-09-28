@@ -45,13 +45,12 @@ trait Variable[A, DomainT[A] <: Domain[A]]
 	def domain : DomainT[A];
 	
 	/**
-	 * The enumerate property provides a [[scala.collection.Iterator]] which
-	 * contains the '''name''' and each '''domain''' value paired as a
-	 * [[scala.Tuple2]].
+	 * The enumerate property provides a [[scala.collection.immutable.Stream]]
+	 * which contains the '''name''' and each '''domain''' value paired as a
+	 * `(name, value)` [[scala.Tuple2]].
 	 */
-	lazy val enumerate : Iterable[(VariableName, A)] = domain.map {
-		(name, _)
-		};
+	def enumerate : Stream[(VariableName, A)] =
+		domain.to[Stream].map ((name, _));
 	
 	
 	/**
