@@ -1,3 +1,5 @@
+.swp
+.*.swp
 *.class
 *.log
 *.out
