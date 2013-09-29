@@ -22,6 +22,7 @@ fi
 export JAVA_OPTS="-Xmx2048M -XX:MaxPermSize=512M -Xss2M -XX:ReservedCodeCacheSize=64m -XX:+UseCodeCacheFlushing -XX:+UseConcMarkSweepGC -Duser.timezone=GMT"
 
 sbt "project smocs-examples" start-script && \
-	env JAVA_OPTS="$JAVA_OPTS $PROFILE_SMOCS" ./smocs-examples/target/start \
+	env JAVA_OPTS="$JAVA_OPTS $PROFILE_SMOCS" \
+	bash $BASE_DIR/smocs-examples/target/start \
 	com.tubros.constraints.examples.cargo.LoadVessels \
 	$*

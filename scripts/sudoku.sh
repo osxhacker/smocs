@@ -30,7 +30,8 @@ EOT
 exit 2
 
 sbt "project smocs-examples" start-script && \
-	env JAVA_OPTS="$JAVA_OPTS $PROFILE_SMOCS" ./smocs-examples/target/start \
+	env JAVA_OPTS="$JAVA_OPTS $PROFILE_SMOCS" \
+	bash ./smocs-examples/target/start \
 	com.tubros.constraints.examples.sudoku.SolvePuzzle \
 	$*
 
