@@ -4,6 +4,11 @@
 package com.tubros.constraints.examples
 package sudoku
 
+import scala.concurrent.{
+	ExecutionContext,
+	Future
+	}
+
 import scalaz._
 
 import com.tubros.constraints._
@@ -44,12 +49,20 @@ object SolvePuzzle
 	private implicit val monad = TreeFiniteDomainSolver.solverMonad[Int];
 
 	lazy val usage = """
-		usage: SolvePuzzle
-		""";
+		|usage: SolvePuzzle [quit-after=N]
+		|
+		|Where:
+		|    quit-after: Optional number of seconds to allow the search to run
+		|
+		|And 'N' is any positive integer (which can be different for each param)
+		|""".stripMargin;
 
 
 	/// Constructor Body
-	run ();
+	if (args.contains ("help") || args.contains ("-?"))
+		println (usage);
+	else
+		run (options.get ("quit-after"));
 
 
 	/**
@@ -66,7 +79,7 @@ object SolvePuzzle
 		FiniteDiscreteDomain (values);
 
 
-	private def run () : Unit =
+	private def run (maxRunTime : Option[Int]) : Unit =
 	{
 		// TODO: populate puzzle with CLI Square values
 		val puzzle = Puzzle (
@@ -114,6 +127,19 @@ object SolvePuzzle
 				)
 			);
 		val solvePuzzle = new SolveSudokuPuzzle ();
+
+		maxRunTime foreach {
+			seconds =>
+				
+			import ExecutionContext.Implicits._
+			
+			Future {
+				Thread.sleep (seconds * 1000);
+
+				println (s"Sudoku puzzle solver ran out of time after $seconds seconds");
+				System.exit (1);
+				}
+			}
 
 		time {
 			val answer = solvePuzzle (puzzle);

@@ -124,60 +124,44 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			: Problem[Int] =
 		{
 			@inline
-			def rows (name : Char) : List[SudokuEquation] =
+			def rows (name : Char) : SudokuEquation =
 			{
 				val row = VariableName (name.toString);
-				val offsets = Puzzle.columnOffsets.toList;
-				val permuted = offsets.map {
-					n =>
-						
-					offsets.drop (n) ::: offsets.take (n);
-					}
-				val equations = permuted.flatMap {
-					case head :: tail =>
-						
-					tail.map {
-						n =>
-							
-						new SudokuEquation {
-							def apply = row (head) !== row (n);
-							}
-						}
+				val equation = new SudokuEquation {
+					def apply =
+						Puzzle.columnOffsets.sliding (2).map {
+							case Seq (first, second) =>
+								
+							row (first) !== row (second);
+							}.reduce (_ && _);
 					}
 				
-				return (equations.toList);
+				return (equation);
 			}
 			
 			@inline
-			def columns (offset : Int) : List[SudokuEquation] =
+			def columns (offset : Int) : SudokuEquation =
 			{
-				val allRowNames = Puzzle.rowNames.toList;
-				val permuted = (0 until allRowNames.length).map {
-					n =>
+				val variableNames = Puzzle.rowNames.map {
+					name =>
 						
-					allRowNames.drop (n) ::: allRowNames.take (n);
+					VariableName (name.toString);
 					}
-				val names = permuted.map {
-					_.map (row => VariableName (row.toString));
-					}
-				val equations = names.flatMap {
-					case head :: tail =>
-						
-					tail.map {
-						row =>
-							
-						new SudokuEquation {
-							def apply = head (offset) !== row (offset);
-							}
-						}
+				val equation = new SudokuEquation {
+					def apply =
+						variableNames.sliding (2).map {
+							case Seq (first, second) =>
+								
+							first (offset) !== second (offset);
+							}.reduce (_ && _);
 					}
 				
-				return (equations.toList);
+				return (equation);
 			}
 
 			Problem[Int] (
-				Puzzle.rowNames.toList.flatMap (rows).toNel.get :::>
-				Puzzle.columnOffsets.toList.flatMap (columns)
+				Puzzle.rowNames.toList.map (rows).toNel.get :::>
+				Puzzle.columnOffsets.toList.map (columns)
 				);
 		}
 				
