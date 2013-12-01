@@ -53,7 +53,7 @@ object Smocs
 	lazy val buildSettings = Seq (
 		organization := "com.tubros",
 		version := "0.5.1-SNAPSHOT",
-		scalaVersion := "2.10.2"
+		scalaVersion := "2.10.3"
 		);
 
 	/// sbt settings applicable to any build
@@ -178,8 +178,8 @@ object Dependencies
 
 	/// Compile Dependencies
 	lazy val compile = Scalaz.core ++ OSGi.all ++ Seq (
-		"org.scala-lang" % "scala-library" % "2.10.2",
-		"org.scala-lang" % "scala-reflect" % "2.10.2"
+		"org.scala-lang" % "scala-library" % "2.10.3",
+		"org.scala-lang" % "scala-reflect" % "2.10.3"
 		);
 
 	/// Test Dependencies

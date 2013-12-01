@@ -90,12 +90,7 @@ object Answer
 	}
 	
 	
-	implicit def answerEqual[A : Equal] : Equal[Answer[A]] =
-		new IsomorphismEqual[Answer[A], VariableNameTuple[A]] {
-			override val G = implicitly[Equal[VariableNameTuple[A]]];
-			override val iso : Answer[A] <=> VariableNameTuple[A] =
-				answerIso[A];
-			}
+	implicit def answerEqual[A : Equal] : Equal[Answer[A]] = Equal.equalA;
 	
 	
 	implicit def answerShow[A : Show] : Show[Answer[A]] =

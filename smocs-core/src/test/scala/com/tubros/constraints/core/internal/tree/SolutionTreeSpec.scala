@@ -94,7 +94,15 @@ class SolutionTreeSpec
 			e.frontier should not be ('empty);
 			
 			// With this expansion, each a -> b -> c(100, 200) node on the frontier
-			e.frontier.size should be === (12);
+			e.depth should be === (1);
+			e.frontier.size should be === (3);
+			e.frontier.toStream.map (_.assignments.toList) should be === (
+				Stream (
+					List (Answer ('a, 3)),
+					List (Answer ('a, 2)),
+					List (Answer ('a, 1))
+					)
+				);
 			}
 		
 	}

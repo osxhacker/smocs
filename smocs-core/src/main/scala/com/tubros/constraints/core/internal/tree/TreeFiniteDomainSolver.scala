@@ -143,8 +143,8 @@ class TreeFiniteDomainSolver[A] (
 			
 			spaceToExplore >>=
 				{
-				explore (_, variables, assignmentProducer, vs.symbols).toStream (
-					expected = vs.symbols.size
+				explore (_, variables, assignmentProducer, vs.symbols) >>= (
+					_.latest
 					);
 				} >>=
 				{
@@ -168,7 +168,7 @@ class TreeFiniteDomainSolver[A] (
 		assigner : AssignmentEnumerator[A, Stream],
 		symbolTable : SymbolTable
 		)
-		: SolutionTree[A] =
+		: Stream[SolutionTree[A]] =
 	{
 		val minimalSize = MinimumDomainSize[A] ();
 		val chooser
@@ -182,15 +182,28 @@ class TreeFiniteDomainSolver[A] (
 			}
 		
 		@tailrec
-		def loop (t : SolutionTree[A])
-			: SolutionTree[A] =
+		def nextAnswer (t : SolutionTree[A]) : Option[SolutionTree[A]] =
 			t.search (variables, chooser, assigner) match {
-				case None =>
-					t;
+				case Some (tree) if (tree.depth === symbolTable.size) =>
+					Some (tree);
 					
-				case Some (updated) =>
-					loop (updated);
+				case Some (other) =>
+					nextAnswer (other);
+					
+				case None =>
+					None;
 				}
+		
+		def loop (cur : SolutionTree[A]) : Stream[SolutionTree[A]] =
+		{
+			nextAnswer (cur) match {
+				case Some (head) =>
+					head #:: loop (head);
+					
+				case None =>
+					Stream.empty;
+				}
+		}
 		
 		loop (tree);
 	}

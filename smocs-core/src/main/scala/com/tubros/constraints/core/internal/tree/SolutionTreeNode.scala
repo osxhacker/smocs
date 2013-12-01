@@ -81,29 +81,35 @@ final case class SolutionTreeNode[A] (
 	private[tree] def isSubsetOf (other : SolutionTreeNode[A]) : Boolean =
 	{
 		@tailrec
-		def loop (us : Iterator[Answer[A]], them : Iterator[Answer[A]])
+		def strictSubset (us : Iterator[Answer[A]], them : Iterator[Answer[A]])
 			: Boolean =
-			if (us.hasNext && them.hasNext)
+			if (us.isEmpty)
+				true
+			else if (them.isEmpty)
+				false
+			else
 			{
-				val ourCurrent = us.next;
+				val ourNext = us.next;
 				val theirNext = them.next;
 				
-				if (ourCurrent === theirNext)
-					loop (us, them);
+				if (ourNext === theirNext)
+					strictSubset (us, them);
 				else
 				{
-					val theirCurrent = them.dropWhile (_ =/= ourCurrent);
+					val theirCurrent = them.dropWhile (_ =/= ourNext);
 					
-					if (theirCurrent.hasNext && theirCurrent.next === ourCurrent)
-						loop (us, them);
+					if (theirCurrent.hasNext && theirCurrent.next === ourNext)
+						strictSubset (us, them);
 					else
 						false;
 				}
 			}
-			else
-				us.isEmpty;
 				
-		return (loop (assignments.iterator, other.assignments.iterator));
+
+		return (
+			assignments.size <= other.assignments.size &&
+			strictSubset (assignments.iterator, other.assignments.iterator)
+			);
 	}
 }
 
@@ -154,4 +160,4 @@ object SolutionTreeNode
 					);
 			}
 }
-	
+

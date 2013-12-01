@@ -21,7 +21,7 @@ import com.tubros.constraints.api.solver._
 
 /**
  * The '''SolutionTree''' type defines a [[scalaz.Tree]]-based
- * [[http://en.wikipedia.org/wiki/Tree_%28graph_theory%29 Tree].
+ * [[http://en.wikipedia.org/wiki/Tree_%28graph_theory%29 Tree]].
  * [[com.tubros.constraints.api.solver.Solver]] specific functionality
  * should be added by extension classes.
  * 
@@ -63,6 +63,10 @@ final case class SolutionTree[A] (
 	private val NodeType = SolutionTreeNode;
 	
 	
+	def depth : Int = focus.firstChild.map (_.getLabel.assignments.size) |
+		focus.getLabel.assignments.size;
+
+
 	def expand[M[_]] (
 		variables : M[VariableType],
 		valuesFor : AssignmentGenerator
@@ -108,7 +112,11 @@ final case class SolutionTree[A] (
 			Some (subTree).filterNot (_.isEmpty).flatMap {
 				newTree =>
 					
-				findNodeUnder (root, newTree.tree.rootLabel);
+				val lookingFor = newTree.tree.rootLabel;
+				
+				findNodeUnder (focus, lookingFor) orElse {
+					findNodeUnder (root, lookingFor);
+					}
 			}
 		
 		insertionSpot.fold (this) {
@@ -123,6 +131,13 @@ final case class SolutionTree[A] (
 				);
 			}
 	}
+	
+	
+	def latest () : Stream[Seq[Answer[A]]] = focus.tree.subForest map {
+		children =>
+			
+		children.rootLabel.assignments.to[Seq];
+		}
 	
 	
 	override def prune (location : LocationType) : SolutionTree[A] =
@@ -187,7 +202,7 @@ final case class SolutionTree[A] (
 	 * containing answers which have the '''expected''' number of assignments.
 	 */
 	def toStream (expected : Int) : Stream[Seq[Answer[A]]] =
-		tree.flatten.filter (_.assignments.size === expected).map {
+		tree.flatten.withFilter (_.assignments.size === expected).map {
 			node =>
 				
 			node.assignments.toSeq;
@@ -206,6 +221,9 @@ final case class SolutionTree[A] (
 			}
 		
 	
+	/**
+	 * The expander method adds to the nodes under `parent` *for one level*.
+	 */
 	private def expander (
 		parent : LocationType,
 		frontier : Frontier[NodeType[A]],
@@ -217,8 +235,8 @@ final case class SolutionTree[A] (
 			case Nil =>
 				None;
 				
-			case last :: Nil =>
-				val leaves = immediateChildren (parent, last, valuesFor);
+			case current :: more =>
+				val leaves = immediateChildren (parent, current, valuesFor);
 				
 				/// Only create a node if there were child nodes produced
 				(!leaves.isEmpty).option {
@@ -226,27 +244,6 @@ final case class SolutionTree[A] (
 						_.enqueue (_);
 						}
 					}
-				
-			case intermediary :: tail =>
-				val created = immediateChildren (
-					parent,
-					intermediary,
-					valuesFor
-					);
-				
-				created.foldLeft (parent -> frontier) {
-					case ((prevParent, prevFrontier), node) =>
-						
-					val child = expander (
-						prevParent.insertDownLast (node.leaf),
-						prevFrontier,
-						tail,
-						valuesFor
-						) map (p => ((_ : LocationType).parent.get) <-: p);
-					
-					/// As with leaf generation, only propagate changes if there
-					child | (prevParent, prevFrontier);
-					}.some.filter (_._1.hasChildren);
 			}
 	
 	
@@ -310,6 +307,10 @@ object SolutionTree
 					Cord (
 						"focus=",
 						solution.focus.getLabel.show
+						),
+					Cord (
+						"depth=",
+						solution.depth.show
 						),
 					solution.frontier.show
 					),
