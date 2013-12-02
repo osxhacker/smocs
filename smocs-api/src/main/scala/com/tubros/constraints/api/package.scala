@@ -54,5 +54,5 @@ package object api
 	implicit def symbolToVariableName (name : Symbol) : VariableName =
 		VariableName (name);
 	
-	implicit def variableNameEqual : Equal[VariableName] = Equal.equalA;
+	implicit val variableNameEqual : Equal[VariableName] = Equal.equalA;
 }
