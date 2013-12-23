@@ -31,8 +31,8 @@ class DomainSpec
 	{
 		val domain : Domain[Int] = createDomain (5);
 		
-		domain.show must not be === (null);
-		domain.shows must not be ('empty);
+		domain.show shouldNot be (null);
+		domain.shows shouldNot be ('empty);
 	}
 	
 	it should "elide 'large' domains" in
@@ -42,7 +42,7 @@ class DomainSpec
 	
 	it should "handle empty domains" in
 	{
-		createDomain (0).shows should be === ("Domain(<empty>)");
+		createDomain (0).shows shouldBe ("Domain(<empty>)");
 	}
 	
 	

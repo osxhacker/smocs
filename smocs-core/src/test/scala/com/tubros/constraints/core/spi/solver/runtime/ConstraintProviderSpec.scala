@@ -36,6 +36,6 @@ class ConstraintProviderSpec
 	{
 		(mockProvider.constraints _).expects ().returning (noConstraints);
 		
-		mockProvider.constraints must not be === (null);
+		mockProvider.constraints shouldNot be (null);
 	}
 }

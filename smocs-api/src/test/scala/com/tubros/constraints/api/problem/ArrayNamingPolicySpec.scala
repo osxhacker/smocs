@@ -26,7 +26,7 @@ class ArrayNamingPolicySpec
 		val root = 'myArrayName;
 		val arrayName = compose (root, 0);
 		
-		arrayName must not be === (null);
+		arrayName shouldNot be (null);
 		arrayName.toString should startWith (root.toString);
 		arrayName.toString should endWith ("0");
 		arrayName.toString.length should be > (root.toString.length + 1);
@@ -40,22 +40,22 @@ class ArrayNamingPolicySpec
 		maybeParts foreach {
 			parts =>
 				
-			parts.productArity should be === (2);
-			parts._1 should not be === (null);
+			parts.productArity shouldBe (2);
+			parts._1 shouldNot be (null);
 			parts._2 should be >= (0);
 			}
 	}
 	
 	it should "not overly burden variable names" in
 	{
-		val withUnderscore = 'name_with_underscore;
+		val withUnderscore = VariableName ("name_with_underscore");
 		val maybeParts = decompose (compose (withUnderscore, 22));
 		
 		maybeParts should be ('defined);
 		maybeParts foreach {
 			parts =>
 				
-			parts._1 should be === (withUnderscore);
+			parts._1 shouldBe (withUnderscore);
 			}
 	}
 	

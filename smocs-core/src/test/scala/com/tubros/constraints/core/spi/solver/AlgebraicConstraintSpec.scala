@@ -62,8 +62,8 @@ class AlgebraicConstraintSpec
 			VariableName ('x) -> 5
 			);
 		
-		c (vars) should be === (\/- (vars));
-		c.computed (vars) should be === (Some (20));
+		c (vars) shouldBe (\/- (vars));
+		c.computed (vars) shouldBe (Some (20));
 	}
 	
 	it should "be able to evaluate an arbitrarily complex expression" in
@@ -79,8 +79,8 @@ class AlgebraicConstraintSpec
 			VariableName ('z) -> 4
 			);
 		
-		c (vars) should be === (\/- (vars));
-		c.computed (vars) should be === (Some (-1));
+		c (vars) shouldBe (\/- (vars));
+		c.computed (vars) shouldBe (Some (-1));
 	}
 	
 	it should "ignore variables not needed by the equation" in
@@ -95,8 +95,8 @@ class AlgebraicConstraintSpec
 			VariableName ('b) -> 20
 			);
 		
-		c (vars) should be === (\/- (vars));
-		c.computed (vars) should be === (Some (16));
+		c (vars) shouldBe (\/- (vars));
+		c.computed (vars) shouldBe (Some (16));
 	}
 	
 	it should "support function-style (abs) operations" in
@@ -110,7 +110,7 @@ class AlgebraicConstraintSpec
 			VariableName ('a) -> -99
 			);
 		
-		c (vars) should be === (\/- (vars));
-		c.computed (vars) should be === (Some (99));
+		c (vars) shouldBe (\/- (vars));
+		c.computed (vars) shouldBe (Some (99));
 	}
 }

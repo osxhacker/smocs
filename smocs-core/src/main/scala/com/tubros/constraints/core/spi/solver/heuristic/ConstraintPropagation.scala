@@ -138,6 +138,6 @@ final case class ConstraintPropagationEnumeratee[
 			(accum, constraint) =>
 				
 			accum.flatMap (p => constraint (p).toOption);
-			}.map (_.map (Answer.fromTuple[A]).toSeq);
+			}.map (_.map (Answer.fromTuple[VariableName, A]).toSeq);
 	}
 }

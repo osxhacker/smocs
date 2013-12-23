@@ -43,7 +43,7 @@ class FrontierSpec
 				)
 			);
 		
-		lifo must not be === (null);
+		lifo shouldNot be (null);
 	}
 	
 	it should "support a FIFO configuration" in
@@ -59,7 +59,7 @@ class FrontierSpec
 				)
 			);
 		
-		fifo must not be === (null);
+		fifo shouldNot be (null);
 	}
 	
 	it should "be able to stream its contents" in
@@ -78,7 +78,7 @@ class FrontierSpec
 		val contents = withThree.toStream.toList;
 		
 		contents should have size (3);
-		contents should be === (List ("a", "b", "c"));
+		contents shouldBe (List ("a", "b", "c"));
 	}
 	
 	it should "satisfy LIFO expectations when enqueuing" in
@@ -91,7 +91,7 @@ class FrontierSpec
 		val (newest, frontier) = populated.dequeue;
 		
 		newest should be ('defined);
-		newest should be === (Some ("second"));
+		newest shouldBe (Some ("second"));
 		frontier should not be ('empty);
 	}
 	
@@ -105,7 +105,7 @@ class FrontierSpec
 		val (oldest, frontier) = populated.dequeue;
 		
 		oldest should be ('defined);
-		oldest should be === (Some ("first"));
+		oldest shouldBe (Some ("first"));
 		frontier should not be ('empty);
 	}
 	
@@ -124,9 +124,9 @@ class FrontierSpec
 		val laws = fifo.monoid.monoidLaw;
 		implicit val m = fifo.monoid;
 		
-		laws.leftIdentity (fifo) must be === (true);
-		laws.rightIdentity (fifo) must be === (true);
-		laws.associative (fifo, more, someMore) must be === (true);
+		laws.leftIdentity (fifo) shouldBe (true);
+		laws.rightIdentity (fifo) shouldBe (true);
+		laws.associative (fifo, more, someMore) shouldBe (true);
 	}
 	
 	it should "retain ordering when using mappend" in
@@ -136,11 +136,11 @@ class FrontierSpec
 		val expected = List (0, 1, 2, 3, 4);
 		val copied = Frontier.lifo[Int].mappend (five);
 		
-		copied.toStream.toList should be === (expected);
+		copied.toStream.toList shouldBe (expected);
 		
 		val another = Frontier.lifo[Int].enqueue (10).enqueue (20);
 		val copiedAgain = copied |+| another;
 		
-		copiedAgain.toStream.toList should be === (List (20, 10) ::: expected);
+		copiedAgain.toStream.toList shouldBe (List (20, 10) ::: expected);
 	}
 }

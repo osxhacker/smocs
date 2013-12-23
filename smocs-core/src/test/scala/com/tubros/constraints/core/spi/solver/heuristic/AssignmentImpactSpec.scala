@@ -93,7 +93,7 @@ class AssignmentImpactSpec
 	{
 		val assessor = AssignmentImpact (emptyVariables, TestConstraints);
 		
-		assessor (Seq.empty[Answer[Int]], alpha, 0) should be === (1.0);
+		assessor (Seq.empty[Answer[Int]], alpha, 0) shouldBe (1.0);
 	}
 	
 	it should "prefer an assignment which does not reduce the domain" in

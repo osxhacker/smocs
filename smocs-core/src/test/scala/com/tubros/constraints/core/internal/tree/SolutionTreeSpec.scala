@@ -50,10 +50,10 @@ class SolutionTreeSpec
 		val intTree = SolutionTree[Int] ();
 		val stringTree = SolutionTree[String] ();
 
-		intTree must not be === (null);
+		intTree shouldNot be (null);
 		intTree.frontier should be ('empty);
 		
-		stringTree must not be === (null);
+		stringTree shouldNot be (null);
 		stringTree.frontier should be ('empty);
 	}
 	
@@ -94,9 +94,9 @@ class SolutionTreeSpec
 			e.frontier should not be ('empty);
 			
 			// With this expansion, each a -> b -> c(100, 200) node on the frontier
-			e.depth should be === (1);
-			e.frontier.size should be === (3);
-			e.frontier.toStream.map (_.assignments.toList) should be === (
+			e.depth shouldBe (1);
+			e.frontier.size shouldBe (3);
+			e.frontier.toStream.map (_.assignments.toList) shouldBe (
 				Stream (
 					List (Answer ('a, 3)),
 					List (Answer ('a, 2)),
@@ -148,11 +148,11 @@ class SolutionTreeSpec
 		
 		val mapped = expanded flatMap (SolutionTree.fromFrontier[Int]);
 		
-		mapped.root.getLabel should be === (expanded.root.getLabel);
-		mapped.root.hasChildren should be === (true);
+		mapped.root.getLabel shouldBe (expanded.root.getLabel);
+		mapped.root.hasChildren shouldBe (true);
 		mapped.root.firstChild.map (
 			_.getLabel.assignments.head.name
-			) should be === (Some ('a));
+			) shouldBe (Some (FastSymbol ("a")));
 	}
 	
 	it should "be able to incrementally search" in
@@ -169,7 +169,7 @@ class SolutionTreeSpec
 		
 		expanded.frontier should not be ('empty);
 		expanded.frontier.dequeue._1 should be ('defined);
-		expanded.frontier.dequeue._1.get.assignments.size should be === (1);
+		expanded.frontier.dequeue._1.get.assignments.size shouldBe (1);
 		
 		val secondLevel = expanded flatMap {
 			node =>
@@ -181,12 +181,12 @@ class SolutionTreeSpec
 				) | SolutionTree.empty[Int];
 			}
 		
-		secondLevel should not be === (null);
+		secondLevel shouldNot be (null);
 		
-		secondLevel.focus must not be === (null);
-		secondLevel.focus.hasChildren should be === (true);
+		secondLevel.focus shouldNot be (null);
+		secondLevel.focus.hasChildren shouldBe (true);
 		secondLevel.root.firstChild should be ('defined);
-		secondLevel.root.firstChild.map (_.rights.size) should be === (Some (2));
+		secondLevel.root.firstChild.map (_.rights.size) shouldBe (Some (2));
 		secondLevel.frontier should not be ('empty);
 		secondLevel.frontier.dequeue._1 should be ('defined);
 		secondLevel.frontier.dequeue._1.get.assignments.size should be > (0);
@@ -199,8 +199,8 @@ class SolutionTreeSpec
 				) | SolutionTree.empty[Int];
 			}
 		
-		thirdLevel.focus must not be === (null);
-		thirdLevel.focus.hasChildren should be === (true);
+		thirdLevel.focus shouldNot be (null);
+		thirdLevel.focus.hasChildren shouldBe (true);
 		thirdLevel.frontier should not be ('empty);
 		thirdLevel.frontier.dequeue._1 should be ('defined);
 		thirdLevel.frontier.dequeue._1.get.assignments.size should be > (0);

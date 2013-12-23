@@ -53,15 +53,18 @@ class SolutionTreeNodeSpec
 	{
 		classOf[SolutionSpace.Node[_]].isAssignableFrom (
 			classOf[SolutionTreeNode[_]]
-			) should be === (true);
+			) shouldBe (true);
 	}
 	
 	it should "support an empty assignments Set" in
 	{
-		val node = SolutionTreeNode (SortedSet.empty[Answer[String]])
+		val node = SolutionTreeNode (
+			SortedSet.empty[Answer[String]],
+			Seq.empty
+			);
 		
 		node should be ('empty);
-		node.size should be === (0);
+		node.size shouldBe (0);
 	}
 	
 	it should "be able to identify unassigned Answers" in
@@ -71,7 +74,8 @@ class SolutionTreeNodeSpec
 				'a -> 1,
 				'b -> 2,
 				'c -> 3
-				)
+				),
+			createAssignments ('c -> 3).toSeq
 			);
 		
 		node should not be ('empty);
@@ -84,75 +88,85 @@ class SolutionTreeNodeSpec
 	{
 		val empty = mzero[SolutionTreeNode[Int]];
 		
-		empty.isSubsetOf (mzero[SolutionTreeNode[Int]]) should be === (true);
+		empty.isSubsetOf (mzero[SolutionTreeNode[Int]]) shouldBe (true);
 	}
 	
 	it should "identify a proper subset" in
 	{
 		val subset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0)
+			createAssignments ('g -> 1.0),
+			createAssignments ('g -> 1.0).toSeq
 			);
 		val superset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0, 'p -> 3.0)
+			createAssignments ('g -> 1.0, 'p -> 3.0),
+			createAssignments ('p -> 3.0).toSeq
 			);
 		
-		subset.isSubsetOf (superset) should be === (true);
+		subset.isSubsetOf (superset) shouldBe (true);
 	}
 	
 	it should "identify an empty node as a subset of a non-empty node" in
 	{
 		val empty = mzero[SolutionTreeNode[Double]];
 		val populated = SolutionTreeNode[Double] (
-			createAssignments ('a -> 1.0, 'b -> 2.0)
+			createAssignments ('a -> 1.0, 'b -> 2.0),
+			createAssignments ('b -> 2.0).toSeq
 			);
 		
-		empty.isSubsetOf (populated) should be === (true);
+		empty.isSubsetOf (populated) shouldBe (true);
 	}
 	
 	it should "not identify a non-empty node as a subset of an empty node" in
 	{
 		val empty = mzero[SolutionTreeNode[Double]];
 		val populated = SolutionTreeNode[Double] (
-			createAssignments ('a -> 1.0, 'b -> 2.0)
+			createAssignments ('a -> 1.0, 'b -> 2.0),
+			createAssignments ('b -> 2.0).toSeq
 			);
 		
-		populated.isSubsetOf (empty) should not be === (true);
+		populated.isSubsetOf (empty) shouldNot be (true);
 	}
 	
 	it should "ignore prefix elements when doing subset determination" in
 	{
 		val subset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0, 'p -> 2.0)
+			createAssignments ('g -> 1.0, 'p -> 2.0),
+			createAssignments ('g -> 1.0, 'p -> 2.0).toSeq
 			);
 		val superset = SolutionTreeNode[Double] (
-			createAssignments ('a -> 0.0, 'g -> 1.0, 'p -> 2.0)
+			createAssignments ('a -> 0.0, 'g -> 1.0, 'p -> 2.0),
+			createAssignments ('a -> 0.0).toSeq
 			);
 		
-		subset.isSubsetOf (superset) should be === (true);
+		subset.isSubsetOf (superset) shouldBe (true);
 	}
 	
 	it should "ignore suffix elements when doing subset determination" in
 	{
 		val subset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0, 'p -> 2.0)
+			createAssignments ('g -> 1.0, 'p -> 2.0),
+			createAssignments ('g -> 1.0, 'p -> 2.0).toSeq
 			);
 		val superset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0, 'p -> 2.0, 'z -> 99.0)
+			createAssignments ('g -> 1.0, 'p -> 2.0, 'z -> 99.0),
+			createAssignments ('z -> 99.0).toSeq
 			);
 		
-		subset.isSubsetOf (superset) should be === (true);
+		subset.isSubsetOf (superset) shouldBe (true);
 	}
 	
 	it should "ignore infix elements when doing subset determination" in
 	{
 		val subset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0, 'p -> 2.0)
+			createAssignments ('g -> 1.0, 'p -> 2.0),
+			createAssignments ('p -> 2.0).toSeq
 			);
 		val superset = SolutionTreeNode[Double] (
-			createAssignments ('g -> 1.0, 'j -> 1.5, 'p -> 2.0)
+			createAssignments ('g -> 1.0, 'j -> 1.5, 'p -> 2.0),
+			createAssignments ('j -> 1.5).toSeq
 			);
 		
-		subset.isSubsetOf (superset) should be === (true);
+		subset.isSubsetOf (superset) shouldBe (true);
 	}
 	
 	
@@ -160,10 +174,10 @@ class SolutionTreeNodeSpec
 		(implicit O : Ordering[Answer[A]])
 		: SortedSet[Answer[A]] =
 		SortedSet.empty[Answer[A]] ++ pairs.map {
-				p =>
+			p =>
 
-				Answer (VariableName (p._1), p._2)
-				}
+			Answer (VariableName (p._1), p._2)
+			}
 	
 	
 	private def createVariables (names : Symbol *)

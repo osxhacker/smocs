@@ -33,22 +33,22 @@ class AnswerSpec
 	{
 		val answer = Answer ('x, 42);
 		
-		answer.name must be === ('x);
-		answer.value must be === (42);
+		answer.name shouldBe (FastSymbol ("x"));
+		answer.value shouldBe (42);
 	}
 	
 	it should "support transformations to Tuple2" in
 	{
 		val answer = Answer ('y, "just for test");
 		
-		answer.toTuple should be === (('y, "just for test"));
+		answer.toTuple shouldBe ((FastSymbol ("y"), "just for test"));
 	}
 	
 	it should "support transformations from Tuple2" in
 	{
-		val answer = Answer.fromTuple ('y -> "just for test");
+		val answer = Answer.fromTuple (FastSymbol ("y") -> "just for test");
 		
-		answer.toTuple should be === (('y, "just for test"));
+		answer.toTuple shouldBe ((FastSymbol ("y"), "just for test"));
 	}
 	
 	it should "support Scalaz Functor" in
@@ -56,12 +56,12 @@ class AnswerSpec
 		val functor = implicitly[Functor[Answer]];
 		val laws = functor.functorLaw;
 		
-		laws.identity (Answer ('a, 99)) must be === (true);
+		laws.identity (Answer ('a, 99)) shouldBe (true);
 		laws.composite (
 			Answer ('a, 99),
 			(_ : Int).toString,
 			(_ : String).length
-			) should be === (true);
+			) shouldBe (true);
 	}
 	
 	it should "support Scalaz Equal" in
@@ -71,22 +71,22 @@ class AnswerSpec
 		val b = Answer ('b, 1);
 		val e = implicitly[Equal[Answer[Int]]];
 		
-		e.equal (a1, a1) should be === (true);
-		e.equal (a1, a2) should be === (false);
-		e.equal (a1, b) should be === (false);
+		e.equal (a1, a1) shouldBe (true);
+		e.equal (a1, a2) shouldBe (false);
+		e.equal (a1, b) shouldBe (false);
 	}
 	
 	it should "support Scalaz Comonad" in
 	{
 		val a = Answer ('a, 42);
 		
-		a.copoint should be === (42);
+		a.copoint shouldBe (42);
 	}
 	
 	it should "support Scalaz Show" in
 	{
 		val cord = Answer ('z, 99).show;
 		
-		cord must not be === (null);
+		cord shouldNot be (null);
 	}
 }

@@ -51,7 +51,7 @@ class AlgebraicEquationConstraintSpec
 		
 		val constraint = cc.constrains (equation);
 		
-		constraint must not be === (null);
+		constraint shouldNot be (null);
 	}
 	
 	it should "constrain the domain of Variables given" in
@@ -64,9 +64,9 @@ class AlgebraicEquationConstraintSpec
 		
 		val answer = cc.constrains (equation) (input);
 		
-		answer must not be === (null);
+		answer shouldNot be (null);
 		answer should be ('left);
-		answer should be === (-\/ (UnsolvableError));
+		answer shouldBe (-\/ (UnsolvableError));
 	}
 	
 	it should "detect when variables are missing" in
@@ -79,7 +79,7 @@ class AlgebraicEquationConstraintSpec
 		
 		val answer = cc.constrains (equation) (input);
 		
-		answer must not be === (null);
+		answer shouldNot be (null);
 		answer should be ('left);
 	}
 	
@@ -96,7 +96,7 @@ class AlgebraicEquationConstraintSpec
 		
 		val answer = cc.constrains (equation) (input);
 		
-		answer must not be === (null);
+		answer shouldNot be (null);
 		answer should be ('left);
 	}
 }

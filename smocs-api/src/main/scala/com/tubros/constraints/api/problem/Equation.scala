@@ -102,14 +102,11 @@ trait Equation[T]
 	
 	
 	/// Implicit Conversions
-	implicit def valToConstant[T <: AnyVal] (v : T) : Expression[T] =
-		Constant[T] (v);
-	
-	implicit def symbolToVariableUse (name : Symbol) : Expression[Nothing] =
-		VariableUse (name);
-	
 	implicit def richSymbolSyntax (name : Symbol) =
 		new Equation.RichSymbolSyntax (name);
+
+	implicit def richVariableNameSyntax (name : VariableName) =
+		new Equation.RichVariableNameSyntax (name);
 }
 
 
@@ -121,4 +118,12 @@ object Equation
 	{
 		def apply (index : Int) = VariableUse (compose (v, index));
 	}
+
+
+	class RichVariableNameSyntax (v : VariableName)
+		extends ArrayNamingPolicy
+	{
+		def apply (index : Int) = VariableUse (compose (v, index));
+	}
 }
+

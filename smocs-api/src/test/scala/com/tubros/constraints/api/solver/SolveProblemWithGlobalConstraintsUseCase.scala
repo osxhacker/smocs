@@ -94,7 +94,7 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 					
 				allDiff (answer.map (_.copoint)) &&
 				increasing (answer.map (_.copoint));
-				} should be === (true);
+				} shouldBe (true);
 		}
 		
 		scenario ("Enforcing 'alldiff' and 'increasing'")
@@ -132,14 +132,14 @@ trait SolveProblemWithGlobalConstraintsUseCase[
 				answer =>
 					
 				allDiff (answer.map (_.copoint));
-				} should be === (true);
+				} shouldBe (true);
 			
 			And ("each answer should have ascending positional values");
 			answers.forall {
 				answer =>
 					
 				increasing (answer.map (_.copoint));
-				} should be === (true);
+				} shouldBe (true);
 		}
 		
 		scenario ("Enforcing 'allsame', causing no satisfactory answers")

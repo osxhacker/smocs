@@ -28,9 +28,9 @@ class SymbolTableSpec
 	{
 		val table = SymbolTable.empty;
 		
-		table must not be === (null);
+		table shouldNot be (null);
 		table ('unknown) should be ('empty);
-		table.contains ('anyName) should be === (false);
+		table.contains ('anyName) shouldBe (false);
 	}
 	
 	it should "support symbol name addition" in
@@ -38,8 +38,8 @@ class SymbolTableSpec
 		val entry = VariableName ('aName);
 		val oneEntry = SymbolTable.empty addSymbol (entry);
 
-		oneEntry.contains (entry) should be === (true);
-		oneEntry (entry) should be === (Set (entry));
+		oneEntry.contains (entry) shouldBe (true);
+		oneEntry (entry) shouldBe (Set (entry));
 	}
 	
 	it should "support dependant definitions" in
@@ -52,8 +52,10 @@ class SymbolTableSpec
 				);
 		
 		dependant ('c) should not be ('empty);
-		dependant.contains ('c) should be === (true);
-		dependant ('c) should be === (Set ('a, 'b));
+		dependant.contains ('c) shouldBe (true);
+		dependant ('c) shouldBe (
+			Set (VariableName ('a), VariableName ('b))
+			);
 	}
 	
 	it should "support nested dependant definitions" in
@@ -66,9 +68,11 @@ class SymbolTableSpec
 				addSymbol ('a)
 				);
 		
-		nested.contains ('d) should be === (true);
+		nested.contains ('d) shouldBe (true);
 		nested ('d) should not be ('empty);
-		nested ('d) should be === (Set ('a, 'b));
+		nested ('d) shouldBe (
+			Set (VariableName ('a), VariableName ('b))
+			);
 	}
 	
 	it should "be able to determine what symbols are dependants" in
@@ -80,8 +84,8 @@ class SymbolTableSpec
 				addDerivedSymbol ('c, Set ('a, 'b))
 				);
 		
-		dependant.isDerived ('a) should be === (false);
-		dependant.isDerived ('c) should be === (true);
+		dependant.isDerived ('a) shouldBe (false);
+		dependant.isDerived ('c) shouldBe (true);
 	}
 	
 	it should "be able to resolve dependants available when expected" in
@@ -93,8 +97,8 @@ class SymbolTableSpec
 				addDerivedSymbol ('c, Set ('a, 'b))
 				);
 		
-		dependant.derivedFrom (Set[VariableName] ('a, 'b)) should be === (
-			Set ('c)
+		dependant.derivedFrom (Set[VariableName] ('a, 'b)) shouldBe (
+			Set (VariableName ('c))
 			);
 	}
 	

@@ -29,7 +29,7 @@ class SquareSpec
 			);
 		
 		set should have size (4);
-		set (Square ('D', 3, None)) should be === (true);
-		set.find (_.column == 5).get.assignment should be === (Some (2));
+		set (Square ('D', 3, None)) shouldBe (true);
+		set.find (_.column == 5).get.assignment shouldBe (Some (2));
 	}
 }

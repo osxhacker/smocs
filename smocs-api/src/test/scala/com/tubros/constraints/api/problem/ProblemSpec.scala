@@ -31,7 +31,7 @@ class ProblemSpec
 				}
 			);
 		
-		problem.equations.size must be === (1);
+		problem.equations.size shouldBe (1);
 	}
 }
 

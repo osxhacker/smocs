@@ -45,14 +45,14 @@ class CanConstrainSpec
 	{
 		val cc = implicitly[CanConstrain[Option, String]];
 		
-		cc must not be === (null);
+		cc shouldNot be (null);
 	}
 	
 	it should "produce a Constraint when requested" in
 	{
 		val constraint = "foo".some.constrains;
 		
-		constraint must not be === (null);
+		constraint shouldNot be (null);
 	}
 	
 	it should "produce a Constraint capable of filtering" in
@@ -65,7 +65,7 @@ class CanConstrainSpec
 			VariableName ('x) -> "desired"
 			);
 		
-		constraint (aVariable) should be === (\/- (aVariable));
+		constraint (aVariable) shouldBe (\/- (aVariable));
 	}
 	
 	it should "be able to constrain numeric types" in
@@ -76,7 +76,7 @@ class CanConstrainSpec
 			VariableName ('x) -> 2
 			);
 		
-		constraint (aVariable) should be === (\/- (aVariable));
+		constraint (aVariable) shouldBe (\/- (aVariable));
 	}
 	
 	

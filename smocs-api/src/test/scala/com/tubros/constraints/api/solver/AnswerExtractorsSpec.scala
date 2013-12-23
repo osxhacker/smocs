@@ -39,8 +39,8 @@ class AnswerExtractorsSpec
 	"ScalarNamed" should "match when a Seq has a corresponding Answer" in
 	{
 		answers match {
-			case _ :: ScalarNamed ('b, v) :: tail =>
-				v should be === (2);
+			case _ :: ScalarNamed ("b", v) :: tail =>
+				v shouldBe (2);
 				
 			case _ =>
 				fail ("Did not match an existing scalar");
@@ -51,7 +51,7 @@ class AnswerExtractorsSpec
 	{
 		answers match {
 			case ArrayVariables (a1, a2) =>
-				a1 must not be === (null);
+				a1 shouldNot be (null);
 				a1 should not be ('empty);
 				a1 should contain key (0);
 				a1 should contain key (1);
@@ -63,7 +63,7 @@ class AnswerExtractorsSpec
 	{
 		answers match {
 			case AllArrays (all) =>
-				all.size should be === (2);
+				all.size shouldBe (2);
 				
 			case other =>
 				fail ("unexpected match: %s".format (other));

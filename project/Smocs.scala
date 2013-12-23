@@ -52,7 +52,7 @@ object Smocs
 	/// Instance Properties
 	lazy val buildSettings = Seq (
 		organization := "com.tubros",
-		version := "0.5.1-SNAPSHOT",
+		version := "0.5.2-SNAPSHOT",
 		scalaVersion := "2.10.3"
 		);
 
@@ -137,7 +137,7 @@ object Dependencies
 
 	object Scalaz
 	{
-		private val version = "7.0.3";
+		private val version = "7.0.5";
 
 		lazy val core = Seq (
 			"org.scalaz" % "scalaz-core_2.10" % version,
@@ -191,9 +191,9 @@ object Dependencies
 		"org.jmock" % "jmock-junit4" % "2.5.1" % "test" intransitive(),
 		"org.jmock" % "jmock-legacy" % "2.5.1" % "test",
 		"org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
-		"org.scalamock" %% "scalamock-core" % "3.0.1" % "test",
-		"org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test",
-		"org.scalatest" %% "scalatest" % "2.0.M5b" % "test",
+		"org.scalamock" %% "scalamock-core" % "3.1.RC1" % "test",
+		"org.scalamock" %% "scalamock-scalatest-support" % "3.1.RC1" % "test",
+		"org.scalatest" %% "scalatest" % "2.0" % "test",
 		"org.slf4j" % "slf4j-jdk14" % "1.7.2" % "test"
 		);
 

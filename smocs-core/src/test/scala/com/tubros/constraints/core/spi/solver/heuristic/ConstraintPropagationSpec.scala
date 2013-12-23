@@ -58,7 +58,7 @@ class ConstraintPropagationSpec
 
 		unconstrained (
 			createPriorAssignments (alpha, beta), gamma
-			) should be === (gamma);
+			) shouldBe (gamma);
 	}
 
 	it should "apply a Constraint and produce a different value set" in
@@ -69,7 +69,7 @@ class ConstraintPropagationSpec
 			symbolTable
 			);
 
-		constrain (createPriorAssignments (alpha), beta) should be === (
+		constrain (createPriorAssignments (alpha), beta) shouldBe (
 			DiscreteVariable (beta.name, FiniteDiscreteDomain (10))
 			);
 	}
@@ -93,7 +93,7 @@ class ConstraintPropagationSpec
 			symbolTable
 			);
 		
-		constrain (createPriorAssignments (alpha), beta).domain should be === (
+		constrain (createPriorAssignments (alpha), beta).domain shouldBe (
 			beta.domain
 			);
 	}

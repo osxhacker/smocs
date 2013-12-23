@@ -58,22 +58,19 @@ object Answer
 	}
 	
 	
-	def apply[A] (pair : (Symbol, A)) : Answer[A] =
-		new Answer (pair._1, pair._2);
+	def apply[A, B] (pair : (A, B))
+		(implicit APC : AnswerPairConverter[A])
+		: Answer[B] =
+		APC.toAnswer (pair);
 	
 	
 	/**
 	 * The fromTuple method is an alias for the `apply` method.
 	 */
-	def fromTuple[A] (pair : (Symbol, A)) : Answer[A] =
-		apply[A] (pair);
-	
-	
-	private def answerIso[A] : IsoSet[Answer[A], VariableNameTuple[A]] =
-		new IsoSet[Answer[A], VariableNameTuple[A]] {
-			override def from = (p : VariableNameTuple[A]) => fromTuple (p);
-			override def to = (Answer.unapply[A] _) andThen (_.get);
-			}
+	def fromTuple[A, B] (pair : (A, B))
+		(implicit APC : AnswerPairConverter[A])
+		: Answer[B] =
+		apply[A, B] (pair);
 	
 	
 	/// Implicit Conversions
@@ -111,13 +108,54 @@ object Answer
 
 
 /**
+ * The '''AnswerPairConverter''' type is a model of the TYPE CLASS pattern and
+ * provides transparent conversion from supported `A` types to an
+ * [[com.tubros.constraints.api.solver.Answer]] instance.
+ * 
+ * @author svickers
+ */
+sealed trait AnswerPairConverter[A]
+{
+	def toAnswer[B] (pair : (A, B)) : Answer[B];
+}
+
+
+object AnswerPairConverter
+{
+	/// Implicit Conversions
+	implicit object FastSymbolAnswerConverter
+		extends AnswerPairConverter[FastSymbol]
+	{
+		override def toAnswer[B] (pair : (FastSymbol, B)) : Answer[B] =
+			new Answer[B] (pair._1, pair._2);
+	}
+	
+	
+	implicit object SymbolAnswerConverter
+		extends AnswerPairConverter[Symbol]
+	{
+		override def toAnswer[B] (pair : (Symbol, B)) : Answer[B] =
+			new Answer[B] (FastSymbol (pair._1.name), pair._2);
+	}
+	
+	
+	implicit object StringAnswerConverter
+		extends AnswerPairConverter[String]
+	{
+		override def toAnswer[B] (pair : (String, B)) : Answer[B] =
+			new Answer[B] (FastSymbol (pair._1), pair._2);
+	}
+}
+
+
+/**
  * The '''ScalarNamed''' extractor can be used with [[scala.PartialFunction]]s
  * to `match` an individual [[com.tubros.constraints.api.solver.Variable]]
  * when performing global constraints, such as:
  * 
  * {{{
  * 		_ match {
- *   		case ScalarNamed ('a, value) =>
+ *   		case ScalarNamed ("a", value) =>
  *				doSomethingWith (value);
  *     		}
  * }}}
@@ -129,15 +167,16 @@ object ScalarNamed
 	extends ArrayNamingPolicy
 {
 	/// Class Imports
-	import syntax.equal._
-	import syntax.std.boolean._
+	import Scalaz._
 	
 	
-	def unapply[A] (answer : Answer[A]) : Option[(VariableName, A)] =
+	def unapply[A] (answer : Answer[A]) : Option[(String, A)] =
 		unlessArrayName (answer.name) {
 			name =>
 				
-			(name === answer.name) option (answer.toTuple);
+			(name === answer.name) option {
+				((_ : FastSymbol).name) <-: answer.toTuple;
+				}
 			}
 }
 

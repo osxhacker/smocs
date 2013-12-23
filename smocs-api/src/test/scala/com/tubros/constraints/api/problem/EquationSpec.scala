@@ -34,8 +34,8 @@ class EquationSpec
 			def apply = 'a := 5;
 			};
 		
-		const.arity should be === (1);
-		const.derived should be === (Some ('a));
+		const.arity shouldBe (1);
+		const.derived shouldBe (Some (FastSymbol ("a")));
 		const.variables should be ('empty);
 	}
 	
@@ -45,8 +45,8 @@ class EquationSpec
 			def apply = 'x > 0;
 			};
 			
-		greaterThanZero.arity should be === (1);
-		greaterThanZero () should be === (
+		greaterThanZero.arity shouldBe (1);
+		greaterThanZero () shouldBe (
 			GreaterThan (
 				VariableUse ('x),
 				Constant (0)
@@ -57,11 +57,11 @@ class EquationSpec
 	it should "support compound statements" in
 	{
 		val complex = new RelationalEquation {
-			def apply = ('x < 0 || 'x > 0) && ('x !== 99);
+            def apply = ('x < 0 || 'x > 0) && ('x <> 99);
 			};
 			
-		complex.arity should be === (1);
-		complex () should be === (
+		complex.arity shouldBe (1);
+		complex () shouldBe (
 			LogicalAnd (
 				LogicalOr (
 					LessThan (
@@ -87,7 +87,7 @@ class EquationSpec
 			def apply = 'x < 'y;
 			}
 		
-		xBeforeY.arity should be === (2);
+		xBeforeY.arity shouldBe (2);
 	}
 	
 	it should "support array syntax" in
@@ -97,8 +97,8 @@ class EquationSpec
 		val equation = EquationSpec.usingSubscripts;
 		val nameComposer = new ArrayNamingPolicy {};
 		
-		equation.arity should be === (2);
-		equation.variables should be === (
+		equation.arity shouldBe (2);
+		equation.variables shouldBe (
 			Set (
 				nameComposer.compose ('array, 0),
 				nameComposer.compose ('array, 1)

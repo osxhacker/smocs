@@ -18,8 +18,7 @@ import org.scalatest.junit.JUnitRunner
 @RunWith (classOf[JUnitRunner])
 trait ProjectSpec
 	extends FlatSpec
-		with MustMatchers
-		with ShouldMatchers
+		with Matchers
 {
 
 }

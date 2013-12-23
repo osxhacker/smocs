@@ -47,12 +47,13 @@ package object api
 	 * val foo : VariableName = 'someName
 	 * }}}.
 	 */
-	type VariableName = Symbol @@ VariableNameTag
+	type VariableName = FastSymbol
+	val VariableName = FastSymbol
 	
 	
 	/// Implicit Conversions
 	implicit def symbolToVariableName (name : Symbol) : VariableName =
-		VariableName (name);
+		VariableName (name.name);
 	
 	implicit val variableNameEqual : Equal[VariableName] = Equal.equalA;
 }

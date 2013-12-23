@@ -48,7 +48,7 @@ class PuzzleSpec
 			|I1 -> None | I2 -> None | I3 -> None | I4 -> None | I5 -> None | I6 -> None | I7 -> None | I8 -> None | I9 -> None
 			|)""".stripMargin;
 		
-		Puzzle ().shows should be === (expected);
+		Puzzle ().shows shouldBe (expected);
 	}
 	
 	it should "be empty when constructed" in
@@ -62,7 +62,7 @@ class PuzzleSpec
 		val puzzle = Puzzle ();
 		val updated = puzzle.update (Square ('D', 3), 2);
 
-		updated ('D', 3).flatMap (_.assignment) should be === (Some (2));
+		updated ('D', 3).flatMap (_.assignment) shouldBe (Some (2));
 	}
 	
 	it should "be able to assign multiple squares" in
@@ -73,9 +73,9 @@ class PuzzleSpec
 			Nil
 			);
 		
-		puzzle ('A', 1) should be === (Some (Square ('A', 1, Some (42))));
-		puzzle ('A', 2) should be === (None);
-		puzzle ('B', 2) should be === (Some (Square ('B', 2, Some (99))));
-		puzzle ('B', 3) should be === (None);
+		puzzle ('A', 1) shouldBe (Some (Square ('A', 1, Some (42))));
+		puzzle ('A', 2) shouldBe (None);
+		puzzle ('B', 2) shouldBe (Some (Square ('B', 2, Some (99))));
+		puzzle ('B', 3) shouldBe (None);
 	}
 }

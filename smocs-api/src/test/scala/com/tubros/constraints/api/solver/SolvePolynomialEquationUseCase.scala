@@ -73,8 +73,8 @@ trait SolvePolynomialEquationUseCase[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			
 			answers should not be ('empty);
 			answers should have size (1);
-			answers.head should be === (
-				List (Answer ('x -> 2), Answer ('y -> 2))
+			answers.head shouldBe (
+				List (Answer ("x" -> 2), Answer ("y" -> 2))
 				);
 		}
 		

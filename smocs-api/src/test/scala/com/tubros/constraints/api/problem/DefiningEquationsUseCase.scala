@@ -7,7 +7,10 @@ import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
-import com.tubros.constraints.api.UseCaseSpec
+import com.tubros.constraints.api.{
+	FastSymbol,
+	UseCaseSpec
+	}
 
 
 /**
@@ -40,8 +43,8 @@ class DefiningEquationsUseCase
 			
 			Then ("The definition should be what was given");
 			
-			e.arity should be === (1);
-			e.derived should be === (Some ('a));
+			e.arity shouldBe (1);
+			e.derived shouldBe (Some (FastSymbol ("a")));
 			e.variables should be ('empty);
 		}
 		
@@ -57,8 +60,10 @@ class DefiningEquationsUseCase
 			 
 			Then ("The definition should be what was given");
 			
-			quadratic.arity should be === (2);
-			quadratic.variables should be === (Set ('x, 'y));
+			quadratic.arity shouldBe (2);
+			quadratic.variables shouldBe (
+				Set (FastSymbol ("x"), FastSymbol ("y"))
+				);
 		}
 	}
 }

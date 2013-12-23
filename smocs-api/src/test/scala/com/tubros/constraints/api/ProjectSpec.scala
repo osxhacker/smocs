@@ -26,6 +26,5 @@ import org.scalatest.prop.Checkers
 trait ProjectSpec
 	extends FlatSpec
 		with Checkers
-		with MustMatchers
-		with ShouldMatchers
+		with Matchers
 

@@ -105,7 +105,7 @@ trait SolveRelationalEquationUseCase[M[+_], SolverT <: Solver[Symbol, M, SolverT
 			Then ("there should be one answer");
 			
 			answers should not be ('empty);
-			answers.head.sortBy (_.name.toString) should be === (
+			answers.head.sortBy (_.name.toString) shouldBe (
 				List (
 					Answer ('first -> 'b),
 					Answer ('head -> 'a),

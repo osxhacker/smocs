@@ -32,7 +32,7 @@ class EstimatedSearchSpaceSpec
 	
 	"An EstimatedSearchSpace" should "have a size of zero with no variables" in
 	{
-		EstimatedSearchSpace (List.empty[DiscreteDomain[Int]]) should be === (0L);
+		EstimatedSearchSpace (List.empty[DiscreteDomain[Int]]) shouldBe (0L);
 	}
 	
 	it should "estimate the size as a product of all variable domain sizes" in
@@ -44,6 +44,6 @@ class EstimatedSearchSpaceSpec
 			FiniteDiscreteDomain (1 to 40)
 			);
 		
-		EstimatedSearchSpace (domains) should be === (10L * 20L * 30L * 40L);
+		EstimatedSearchSpace (domains) shouldBe (10L * 20L * 30L * 40L);
 	}
 }

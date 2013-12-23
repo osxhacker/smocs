@@ -31,14 +31,14 @@ class FiniteDiscreteDomainSpec
 	
 	it should "support variadic construction" in
 	{
-		FiniteDiscreteDomain (99) should be === (Set (99));
-		FiniteDiscreteDomain (99, 100) should be === (Set (99, 100));
+		FiniteDiscreteDomain (99) shouldBe (Set (99));
+		FiniteDiscreteDomain (99, 100) shouldBe (Set (99, 100));
 	}
 	
 	it should "support construction from a range" in
 	{
-		FiniteDiscreteDomain (1 to 5) should be === (Set (1, 2, 3, 4, 5));
-		FiniteDiscreteDomain ('a' to 'c') should be === (Set ('a', 'b', 'c'));
+		FiniteDiscreteDomain (1 to 5) shouldBe (Set (1, 2, 3, 4, 5));
+		FiniteDiscreteDomain ('a' to 'c') shouldBe (Set ('a', 'b', 'c'));
 	}
 	
 	it should "support construction from a Scalaz Enum" in
@@ -46,6 +46,6 @@ class FiniteDiscreteDomainSpec
 		import scalaz.std.AllInstances._
 		import scalaz.syntax.enum._
 		
-		FiniteDiscreteDomain (1 |==> (2, 5)) should be === (Set (1, 3, 5));
+		FiniteDiscreteDomain (1 |==> (2, 5)) shouldBe (Set (1, 3, 5));
 	}
 }

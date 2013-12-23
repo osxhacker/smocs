@@ -156,7 +156,7 @@ class TreeFiniteDomainSolver[A] (
 				
 				globalFilters.run (args).fold (
 					_ => Stream.empty,
-					_.to[Seq].map (Answer.fromTuple).point[Stream]
+					_.to[Seq].map (Answer.fromTuple[VariableName, A]).point[Stream]
 					);
 				}
 			}

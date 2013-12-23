@@ -82,7 +82,7 @@ class TreeFiniteDomainSolverSpec
 					Answer ('b, b),
 					Answer ('c, c)
 					)
-				) should be === (true);
+				) shouldBe (true);
 			}
 	}
 	
@@ -115,7 +115,7 @@ class TreeFiniteDomainSolverSpec
 				
 			answer should not be ('empty);
 			answer should have size (1);
-			answer.head should be === (Vector (Answer ('x, 2), Answer ('y, 8)));
+			answer.head shouldBe (Vector (Answer ('x, 2), Answer ('y, 8)));
 			}
 	}
 	

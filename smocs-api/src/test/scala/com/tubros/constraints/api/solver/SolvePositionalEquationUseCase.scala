@@ -137,7 +137,7 @@ trait SolvePositionalEquationUseCase[
 				val aToB = sorted.dropWhile (_ != a).takeWhile (_ != b).to[Set];
 				
 				aToB.contains (answer (2).value);
-				} should be === (false);
+				} shouldBe (false);
 				
 			And ("each answer should not have 'a == 'v1");
 			answers.toList.map {

@@ -53,7 +53,7 @@ class AssignmentEnumeratorSpec
 	/// Testing Collaborators
 	val candidate = DiscreteVariable ('z, FiniteDiscreteDomain (1, 2, 3));
 	val existingAssignments = List[VariableName] ('a, 'b, 'c).zipWithIndex.map (
-		Answer.fromTuple
+		Answer.fromTuple[VariableName, Int]
 		);
 		
 		
@@ -76,7 +76,7 @@ class AssignmentEnumeratorSpec
 			assignment =>
 				
 			assignment should have size (1);
-			assignment.last.name should be === (candidate.name);
+			assignment.last.name shouldBe (candidate.name);
 			candidate.domain should contain (assignment.last.value);
 			}
 	}
@@ -107,12 +107,14 @@ class AssignmentEnumeratorSpec
 			
 			val mapping = assignment.map (_.toTuple).toMap;
 			
-			mapping.keySet should be === (Set (candidate.name, 'zz));
-			candidate.domain.contains (mapping (candidate.name)) should be === (
+			mapping.keySet shouldBe (
+				Set (candidate.name, VariableName ('zz))
+				);
+			candidate.domain.contains (mapping (candidate.name)) shouldBe (
 				true
 				);
 			
-			mapping ('zz) should be === (
+			mapping ('zz) shouldBe (
 				mapping (candidate.name) * mapping (candidate.name)
 				);
 			}

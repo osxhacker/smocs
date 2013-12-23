@@ -26,6 +26,13 @@ import com.tubros.constraints.api.problem.ast.{
 package object problem
 {
 	/// Implicit Conversions
-	implicit class EquationDefinition (val name : Symbol)
-		extends AnyVal
+	implicit def fastSymbolToVariableUse (name : FastSymbol)
+		: Expression[Nothing] =
+		VariableUse (name);
+	
+	implicit def symbolToVariableUse (name : Symbol) : Expression[Nothing] =
+		VariableUse (name);
+
+	implicit def valToConstant[T <: AnyVal] (v : T) : Expression[T] =
+		Constant[T] (v);
 }

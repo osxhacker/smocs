@@ -92,9 +92,9 @@ class VariableRankingPolicySpec
 		
 		val ranked = policy (SampleConstraintsProvider (constraints, variables)) (variables);
 		
-		ranked must not be === (null);
-		ranked must have size (variables.size);
-		ranked.head.name should be === ('b);
+		ranked shouldNot be (null);
+		ranked should have size (variables.size);
+		ranked.head.name shouldBe (VariableName ('b));
 	}
 	
 	it should "pick the most impacted variable" in
@@ -114,8 +114,8 @@ class VariableRankingPolicySpec
 		
 		val ranked = policy (provider) (variables);
 		
-		ranked must not be === (null);
-		ranked must have size (variables.size);
-		ranked.head.name should be === ('c);
+		ranked shouldNot be (null);
+		ranked should have size (variables.size);
+		ranked.head.name shouldBe (VariableName ('c));
 	}
 }

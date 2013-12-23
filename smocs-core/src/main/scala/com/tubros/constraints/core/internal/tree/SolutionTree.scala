@@ -38,7 +38,6 @@ import com.tubros.constraints.api.solver._
  *
  */
 final case class SolutionTree[A] (
-	private val tree : Tree[SolutionTree[A]#NodeType[A]],
 	val focus : SolutionTree[A]#LocationType,
 	override val frontier : Frontier[SolutionTree[A]#NodeType[A]]
 	)
@@ -57,8 +56,8 @@ final case class SolutionTree[A] (
 	
 	
 	/// Instance Properties
-	lazy val isEmpty : Boolean = tree.rootLabel.isEmpty && frontier.isEmpty;
-	lazy val root : LocationType = tree.loc;
+	lazy val isEmpty : Boolean = focus.getLabel.isEmpty && frontier.isEmpty;
+	lazy val root : LocationType = focus.root;
 	private implicit val frontierMonoid = frontier.monoid;
 	private val NodeType = SolutionTreeNode;
 	
@@ -86,7 +85,6 @@ final case class SolutionTree[A] (
 		expander (location, frontier, variables.toList, valuesFor).map {
 			case (subTree, newFrontier) =>
 				copy (
-					tree = subTree.toTree,
 					focus = subTree,
 					frontier = newFrontier
 					);
@@ -112,7 +110,7 @@ final case class SolutionTree[A] (
 			Some (subTree).filterNot (_.isEmpty).flatMap {
 				newTree =>
 					
-				val lookingFor = newTree.tree.rootLabel;
+				val lookingFor = newTree.focus.getLabel;
 				
 				findNodeUnder (focus, lookingFor) orElse {
 					findNodeUnder (root, lookingFor);
@@ -125,7 +123,6 @@ final case class SolutionTree[A] (
 			val merged = node.setTree (subTree.root.toTree).toTree;
 			
 			copy (
-				tree = merged,
 				focus = merged.loc,
 				frontier = frontier |+| subTree.frontier
 				);
@@ -142,12 +139,12 @@ final case class SolutionTree[A] (
 	
 	override def prune (location : LocationType) : SolutionTree[A] =
 	{
-		val pruned = location.delete.map (_.toTree);
+		val pruned = location.delete;
 		
 		pruned.fold (this) {
-			t =>
+			loc =>
 				
-			copy (tree = t);
+			copy (focus = loc);
 			}
 	}
 	
@@ -202,7 +199,7 @@ final case class SolutionTree[A] (
 	 * containing answers which have the '''expected''' number of assignments.
 	 */
 	def toStream (expected : Int) : Stream[Seq[Answer[A]]] =
-		tree.flatten.withFilter (_.assignments.size === expected).map {
+		root.tree.flatten.withFilter (_.assignments.size === expected).map {
 			node =>
 				
 			node.assignments.toSeq;
@@ -273,7 +270,7 @@ final case class SolutionTree[A] (
 		valuesFor.generate (parentNode.assignments.toSeq, variable) map {
 			additions =>
 
-			parentNode map (e => additions ++ e);
+			NodeType[A] (parentNode.assignments ++ additions, additions)
 			}
 	}
 }
@@ -303,7 +300,7 @@ object SolutionTree
 				"SolutionTree(\n",
 				mkCord (
 					"\n",
-					solution.tree.drawTree,
+					solution.root.tree.drawTree,
 					Cord (
 						"focus=",
 						solution.focus.getLabel.show
@@ -342,7 +339,7 @@ object SolutionTree
 				
 			val tree = Tree (node);
 			
-			new SolutionTree[A] (tree, tree.loc, frontier);
+			new SolutionTree[A] (tree.loc, frontier);
 			}
 	
 			
@@ -362,9 +359,9 @@ object SolutionTree
 	def empty[A] (implicit AO : Ordering[Answer[A]], E : Equal[A])
 		: SolutionTree[A] =
 	{
-		val tree = Tree (SolutionTreeNode[A] (SortedSet.empty[Answer[A]]));
+		val tree = Tree (mzero[SolutionTreeNode[A]]);
 		
-		new SolutionTree (tree, tree.loc, Frontier.lifo[NodeType[A]]);
+		new SolutionTree (tree.loc, Frontier.lifo[NodeType[A]]);
 	}
 	
 	

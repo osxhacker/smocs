@@ -28,14 +28,14 @@ class VariableNameSpec
 	{
 		val name = VariableName ('x);
 		
-		name must not be === (null);
+		name shouldNot be (null);
 	}
 	
 	it should "retain the symbolic name it was given" in
 	{
 		val name = VariableName ('a);
 		
-		name.name should be === ("a");
+		name.name shouldBe ("a");
 	}
 	
 	it should "accept any valid Symbol" in
@@ -53,6 +53,6 @@ class VariableNameSpec
 	{
 		val converted : VariableName = 'anId;
 		
-		converted must be === ('anId);
+		converted should be (FastSymbol ("anId"));
 	}
 }

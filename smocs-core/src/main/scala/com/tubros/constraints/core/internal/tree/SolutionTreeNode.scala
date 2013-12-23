@@ -34,7 +34,8 @@ import com.tubros.constraints.api.solver.{
  *
  */
 final case class SolutionTreeNode[A] (
-	override val assignments : SortedSet[Answer[A]]
+	override val assignments : SortedSet[Answer[A]],
+	private val added : Seq[Answer[A]]
 	)
 	(implicit E : Equal[A], O : Ordering[Answer[A]])
 	extends SolutionSpace.Node[A]
@@ -51,11 +52,6 @@ final case class SolutionTreeNode[A] (
 	
 	def :+ (answer : Answer[A]) : SolutionTreeNode[A] =
 		copy (assignments + answer);
-	
-	
-	def map (f : GenTraversableOnce[Answer[A]] => GenTraversableOnce[Answer[A]])
-		: SolutionTreeNode[A] =
-		SolutionTreeNode[A] (SortedSet.empty[Answer[A]] ++ f (assignments));
 	
 	
 	/**
@@ -94,9 +90,11 @@ final case class SolutionTreeNode[A] (
 				
 				if (ourNext === theirNext)
 					strictSubset (us, them);
+				else if (ourNext.name === theirNext.name)
+					false;
 				else
 				{
-					val theirCurrent = them.dropWhile (_ =/= ourNext);
+					val theirCurrent = them.dropWhile (_.name.name < ourNext.name.name);
 					
 					if (theirCurrent.hasNext && theirCurrent.next === ourNext)
 						strictSubset (us, them);
@@ -104,11 +102,10 @@ final case class SolutionTreeNode[A] (
 						false;
 				}
 			}
-				
 
 		return (
 			assignments.size <= other.assignments.size &&
-			strictSubset (assignments.iterator, other.assignments.iterator)
+			strictSubset (added.iterator, other.assignments.iterator)
 			);
 	}
 }
@@ -132,7 +129,10 @@ object SolutionTreeNode
 	implicit def nodeMonoid[A] (implicit E : Equal[A], O : Ordering[Answer[A]])
 		: Monoid[SolutionTreeNode[A]] =
 		new Monoid[SolutionTreeNode[A]] {
-			override val zero = SolutionTreeNode (SortedSet.empty[Answer[A]]);
+			override val zero = SolutionTreeNode (
+				SortedSet.empty[Answer[A]],
+				Seq.empty[Answer[A]]
+				);
 			
 			override def append (
 				a : SolutionTreeNode[A],
@@ -141,7 +141,10 @@ object SolutionTreeNode
 				: SolutionTreeNode[A] =
 				a.assignments.isEmpty.fold (
 					b,
-					SolutionTreeNode[A] (a.assignments ++ b.assignments)
+					SolutionTreeNode[A] (
+						a.assignments ++ b.assignments,
+						a.added ++ b.added
+						)
 					);
 			}
 	

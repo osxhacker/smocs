@@ -32,17 +32,17 @@ class DiscreteDomainSpec
 	{
 		val empty = DiscreteDomain.empty[Int];
 		
-		empty must not be === (null);
+		empty shouldNot be (null);
 		empty should be ('empty);
-		empty.contains (99) should be === (false);
+		empty.contains (99) shouldBe (false);
 	}
 	
 	it should "support 'finite' domains" in
 	{
 		val ten : Domain[Int] = DiscreteDomain.empty[Int] ++ (1 to 10);
 		
-		ten.hasDefiniteSize should be === (true);
-		ten.bounds should be === (Some ((1, 10)));
+		ten.hasDefiniteSize shouldBe (true);
+		ten.bounds shouldBe (Some ((1, 10)));
 	}
 	
 	it should "retain the DiscreteDomain type in its returned instances" in
@@ -53,11 +53,11 @@ class DiscreteDomainSpec
 		val even : DiscreteDomain[Int] = ten filter (n => (n % 2) == 0);
 		val odd : DiscreteDomain[Int] = ten &~ even;
 		
-		ten must have size (10);
-		firstThree must have size (3);
-		allButLast must have size (9);
-		even must have size (5);
-		odd must have size (5);
+		ten should have size (10);
+		firstThree should have size (3);
+		allButLast should have size (9);
+		even should have size (5);
+		odd should have size (5);
 	}
 	
 	it should "support the Show monad" in
@@ -73,9 +73,9 @@ class DiscreteDomainSpec
 		val monad = implicitly[scalaz.Monad[DiscreteDomain]];
 		val laws = monad.monadLaw;
 		
-		laws.identity (doubles) must be === (true);
-		laws.leftIdentity (99.0, singleton[Double]) must be === (true);
-		laws.rightIdentity (doubles) must be === (true);
+		laws.identity (doubles) shouldBe (true);
+		laws.leftIdentity (99.0, singleton[Double]) shouldBe (true);
+		laws.rightIdentity (doubles) shouldBe (true);
 	}
 	
 	it should "conform to the MonadPlus laws" in
@@ -84,8 +84,8 @@ class DiscreteDomainSpec
 		val monadPlus = implicitly[scalaz.MonadPlus[DiscreteDomain]];
 		val laws = monadPlus.monadPlusLaw;
 		
-		laws.emptyMap ((n : Double) => n) must be === (true);
-		laws.leftZero (singleton[Double]) must be === (true);
+		laws.emptyMap ((n : Double) => n) shouldBe (true);
+		laws.leftZero (singleton[Double]) shouldBe (true);
 	}
 	
 	it should "conform to the Monoid laws" in
@@ -96,9 +96,9 @@ class DiscreteDomainSpec
 		val monoid = implicitly[scalaz.Monoid[DiscreteDomain[String]]];
 		val laws = monoid.monoidLaw;
 		
-		laws.leftIdentity (strings) must be === (true);
-		laws.rightIdentity (strings) must be === (true);
-		laws.associative (strings, more, stillMore) must be === (true);
+		laws.leftIdentity (strings) shouldBe (true);
+		laws.rightIdentity (strings) shouldBe (true);
+		laws.associative (strings, more, stillMore) shouldBe (true);
 	}
 	
 	it should "conform to the Category laws" in
@@ -109,9 +109,9 @@ class DiscreteDomainSpec
 		val category = implicitly[scalaz.Monoid[DiscreteDomain[Int]]].category;
 		val laws = category.categoryLaw;
 		
-		laws.leftIdentity (ints) must be === (true);
-		laws.rightIdentity (ints) must be === (true);
-		laws.associative (ints, more, stillMore) must be === (true);
+		laws.leftIdentity (ints) shouldBe (true);
+		laws.rightIdentity (ints) shouldBe (true);
+		laws.associative (ints, more, stillMore) shouldBe (true);
 	}
 	
 	it should "support Functor use" in
@@ -119,7 +119,7 @@ class DiscreteDomainSpec
 		val ints = DiscreteDomain.empty[Int] ++ Seq (4, 5, 6);
 		val functor = implicitly[scalaz.Functor[DiscreteDomain]];
 		
-		functor (ints) (n => n + 1) must be === (
+		functor (ints) (n => n + 1) shouldBe (
 			DiscreteDomain.empty[Int] ++ Seq (5, 6, 7)
 			);
 	}
@@ -129,7 +129,7 @@ class DiscreteDomainSpec
 		val values = List (4, 5, 6, 7);
 		val ints = DiscreteDomain.empty[Int] ++ values;
 		
-		Foldable[DiscreteDomain].foldMap (ints) (a => a) should be === (
+		Foldable[DiscreteDomain].foldMap (ints) (a => a) shouldBe (
 			values.sum
 			);
 	}

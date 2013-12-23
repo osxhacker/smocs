@@ -62,13 +62,13 @@ class ExhaustiveFiniteDomainSolverSpec
 				
 			answer.contains (
 				List (Answer ('x -> 1), Answer ('y -> 1))
-				) should be === (true);
+				) shouldBe (true);
 			answer.contains (
 				List (Answer ('x -> 2), Answer ('y -> 5))
-				) should be === (true);
+				) shouldBe (true);
 			answer.contains (
 				List (Answer ('x -> 5), Answer ('y -> 5))
-				) should be === (true);
+				) shouldBe (true);
 			answer should have size (25);
 			}
 	}
@@ -86,15 +86,15 @@ class ExhaustiveFiniteDomainSolverSpec
 				} yield stream;
 			}.valueOr (_ => Stream.empty);
 		
-		answer must not be ('empty);
+		answer shouldNot be ('empty);
 		
 		answer.foreach {
 			a =>
 				
-			a (0).name should be === ('a);
-			a (1).name should be === ('b);
-			a (2).name should be === ('c);
-			a (3).name should be === ('d);
+			a (0).name shouldBe (VariableName ('a));
+			a (1).name shouldBe (VariableName ('b));
+			a (2).name shouldBe (VariableName ('c));
+			a (3).name shouldBe (VariableName ('d));
 			}
 	}
 }
