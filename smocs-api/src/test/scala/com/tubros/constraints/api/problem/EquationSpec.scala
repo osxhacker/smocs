@@ -4,6 +4,11 @@
 package com.tubros.constraints.api
 package problem
 
+import scala.Predef.{
+	any2stringadd => _,
+	_
+    }
+
 import scalaz._
 
 import org.junit.runner.RunWith
@@ -103,6 +108,21 @@ class EquationSpec
 				nameComposer.compose ('array, 0),
 				nameComposer.compose ('array, 1)
 				)
+			);
+	}
+	
+	it should "be able to show its symbolic definition" in
+	{
+		import syntax.show._
+		
+		
+		val equation = new RelationalEquation with ArithmeticSupport[Int] {
+			def apply = 'x ** 3 - 'x ** 2 + lit (4) * 'x;
+            }
+		
+		equation.show shouldNot be ('empty);
+		equation.shows shouldBe (
+			"Equation(((('x) ** (3)) - (('x) ** (2))) + ((4) * ('x)))"
 			);
 	}
 }

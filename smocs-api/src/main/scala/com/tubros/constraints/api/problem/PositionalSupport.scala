@@ -64,12 +64,20 @@ trait PositionalSupport[T]
 package ast
 {
 
+import scalaz._
+
+import syntax.show._
+
+
 case class After[T] (
 	override val lhs : Expression[T],
 	override val rhs : Expression[T]
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") after (", rhs.show, ")");
+}
 
 
 case class Before[T] (
@@ -78,18 +86,31 @@ case class Before[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") before (", rhs.show, ")");
+}
 
 
 case class Offset[T] (
 	val value : Int
 	)
 	extends Expression[T]
+{
+	override def cord = Cord ("[", value.toString, "]");
+}
 
 
 case class FirstPosition[T] ()
 	extends Expression[T]
+{
+	override def cord = Cord ("first");
+}
 
 
 case class LastPosition[T] ()
 	extends Expression[T]
+{
+	override def cord = Cord ("last");
+}
+
 }

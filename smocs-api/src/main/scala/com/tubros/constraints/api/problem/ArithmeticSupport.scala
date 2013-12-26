@@ -6,6 +6,8 @@ package problem
 
 import scala.language.implicitConversions
 
+import scalaz._
+
 
 /**
  * The '''ArithmeticSupport''' type provides operators for the EDSL related to
@@ -65,10 +67,16 @@ trait ArithmeticSupport[T]
 
 package ast
 {
+	
+import syntax.show._
 
 case class AbsoluteValue[T] (override val operand : Expression[T])
 	extends Expression[T]
 		with UnaryOperator[T]
+{
+	override def cord = Cord ("abs(", operand.show, ")");
+}
+
 	
 case class Minus[T] (
 	override val lhs : Expression[T],
@@ -76,6 +84,10 @@ case class Minus[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") - (", rhs.show, ")");
+}
+
 
 case class Modulo[T] (
 	override val lhs : Expression[T],
@@ -83,10 +95,18 @@ case class Modulo[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") % (", rhs.show, ")");
+}
+
 
 case class Negate[T] (override val operand : Expression[T])
 	extends Expression[T]
 		with UnaryOperator[T]
+{
+	override def cord = Cord ("-(", operand.show, ")");
+}
+
 
 case class Plus[T] (
 	override val lhs : Expression[T],
@@ -94,6 +114,10 @@ case class Plus[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") + (", rhs.show, ")");
+}
+
 
 case class Power[T] (
 	override val lhs : Expression[T],
@@ -101,6 +125,10 @@ case class Power[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") ** (", rhs.show, ")");
+}
+
 
 case class Quotient[T] (
 	override val lhs : Expression[T],
@@ -108,6 +136,10 @@ case class Quotient[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") / (", rhs.show, ")");
+}
+
 
 case class Times[T] (
 	override val lhs : Expression[T],
@@ -115,5 +147,8 @@ case class Times[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
-		
+{
+	override def cord = Cord ("(", lhs.show, ") * (", rhs.show, ")");
+}
+
 }

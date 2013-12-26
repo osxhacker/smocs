@@ -61,19 +61,32 @@ trait RelationalSupport[T]
 package ast
 {
 	
+import scalaz._
+
+import syntax.show._
+
+
 case class EqualTo[T] (
 	override val lhs : Expression[T],
 	override val rhs : Expression[T]
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
-		
+{
+	override def cord = Cord ("(", lhs.show, ") == (", rhs.show, ")");
+}
+
+
 case class NotEqualTo[T] (
 	override val lhs : Expression[T],
 	override val rhs : Expression[T]
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") != (", rhs.show, ")");
+}
+
 		
 case class LessThan[T] (
 	override val lhs : Expression[T],
@@ -81,6 +94,10 @@ case class LessThan[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") < (", rhs.show, ")");
+}
+
 		
 case class GreaterThan[T] (
 	override val lhs : Expression[T],
@@ -88,6 +105,10 @@ case class GreaterThan[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") > (", rhs.show, ")");
+}
+
 		
 case class LessThanOrEqualTo[T] (
 	override val lhs : Expression[T],
@@ -95,6 +116,10 @@ case class LessThanOrEqualTo[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") <= (", rhs.show, ")");
+}
+
 		
 case class GreaterThanOrEqualTo[T] (
 	override val lhs : Expression[T],
@@ -102,5 +127,8 @@ case class GreaterThanOrEqualTo[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") >= (", rhs.show, ")");
+}
 
 }

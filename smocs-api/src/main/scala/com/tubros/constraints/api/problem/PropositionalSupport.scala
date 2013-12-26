@@ -3,6 +3,7 @@
  */
 package com.tubros.constraints.api.problem
 
+
 /**
  * The '''PropositionalSupport''' type reifies a calculus for
  * [[http://en.wikipedia.org/wiki/Propositional_logic propositional logic]].
@@ -43,12 +44,21 @@ trait PropositionalSupport[T]
 package ast
 {
 	
+import scalaz._
+
+import syntax.show._
+
+
 case class LogicalAnd[T] (
 	override val lhs : Expression[T],
 	override val rhs : Expression[T]
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") && (", rhs.show, ")");
+}
+
 
 case class LogicalOr[T] (
 	override val lhs : Expression[T],
@@ -56,5 +66,10 @@ case class LogicalOr[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord ("(", lhs.show, ") || (", rhs.show, ")");
+}
+
+
 
 }

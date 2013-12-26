@@ -94,6 +94,7 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 		import NonEmptyList._
 		import std.vector._
 		import syntax.monad._
+		import syntax.show._
 		import syntax.std.option._
 		
 		
@@ -126,7 +127,10 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 					solutions <- solver.run[Vector]
 					} yield solutions.sorted;
 				}
-			
+
+			println (problem.show);		// show the equations we solved
+
+			// We want to produce the optimal ("best") loading answer.
 			answers.map (_.head.map (_.toTuple).toMap).map {
 				best =>
 					

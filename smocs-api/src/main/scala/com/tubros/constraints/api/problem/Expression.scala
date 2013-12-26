@@ -17,6 +17,10 @@ import scalaz._
  *
  */
 trait Expression[+T]
+{
+	/// Instance Properties
+	implicit def cord : Cord;
+}
 
 
 object Expression
@@ -24,8 +28,8 @@ object Expression
 	/// Implicit Conversions
 	implicit def expressionToShow[T] : Show[Expression[T]] =
 		new Show[Expression[T]] {
-			override def shows (expr : Expression[T]) : String =
-				expr.toString;
+			override def show (expr : Expression[T]) : Cord =
+				expr.cord;
 	}
 }
 
@@ -83,17 +87,29 @@ case class Assignment[T] (
 	)
 	extends Expression[T]
 		with BinaryOperator[T]
+{
+	override def cord = Cord (lhs.cord, ":=", rhs.cord);
+}
 
 
 case class DerivedVariable (name : VariableName)
 	extends Expression[Nothing]
+{
+	override def cord = Cord (name.toString);
+}
 
 
 case class VariableUse (name : VariableName)
 	extends Expression[Nothing]
+{
+	override def cord = Cord (name.toString);
+}
 
 
 case class Constant[T] (value : T)
 	extends Expression[T]
+{
+	override def cord = Cord (value.toString);
+}
 
 }

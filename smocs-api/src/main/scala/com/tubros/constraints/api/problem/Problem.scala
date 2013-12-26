@@ -38,4 +38,15 @@ object Problem
 		override def append (a : Problem[A], b : => Problem[A]) : Problem[A] =
 			Problem (a.equations.append (b.equations));
 	}
+	
+	
+	implicit def ShowProblem[A] : Show[Problem[A]] =
+		new Show[Problem[A]] {
+            override def show (a : Problem[A]) : Cord =
+            	Cord (
+            		"Problem(\n\t",
+            		Cord.mkCord ("\n\t", a.equations.map (_.show).list : _*),
+            		"\n\t)"
+            		);
+            }
 }

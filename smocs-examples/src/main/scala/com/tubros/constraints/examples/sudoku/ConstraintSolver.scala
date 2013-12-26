@@ -71,9 +71,13 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			val answers = createSolver () {
 				implicit solver =>
 					
+				val problem = problemDefinition ();
+				
+				println (problem.show);
+				
 				for {
 					variables <- createGridVariables (puzzle)
-					_ <- solver.add (problemDefinition ())
+					_ <- solver.add (problem)
 					_ <- solver.impose (unitAllDiff)
 					stream <- solver.run[Vector]
 					} yield stream;

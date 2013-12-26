@@ -9,6 +9,12 @@ import scala.language.{
 	postfixOps
 	}
 
+import scalaz.{
+	Cord,
+	Show
+    }
+
+
 import ast.{
 	Assignment,
 	Constant,
@@ -72,6 +78,26 @@ trait Equation[T]
 	 * which may conflict with formulae definition.
 	 */
 	def lit[T] (value : T) = Constant[T] (value);
+	
+	
+	/**
+	 * The show method produces a [[scalaz.Cord]] representation of this
+	 * '''Equation'''.
+	 */
+	def show (implicit SE : Show[Expression[T]]) : Cord =
+		Cord (
+			"Equation(",
+            SE.show (expression),
+            ")"
+			);
+	
+	
+	/**
+	 * The shows method produces a `String` representation of this
+	 * '''Equation'''.
+	 */
+	def shows (implicit SE : Show[Expression[T]]) : String =
+		show toString;
 	
 	
 	private def derivedDefinition (expr : Expression[T])
