@@ -24,7 +24,7 @@ import runtime.{
  * [[com.tubros.constraints.api.solver.Domain]] values.
  * 
  * In this context, a score closer to `1.0` indicates a ''higher'' impact on
- * the solution space than those closer to `1.0`.
+ * the solution space than those closer to `0.0`.
  *
  * @author svickers
  *
@@ -51,6 +51,10 @@ case class AssignmentImpact[
 		);
 	
 	
+    /**
+     * The apply method estimates how an assignment of the given `variable`
+     * will impact the solution space in the presence of existing `assignments`.
+     */
 	def apply[VariableT <: Variable[A, DiscreteDomain]] (
 		assignments : Seq[Answer[A]],
 		variable : VariableT,
@@ -61,6 +65,11 @@ case class AssignmentImpact[
 			}
 	
 	
+    /**
+     * The ofVariable method estimates the assignment impact of a specific
+     * `variable` within a solution space when there are no existing
+     * assignments.
+     */
 	def ofVariable[VariableT <: Variable[A, DiscreteDomain]] (
 		variable : VariableT
 		) : Double =
@@ -108,6 +117,7 @@ case class AssignmentImpact[
 			).map (_.domain);
 		val updatedEstimate = EstimatedSearchSpace (domainsAfter);
 		
-		1.0 - (updatedEstimate.toDouble / originalSize.toDouble);
+		return (1.0 - (updatedEstimate.toDouble / originalSize.toDouble));
 	}
 }
+
