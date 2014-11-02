@@ -56,19 +56,27 @@ trait StateBasedSolver[
 	override def add (equation : Equation[A]) : SolverState[Unit] =
 		MS.modify {
 			vs =>
-				
-			val constraintAdded = vs.addConstraint (equation.constrains);
-			
-			equation.derived.fold (constraintAdded) {
-				derived =>
-					
-				constraintAdded.defining (derived, equation.variables);
-				}
+
+			addConstraintToStore (vs, equation);
 			}
 
 
+    /**
+     * While this version of the add method could use Scalaz's `traverse`
+     * method, testing revealed that this consumed large amounts of stack
+     * space.  Therefore, use of `foldLeft` and the `addConstraintToStore`
+     * implementation method are used to eliminate this problem.
+     */
 	override def add (problem : Problem[A]) : SolverState[Unit] =
-		problem.equations.traverse (add) map (_ => ());
+		MS.modify {
+			vs =>
+
+			problem.equations.foldLeft (vs) {
+				(store, equation) =>
+
+				addConstraintToStore (store, equation);
+				}
+			}
 
 
 	override def apply[C[_]] (
@@ -106,17 +114,17 @@ trait StateBasedSolver[
 		: SolverState[List[Variable[A, DomainType]]] =
 		StateT {
 			vs =>
-				
+
 			val jaggedArray = (0 until size).map {
 				index =>
-					
+
 				DiscreteVariable[A] (compose (name, index), functor (index));
 				}.to[List];
 
 			\/- (vs.addVariables (jaggedArray), jaggedArray);
 			}
-	
-	
+
+
 	override def newVar (name : VariableName, domain : DomainType[A])
 		: SolverState[Variable[A, DomainType]] =
 		StateT {
@@ -143,20 +151,37 @@ trait StateBasedSolver[
 
 			\/- (vs.addVariables (created), created);
 			}
+
+
+	private def addConstraintToStore[A] (
+		store : VariableStore[A],
+		equation : Equation[A]
+		)
+		(implicit CC : CanConstrain[Equation, A])
+		: VariableStore[A] =
+	{
+		val added = store.addConstraint (equation.constrains);
+
+		equation.derived.fold (added) {
+			derived =>
+
+			added.defining (derived, equation.variables);
+			}
+	}
 }
 
 
 object StateBasedSolver
 	extends StateBasedFunctions
-	
+
 
 trait StateBasedFunctions
 {
 	/// Class Types
 	type ErrorOr[+T] = \/[SolverError, T]
 	type SolverStateT[S, +T] = StateT[ErrorOr, S, T]
-	
-	
+
+
 	/**
 	 * The solverMonad method is provided so that clients of
 	 * '''StateBasedSolver''' instances are insulated from the details of how
