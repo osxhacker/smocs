@@ -15,7 +15,7 @@ import com.tubros.constraints.api.solver.error._
 
 /**
  * The '''ConstraintSolver''' type is a participant in the CAKE pattern used to
- * solve an arbitrary [[com.tubros.constraints.examples.sudoku.Puzzle] for the
+ * solve an arbitrary [[com.tubros.constraints.examples.sudoku.Puzzle]] for the
  * `sudoku` example.
  *
  * @author svickers
@@ -47,22 +47,26 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 		private val unitAllDiff : GlobalConstraint[Int] =
 		{
 			case ArrayVariables (as, bs, cs, ds, es, fs, gs, hs, is) =>
+				println(s"sudoku all diff:\n${as}\n${bs}\n${cs}\n${ds}\n${es}\n${fs}\n${gs}\n${hs}\n${is}\n\n")
+				List ((0, 2), (3, 5), (6, 8)) forall {
+					case (start, end) =>
 
-				Set (
-					as.slice (0, 3) ++
-					bs.slice (0, 3) ++
-					cs.slice (0, 3)
-					).size === 9 &&
-				Set (
-					as.slice (3, 6) ++
-					bs.slice (3, 6) ++
-					cs.slice (3, 6)
-					).size === 9 &&
-				Set (
-					as.slice (6, 9) ++
-					bs.slice (6, 9) ++
-					cs.slice (6, 9)
-					).size === 9
+					Set (
+						as.slice (start, end) ++
+						bs.slice (start, end) ++
+						cs.slice (start, end)
+						).size === 9 &&
+					Set (
+						ds.slice (start, end) ++
+						es.slice (start, end) ++
+						fs.slice (start, end)
+						).size === 9 &&
+					Set (
+						gs.slice (start, end) ++
+						hs.slice (start, end) ++
+						is.slice (start, end)
+						).size === 9;
+					}
 		}
 		
 		
@@ -72,9 +76,7 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 				implicit solver =>
 					
 				val problem = problemDefinition ();
-				
-				println (problem.show);
-				
+
 				for {
 					variables <- createGridVariables (puzzle)
 					_ <- solver.add (problem)
@@ -112,7 +114,7 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 						vars <- solver.newArrayVar (name, domain.size) {
 							n =>
 								
-							(puzzle (row, n + 1) >>= (_.assignment)) cata (
+							(puzzle (row, n) >>= (_.assignment)) cata (
 								value => domainOf (solver, Seq (value)),
 								domain
 								)
@@ -127,49 +129,91 @@ trait ConstraintSolver[M[+_], SolverT <: Solver[Int, M, SolverT]]
 			(implicit solver : SolverT)
 			: Problem[Int] =
 		{
-			@inline
-			def rows (name : Char) : SudokuEquation =
+			def rows (name : Char) : List[SudokuEquation] =
 			{
 				val row = VariableName (name.toString);
-				val equation = new SudokuEquation {
-					def apply =
-						Puzzle.columnOffsets.sliding (2).map {
-							case Seq (first, second) =>
-								
-							row (first) !== row (second);
+				val equations = for {
+					involved <- 2 until Puzzle.columnOffsets.last
+					offsets <- Puzzle.columnOffsets.combinations (involved)
+					} yield new SudokuEquation {
+						def apply = offsets.sliding (2).map {
+							case Seq (f, s) =>
+
+							row (f) !== row (s);
 							}.reduce (_ && _);
-					}
-				
-				return (equation);
+						}
+
+				return (equations.toList);
 			}
-			
-			@inline
-			def columns (offset : Int) : SudokuEquation =
+
+			def columns (offset : Int) : List[SudokuEquation] =
 			{
 				val variableNames = Puzzle.rowNames.map {
 					name =>
 						
 					VariableName (name.toString);
-					}
-				val equation = new SudokuEquation {
-					def apply =
-						variableNames.sliding (2).map {
+					}.toList;
+				val equations = for {
+					involved <- 2 until variableNames.size
+					names <- variableNames.combinations (involved)
+					} yield new SudokuEquation {
+						def apply = names.sliding (2).map {
 							case Seq (first, second) =>
-								
+
 							first (offset) !== second (offset);
 							}.reduce (_ && _);
-					}
-				
-				return (equation);
+						}
+
+				return (equations.toList);
+			}
+
+			def grid () : List[SudokuEquation] =
+			{
+				val variableNames = Puzzle.rowNames.map {
+					name =>
+						
+					VariableName (name.toString);
+					}.toList;
+
+				/// r, c -> r, c
+				val offsets =
+					((0, 0) -> (1, 1)) ::
+					((0, 0) -> (1, 2)) ::
+					((0, 0) -> (2, 1)) ::
+					((0, 0) -> (2, 2)) ::
+					((0, 1) -> (1, 0)) ::
+					((0, 1) -> (1, 2)) ::
+					((0, 1) -> (2, 0)) ::
+					((0, 1) -> (2, 2)) ::
+					((0, 2) -> (1, 0)) ::
+					((0, 2) -> (1, 1)) ::
+					((1, 0) -> (2, 1)) ::
+					((1, 0) -> (2, 2)) ::
+					((1, 1) -> (2, 0)) ::
+					((1, 1) -> (2, 2)) ::
+					((1, 2) -> (2, 0)) ::
+					((1, 2) -> (2, 1)) ::
+					Nil;
+
+				val equations = for {
+					rows <- variableNames.grouped (3)
+					columns <- Puzzle.columnOffsets.grouped (3)
+					o <- offsets
+					} yield new SudokuEquation {
+						def apply = rows (o._1._1) (columns (o._1._2)) !==
+							rows (o._2._1) (columns (o._2._2));
+						}
+
+				return (equations.toList);
 			}
 
 			Problem[Int] (
-				Puzzle.rowNames.toList.map (rows).toNel.get :::>
-				Puzzle.columnOffsets.toList.map (columns)
+				(Puzzle.rowNames.toList >>= (rows _)).toNel.get :::>
+				((Puzzle.columnOffsets.toList >>= (columns _)) |+| grid ())
 				);
 		}
-				
-				
+
+
 		private def solvedPuzzle (answers : Seq[Answer[Int]]) : Option[Puzzle] =
 			answers match {
 				case AllArrays (grid) =>

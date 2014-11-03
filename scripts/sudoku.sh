@@ -24,13 +24,6 @@ fi
 
 export JAVA_OPTS="-Xmx2048M -XX:MaxPermSize=512M -Xss2M -XX:ReservedCodeCacheSize=64m -XX:+UseCodeCacheFlushing -XX:+UseConcMarkSweepGC -Duser.timezone=GMT"
 
-cat - >&2 <<EOT
-The Sudoku solver is currently taking too long to execute and is disabled.
-Once the culprit is identified and eradicated, this example will be
-enabled.
-EOT
-exit 2
-
 sbt "project smocs-examples" start-script && \
 	env JAVA_OPTS="$JAVA_OPTS $PROFILE_SMOCS" \
 	bash ./smocs-examples/target/start \

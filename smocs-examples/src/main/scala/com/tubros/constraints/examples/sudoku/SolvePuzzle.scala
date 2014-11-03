@@ -84,46 +84,44 @@ object SolvePuzzle
 		// TODO: populate puzzle with CLI Square values
 		val puzzle = Puzzle (
 			Set (
-				Square ('A', 3, 3.some),
-				Square ('A', 5, 2.some),
-				Square ('A', 7, 6.some),
+				Square ('A', 0, 5.some),
+				Square ('A', 1, 3.some),
+				Square ('A', 4, 7.some),
 
-				Square ('B', 1, 9.some),
-				Square ('B', 4, 3.some),
-				Square ('B', 6, 5.some),
-				Square ('B', 9, 1.some),
+				Square ('B', 0, 6.some),
+				Square ('B', 3, 1.some),
+				Square ('B', 4, 9.some),
+				Square ('B', 5, 5.some),
 
-				Square ('C', 3, 1.some),
-				Square ('C', 4, 8.some),
-				Square ('C', 6, 6.some),
-				Square ('C', 7, 4.some),
+				Square ('C', 1, 9.some),
+				Square ('C', 2, 8.some),
+				Square ('C', 7, 6.some),
 
-				Square ('D', 3, 8.some),
-				Square ('D', 4, 1.some),
-				Square ('D', 6, 2.some),
-				Square ('D', 7, 4.some),
+				Square ('D', 0, 8.some),
+				Square ('D', 4, 6.some),
+				Square ('D', 8, 3.some),
 
-				Square ('E', 1, 7.some),
-				Square ('E', 9, 8.some),
+				Square ('E', 0, 4.some),
+				Square ('E', 3, 8.some),
+				Square ('E', 5, 3.some),
+				Square ('E', 8, 1.some),
 
-				Square ('F', 3, 6.some),
-				Square ('F', 4, 7.some),
-				Square ('F', 6, 8.some),
-				Square ('F', 7, 2.some),
+				Square ('F', 0, 7.some),
+				Square ('F', 4, 2.some),
+				Square ('F', 8, 6.some),
 
-				Square ('G', 3, 2.some),
-				Square ('G', 4, 6.some),
-				Square ('G', 6, 9.some),
-				Square ('G', 7, 5.some),
+				Square ('G', 1, 6.some),
+				Square ('G', 6, 2.some),
+				Square ('G', 7, 8.some),
 
-				Square ('H', 1, 8.some),
-				Square ('H', 4, 2.some),
-				Square ('H', 6, 3.some),
-				Square ('H', 9, 9.some),
+				Square ('H', 3, 4.some),
+				Square ('H', 4, 1.some),
+				Square ('H', 5, 9.some),
+				Square ('H', 8, 5.some),
 
-				Square ('I', 3, 5.some),
-				Square ('I', 5, 1.some),
-				Square ('I', 7, 3.some)
+				Square ('I', 4, 8.some),
+				Square ('I', 7, 7.some),
+				Square ('I', 8, 9.some)
 				)
 			);
 		val solvePuzzle = new SolveSudokuPuzzle ();

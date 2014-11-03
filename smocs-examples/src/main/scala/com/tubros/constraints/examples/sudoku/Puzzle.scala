@@ -78,7 +78,7 @@ object Puzzle
 	/// Instance Properties
 	val rowNames = 'A' |=> 'I';
 	val columnNames = 1 |=> 9;
-	val columnOffsets = 0 to 7;
+	val columnOffsets = 0 to 8;
 	
 	
 	/**
